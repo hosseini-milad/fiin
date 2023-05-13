@@ -108,8 +108,9 @@ app.use(expressWinston.errorLogger({
 }));
 
 // Optionally you can include your custom error handler after the logging.
+const { API_PORT } = process.env;
+const port = 4030 || API_PORT;
 
-
-app.listen(4030, function(){
+app.listen(port, function(){
   console.log("logger listening on port %d in %s mode", this.address().port, app.settings.env);
 });
