@@ -18,7 +18,7 @@ eventsEmitter.on('test', () => {
 
 });
 app.get('/hook-lead', (req, res) => {    //Subscribing to an event
-  console.log(req)
+  //console.log(req)
   eventsEmitter.emit('test');});
 
 const bodyParser = require('body-parser');
