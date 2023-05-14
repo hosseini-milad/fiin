@@ -12,14 +12,14 @@ require('winston-daily-rotate-file');
 var events = require('events');
 var eventsEmitter = new events.EventEmitter();
 
-eventsEmitter.on('test', () => {
+eventsEmitter.on('tqi9z2oj5x1gu3iuqtv1d9pyc1gtfkef', () => {
   
   console.log('Test Event Successful!');
 
 });
 app.get('/hook-lead', (req, res) => {    //Subscribing to an event
-  //console.log(req)
-  eventsEmitter.emit('test');});
+  console.log("req")
+  eventsEmitter.emit('tqi9z2oj5x1gu3iuqtv1d9pyc1gtfkef');});
 
 const bodyParser = require('body-parser');
 //app.use(express.methodOverride());
