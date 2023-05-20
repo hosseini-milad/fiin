@@ -4,13 +4,13 @@ require("./middleware/database").connect();
 var expressWinston = require('express-winston');
 var winston = require('winston'); // for transports.Console
 var app = module.exports = express();
+const cors = require("cors");
 const mainApi = require('./router/mainApi');
-const authApi = require('./router/authApi');
-const reportApi = require('./router/reportApi');
-const productApi = require('./router/productApi');
 require('winston-daily-rotate-file');
-var events = require('events');
-var eventsEmitter = new events.EventEmitter();
+var emitter = require('events').EventEmitter;
+var eventsEmitter = new emitter();
+const { API_PORT } = process.env;
+const port = 4090 || API_PORT;
 
 eventsEmitter.on('tqi9z2oj5x1gu3iuqtv1d9pyc1gtfkef', () => {
   
@@ -35,18 +35,6 @@ router.get('/error', function(req, res, next) {
 });
 
 router.use('/api', mainApi)
-router.use('/api/auth', authApi)
-router.use('/api/report', reportApi)
-router.use('/api/product', productApi)
-/*
-router.get('/', function(req, res, next) {
-  res.write('This is a normal request, it should be logged to the console too');
-  res.end();
-});*/
-
-//expressWinston.requestWhitelist.push('body');
-//expressWinston.requestWhitelist.push('session');
-//expressWinston.responseWhitelist.push('body');
 
 // express-winston logger makes sense BEFORE the router
 app.use(expressWinston.logger({
@@ -84,6 +72,7 @@ app.use(expressWinston.logger({
 
 // Now we can tell the app to use our routing code:
 app.use(router);
+app.use(cors());
 
 // express-winston errorLogger makes sense AFTER the router.
 app.use(expressWinston.errorLogger({
@@ -108,9 +97,7 @@ app.use(expressWinston.errorLogger({
 }));
 
 // Optionally you can include your custom error handler after the logging.
-const { API_PORT } = process.env;
-const port = 4090 || API_PORT;
-console.log(process.env.API_PORT)
+
 app.listen(port, function(){
   console.log("logger listening on port %d in %s mode", this.address().port, app.settings.env);
 });

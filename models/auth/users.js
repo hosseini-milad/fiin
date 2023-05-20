@@ -1,14 +1,15 @@
 const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
-  phone: { type: String, unique: true },
-  cName: { type: String},
-  cCode:{ type: String},
+  username: { type: String, unique: true },
+  cName: { type: String, required : true},
+  sName:{ type: String, required : true},
+  phone: { type: String , required : true},
   password: { type: String },
   email: { type: String },
   access:{
     type:String,
-    enum:["manager","factory","store","customer","shop","request"]
+    enum:["manager","agent","agency","customer","credit","request"]
   },
   group: {
     type:String,
@@ -17,10 +18,9 @@ const userSchema = new mongoose.Schema({
   credit: { type: String },
   token: { type: String },
   otp:{ type: String , default: null },
-  activity: { type: String },
-  phone1: { type: String },
-  fax: { type: String },
-  
+  nif: { type: String },
+  agent:{ type: String },
+
   date:{type:Date}
 });
 
