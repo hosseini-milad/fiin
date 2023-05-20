@@ -4,7 +4,10 @@ require("./middleware/database").connect();
 var expressWinston = require('express-winston');
 var winston = require('winston'); // for transports.Console
 var app = module.exports = express();
+
 const cors = require("cors");
+app.use(cors());
+
 const mainApi = require('./router/mainApi');
 require('winston-daily-rotate-file');
 var emitter = require('events').EventEmitter;
@@ -72,7 +75,6 @@ app.use(expressWinston.logger({
 
 // Now we can tell the app to use our routing code:
 app.use(router);
-app.use(cors());
 
 // express-winston errorLogger makes sense AFTER the router.
 app.use(expressWinston.errorLogger({
