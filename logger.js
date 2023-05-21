@@ -38,7 +38,7 @@ router.get('/error', function(req, res, next) {
 });
 
 router.use('/api', mainApi)
-
+router.use(cors());
 // express-winston logger makes sense BEFORE the router
 app.use(expressWinston.logger({
   transports: [
