@@ -117,7 +117,7 @@ router.post('/list-users',auth,jsonParser, async (req,res)=>{
       }
       // Validate if user exist in our database
       const userOwner = await User.findOne({_id:req.headers["userid"]});
-      
+      //console.log(userOwner)
       const user = await User.aggregate([
         { $match : data.access?{access:data.access}:{}},
         { $match : data.cName?{cName:{$regex: data.cName}}:{}},
@@ -125,7 +125,8 @@ router.post('/list-users',auth,jsonParser, async (req,res)=>{
         { $match : data.nif?{nif:{$regex: data.nif}}:{}},
         { $match : data.email?{email:{$regex: data.email}}:{}},
         { $match : data.phone?{phone:{$regex: data.phone}}:{}},
-        { $match : userOwner.access=="agent"?{agent: {$regex:userOwner._id.toString()}}:{}},
+        { $match : (userOwner&&(userOwner.access==="agent"||userOwner.access==="agency"))?
+          {agent: {$regex:userOwner._id.toString()}}:{}},
         
         { $addFields: { "agent": { "$toObjectId": "$agent" }}},
         {$lookup:{
@@ -142,6 +143,15 @@ router.post('/list-users',auth,jsonParser, async (req,res)=>{
       res.status(500).json({message: error.message})
   }
 })
+router.post('/find-users',auth,jsonParser, async (req,res)=>{
+  try {
+        const userOwner = await User.findOne({_id:req.headers["userid"]});
+        res.status(200).json({user:userOwner,message:"User Data"})
+      } 
+  catch(error){
+      res.status(500).json({message: error.message})
+  }
+})
 router.post('/change-password',auth,jsonParser, async (req,res)=>{
   try {
       const data = {
@@ -150,16 +160,53 @@ router.post('/change-password',auth,jsonParser, async (req,res)=>{
         confPass: req.body.confPass,
         date: Date.now()
       }
+      if(data.newPass === data.confPass){
+        var encryptedOld = await bcrypt.hash(data.oldPass, 10);
+        const userOwner = await User.findOne({_id:req.headers["userid"]});
+        const passCompare = await bcrypt.compare(data.oldPass,userOwner.password)
+        
+        if(passCompare){
+          var encryptedNew = await bcrypt.hash(data.newPass, 10);
+          await User.updateOne({_id:req.headers["userid"]},
+          {$set:{password:encryptedNew}})
+
+          res.status(200).json({user:passCompare,message:"User Pass Changes"})
+        }
+        else{
+          res.status(400).json({error:"Wrong Password"});
+        }
+      }
+      else{
+        res.status(400).json({error:"Not Equal Passwords"});
+      }
+    } 
+  catch(error){
+      res.status(500).json({message: error.message})
+  }
+})
+router.post('/change-user',auth,jsonParser, async (req,res)=>{
+  try {
+      const data = {
+        username: req.body.username,
+        cName: req.body.cName,
+        sName:req.body.sName,
+        phone:req.body.phone,
+        email:req.body.email,
+        nif:req.body.nif,
+        date: Date.now()
+      }
       // Validate if user exist in our database
-      const userOwner = await User.findOne({_id:req.headers["userid"]});
-      const passCompare = await bcrypt.compare(userOwner.password, data.oldPass)
-      console.log(await bcrypt.compare(userOwner.password, data.oldPass))
+      const userOwner = await User.updateOne({_id:req.headers["userid"]},
+        {$set:data});
+      //console.log(await bcrypt.compare(userOwner.password, data.oldPass))
       
-      res.status(200).json({user:passCompare,data:userOwner.password,message:"User Pass Changes"})
+      res.status(200).json({user:userOwner,message:"User Data Changed."})
       
       } 
   catch(error){
-      res.status(500).json({message: error.message})
+    var errorTemp=error.message.includes("duplicate")?
+      "duplicate Value":error.message
+      res.status(500).json({error: errorTemp})
   }
 })
 module.exports = router;
