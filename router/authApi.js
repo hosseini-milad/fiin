@@ -117,7 +117,7 @@ router.post('/list-users',auth,jsonParser, async (req,res)=>{
       }
       // Validate if user exist in our database
       const userOwner = await User.findOne({_id:req.headers["userid"]});
-      
+      //console.log(userOwner)
       const user = await User.aggregate([
         { $match : data.access?{access:data.access}:{}},
         { $match : data.cName?{cName:{$regex: data.cName}}:{}},
@@ -125,7 +125,8 @@ router.post('/list-users',auth,jsonParser, async (req,res)=>{
         { $match : data.nif?{nif:{$regex: data.nif}}:{}},
         { $match : data.email?{email:{$regex: data.email}}:{}},
         { $match : data.phone?{phone:{$regex: data.phone}}:{}},
-        { $match : userOwner.access=="agent"?{agent: {$regex:userOwner._id.toString()}}:{}},
+        { $match : (userOwner&&(userOwner.access==="agent"||userOwner.access==="agency"))?
+          {agent: {$regex:userOwner._id.toString()}}:{}},
         
         { $addFields: { "agent": { "$toObjectId": "$agent" }}},
         {$lookup:{
