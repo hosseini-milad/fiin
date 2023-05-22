@@ -6,6 +6,7 @@ const userSchema = new mongoose.Schema({
   sName:{ type: String, required : true},
   phone: { type: String , required : true},
   password: { type: String },
+  bitrixCode:{type: String },
   email: { type: String },
   access:{
     type:String,
