@@ -90,8 +90,8 @@ router.post('/register',auth,jsonParser, async (req,res)=>{
       const user = await User.findOne({username: data.username });
       if(!user){
         data.password = data.password&&await bcrypt.hash(data.password, 10);
-        const bitrixData = await sendBitrix(data,"crm.lead.add.json")
-        //console.log(bitrixData)
+        const bitrixData = await sendBitrix(data,"crm.deal.add.json")
+        console.log(bitrixData)
         if(bitrixData.error){
           res.status(400).json({error:bitrixData.error_description})
           return
