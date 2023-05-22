@@ -7,6 +7,8 @@ const jsonParser = bodyParser.json();
 const router = express.Router()
 const auth = require("../middleware/auth");
 const User = require("../models/auth/users");
+const sendEmailNow = require('../middleware/sendMail');
+const sendBitrix = require('../middleware/Bitrix');
 
 router.post('/login',jsonParser, async (req,res)=>{
     try {
@@ -88,7 +90,14 @@ router.post('/register',auth,jsonParser, async (req,res)=>{
       const user = await User.findOne({username: data.username });
       if(!user){
         data.password = data.password&&await bcrypt.hash(data.password, 10);
+        const bitrixData = await sendBitrix(data,"crm.lead.add.json")
+        //console.log(bitrixData)
+        if(bitrixData.error){
+          res.status(400).json({error:bitrixData.error_description})
+          return
+        }
         const user = await User.create(data);
+        
         res.status(201).json({user:user,message:"User Created"})
         return;
       }
@@ -207,6 +216,17 @@ router.post('/change-user',auth,jsonParser, async (req,res)=>{
     var errorTemp=error.message.includes("duplicate")?
       "duplicate Value":error.message
       res.status(500).json({error: errorTemp})
+  }
+})
+
+router.get('/sendmail',jsonParser, async (req,res)=>{
+  try {
+      sendEmailNow()
+      res.status(200).json({message:"Email Sent"})
+      
+      } 
+  catch(error){
+      res.status(500).json({error: error})
   }
 })
 module.exports = router;
