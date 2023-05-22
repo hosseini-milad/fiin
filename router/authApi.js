@@ -221,7 +221,7 @@ router.post('/change-user',auth,jsonParser, async (req,res)=>{
 
 router.get('/sendmail',jsonParser, async (req,res)=>{
   try {
-      sendEmailNow()
+      //sendEmailNow()
       res.status(200).json({message:"Email Sent"})
       
       } 
@@ -229,3 +229,4 @@ router.get('/sendmail',jsonParser, async (req,res)=>{
       res.status(500).json({error: error})
   }
 })
+module.exports = router;

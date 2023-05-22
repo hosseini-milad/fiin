@@ -8,7 +8,7 @@ var app = module.exports = express();
 const cors = require("cors");
 app.use(cors());
 
-const mainApi = require('./router/mainApi');
+const mainApi = require('./router/mainApi')
 require('winston-daily-rotate-file');
 var emitter = require('events').EventEmitter;
 var eventsEmitter = new emitter();
