@@ -9,7 +9,8 @@ const auth = require("../middleware/auth");
 const User = require("../models/auth/users");
 const sendEmailNow = require('../middleware/sendMail');
 const sendBitrix = require('../middleware/Bitrix');
-const bitrixDeal = require('../middleware/Bitrixdeal')
+const bitrixDeal = require('../middleware/Bitrixdeal');
+const sendMailBrevo = require('../middleware/sendMail');
 
 router.post('/login',jsonParser, async (req,res)=>{
     try {
@@ -67,6 +68,36 @@ router.post('/login',jsonParser, async (req,res)=>{
         res.status(500).json({message: error.message})
     }
 })
+router.post('/forget',jsonParser, async (req,res)=>{
+  try {
+      const { email } = req.body;
+      if (!email) {
+        res.status(400).json({error:"Email is required"});
+        return;
+      }
+      // Validate if user exist in our database
+      const user = await User.findOne({email: email });
+      if(!user){
+        
+        res.status(400).json({error:"Email not found"});
+        return;
+      }
+      if (user) {
+        const newOtp=user.cName+(Math.floor(Math.random() * 10000000) + 10000000)
+        await User.updateOne({email: email },{$set:{otp:newOtp}})
+        const sendMailResult = await sendMailBrevo(email,newOtp)
+        //console.log(sendMailResult)
+        if(sendMailResult.error)
+          res.status(400).json({error:sendMailResult.error});
+        else res.status(200).json({message:"email sent"});
+        return;
+      }
+      
+    } 
+  catch(error){
+      res.status(500).json({message: error.message})
+  }
+})
 router.post('/register',auth,jsonParser, async (req,res)=>{
   try {
       const data = {
@@ -99,7 +130,7 @@ router.post('/register',auth,jsonParser, async (req,res)=>{
         }
         const bitrixDealConst=await bitrixDeal(bitrixData.result,"crm.deal.add.json",data)
 
-        console.log(bitrixDealConst)
+        //console.log(bitrixDealConst)
         const user = bitrixData.result&&
           await User.create({...data,bitrixCode:bitrixData.result});
         
@@ -189,6 +220,33 @@ router.post('/change-password',auth,jsonParser, async (req,res)=>{
         else{
           res.status(400).json({error:"Wrong Password"});
         }
+      }
+      else{
+        res.status(400).json({error:"Not Equal Passwords"});
+      }
+    } 
+  catch(error){
+      res.status(500).json({message: error.message})
+  }
+})
+
+router.post('/forget-password-set',jsonParser, async (req,res)=>{
+  try {
+      const data = {
+        newPass: req.body.newPass,
+        confPass: req.body.confPass,
+        otp:req.body.otp,
+        date: Date.now()
+      }
+      if(data.newPass === data.confPass){
+        const user = await User.findOne({otp:data.otp})
+        res.status(200).json({user:user,message:"User Found"})
+        var encryptedNew = await bcrypt.hash(data.newPass, 10);
+          await User.updateOne({otp:data.otp},
+          {$set:{password:encryptedNew}})
+
+          res.status(200).json({user:user,message:"User Pass Changes"})
+        
       }
       else{
         res.status(400).json({error:"Not Equal Passwords"});

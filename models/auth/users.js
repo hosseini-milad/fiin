@@ -7,7 +7,7 @@ const userSchema = new mongoose.Schema({
   phone: { type: String , required : true},
   password: { type: String },
   bitrixCode:{type: String },
-  email: { type: String },
+  email: { type: String , unique: true},
   access:{
     type:String,
     enum:["manager","agent","agency","customer","credit","request"]

@@ -1,16 +1,38 @@
-var sendmail = require('sendmail')()
+const SibApiV3Sdk = require('sib-api-v3-sdk');
 
-const sendEmailNow=()=>{
-    sendmail({
-    from: 'dkmehr.com@gmail.com',
-    to: 'milad.cia@gmail.com',
-    replyTo: 'reyham.com@gmail.com',
-    subject: 'MailComposer sendmail',
-    html: 'Mail of test sendmail '
-    }, function (err, reply) {
-    console.log(err && err.stack)
-    console.dir(reply)
-    })
+const sendMailBrevo=async(email,otp,user)=>{
+    let defaultClient = SibApiV3Sdk.ApiClient.instance;
+
+    let apiKey = defaultClient.authentications['api-key'];
+    apiKey.apiKey = process.env.email_key;
+    
+    let apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
+    let sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
+
+    sendSmtpEmail.subject = "Fiin Change Password";
+    sendSmtpEmail.htmlContent = `<html><body>
+    <h1>Fiin</h1>
+    <span>{{params.parameter}}</span>
+    <p>Change password from below link</p>
+    <a href="https://fiin1.deleves.com/forget-pass/${otp}">Change Password</a>
+    </body></html>`;
+    sendSmtpEmail.sender = {"name":"Fiin","email":"arash@gandotech.com"};
+    sendSmtpEmail.to = [{"email":email}];
+    //sendSmtpEmail.cc = [{"email":"tetikak@gmail.com","name":"Janice Doe"}];
+    //sendSmtpEmail.bcc = [{"email":"dkmehr.com@gmail.com","name":"DKMehr"}];
+    sendSmtpEmail.replyTo = {"email":"replyto@domain.com","name":"John Doe"};
+    sendSmtpEmail.headers = {"Some-Custom-Name":"unique-id-1234"};
+    sendSmtpEmail.params = {"parameter":"My param value","subject":"New Subject"};
+    var result = "";
+    await apiInstance.sendTransacEmail(sendSmtpEmail)
+    .then(function(data) {
+        result = "accept"
+        //console.log(JSON.stringify(data));
+    }, function(err) {
+        result=({error:JSON.parse(err.response&&
+            err.response.error&&err.response.error.text).message});
+        
+    });
+    return(result)
 }
-
-module.exports =sendEmailNow
+module.exports =sendMailBrevo
