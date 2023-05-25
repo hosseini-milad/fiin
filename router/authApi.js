@@ -159,7 +159,7 @@ router.post('/list-users',auth,jsonParser, async (req,res)=>{
         access: req.body.access,
         group: req.body.group,
         nif: req.body.nif,
-        offset:req.body.offset,
+        offset:req.body.offset?req.body.offset:0,
         date: Date.now()
       }
       // Validate if user exist in our database
