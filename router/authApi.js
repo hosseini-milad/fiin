@@ -149,6 +149,7 @@ router.post('/register',auth,jsonParser, async (req,res)=>{
 })
 router.post('/list-users',auth,jsonParser, async (req,res)=>{
   try {
+    var pageSize = req.body.pageSize?req.body.pageSize:"10";
       const data = {
         agent: req.body.agent,
         cName: req.body.cName,
@@ -158,6 +159,7 @@ router.post('/list-users',auth,jsonParser, async (req,res)=>{
         access: req.body.access,
         group: req.body.group,
         nif: req.body.nif,
+        offset:req.body.offset,
         date: Date.now()
       }
       // Validate if user exist in our database
@@ -179,9 +181,12 @@ router.post('/list-users',auth,jsonParser, async (req,res)=>{
             localField: "agent", 
             foreignField: "_id", 
             as : "agentDetail"
-        }},
+        }}
     ])
-      res.status(200).json({user:user,message:"User List"})
+    var pageUser=[];
+    for(var i=data.offset;i<data.offset+parseInt(pageSize);i++)
+      user[i]&&pageUser.push(user[i])
+      res.status(200).json({user:pageUser,message:"User List",size:user.length})
       
       } 
   catch(error){

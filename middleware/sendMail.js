@@ -29,7 +29,7 @@ const sendMailBrevo=async(email,otp,user)=>{
         result = "accept"
         //console.log(JSON.stringify(data));
     }, function(err) {
-        console.log(err)
+        //console.log(err)
         result=({error:JSON.parse(err.response&&
             err.response.error&&err.response.error.text).message});
         
