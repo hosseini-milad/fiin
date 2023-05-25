@@ -5,7 +5,9 @@ const sendMailBrevo=async(email,otp,user)=>{
 
     let apiKey = defaultClient.authentications['api-key'];
     apiKey.apiKey = process.env.email_key;
-    
+    if(!process.env.email_key){
+        return({error:"no Realy???"})
+    }
     let apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
     let sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
 
