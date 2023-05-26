@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcryptjs');
 const jwt = require("jsonwebtoken");
-
+var ObjectID = require('mongodb').ObjectID;
 const jsonParser = bodyParser.json();
 const router = express.Router()
 const auth = require("../middleware/auth");
@@ -119,19 +119,20 @@ router.post('/register',auth,jsonParser, async (req,res)=>{
         return;
       }
       // Validate if user exist in our database
-      const user = await User.findOne({username: data.username });
+      const user = await User.findOne({$or:[
+        {username: data.username },{email:data.email}]});
       if(!user){
         data.password = data.password&&await bcrypt.hash(data.password, 10);
-        const bitrixData = await sendBitrix(data,"crm.contact.add.json")
+        const bitrixData = {}//&&await sendBitrix(data,"crm.contact.add.json")
         //console.log(bitrixData)
         if(bitrixData.error){
           res.status(400).json({error:bitrixData.error_description})
           return
         }
-        const bitrixDealConst=await bitrixDeal(bitrixData.result,"crm.deal.add.json",data)
+        //const bitrixDealConst=await bitrixDeal(bitrixData.result,"crm.deal.add.json",data)
 
         //console.log(bitrixDealConst)
-        const user = bitrixData.result&&
+        const user = //bitrixData.result&&
           await User.create({...data,bitrixCode:bitrixData.result});
         
         res.status(201).json({user:user,message:"User Created"})
@@ -239,8 +240,19 @@ router.post('/list-search',auth,jsonParser, async (req,res)=>{
 })
 router.post('/find-users',auth,jsonParser, async (req,res)=>{
   try {
+
         const userOwner = await User.findOne({_id:req.headers["userid"]});
         res.status(200).json({user:userOwner,message:"User Data"})
+      } 
+  catch(error){
+      res.status(500).json({message: error.message})
+  }
+})
+router.post('/find-user-admin',auth,jsonParser, async (req,res)=>{
+  try {
+        const userOwner = await User.findOne({_id:req.headers["userid"]});
+        const userData = await User.findOne({_id:req.body.userId});
+        res.status(200).json({user:userData,message:"User Data"})
       } 
   catch(error){
       res.status(500).json({message: error.message})
@@ -317,7 +329,7 @@ router.post('/change-user',auth,jsonParser, async (req,res)=>{
         date: Date.now()
       }
       // Validate if user exist in our database
-      const userOwner = await User.updateOne({_id:req.headers["userid"]},
+      const userOwner = await User.updateOne({_id:ObjectID(req.body._id)},
         {$set:data});
       //console.log(await bcrypt.compare(userOwner.password, data.oldPass))
       
