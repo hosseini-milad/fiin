@@ -122,16 +122,16 @@ router.post('/register',auth,jsonParser, async (req,res)=>{
       const user = await User.findOne({username: data.username });
       if(!user){
         data.password = data.password&&await bcrypt.hash(data.password, 10);
-        const bitrixData = await sendBitrix(data,"crm.contact.add.json")
-        console.log(bitrixData)
+        const bitrixData = {}//await sendBitrix(data,"crm.contact.add.json")
+        //console.log(bitrixData)
         if(bitrixData.error){
           res.status(400).json({error:bitrixData.error_description})
           return
         }
-        const bitrixDealConst=await bitrixDeal(bitrixData.result,"crm.deal.add.json",data)
+        //const bitrixDealConst=await bitrixDeal(bitrixData.result,"crm.deal.add.json",data)
 
         //console.log(bitrixDealConst)
-        const user = bitrixData.result&&
+        const user = //bitrixData.result&&
           await User.create({...data,bitrixCode:bitrixData.result});
         
         res.status(201).json({user:user,message:"User Created"})
