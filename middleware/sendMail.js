@@ -11,10 +11,10 @@ const sendMailBrevo=async(email,otp,user)=>{
 
     sendSmtpEmail.subject = "Fiin Change Password";
     sendSmtpEmail.htmlContent = `<html><body>
-    <h1>Fiin</h1>
-    <span>{{params.parameter}}</span>
-    <p>Change password from below link</p>
-    <a href="https://fiin1.deleves.com/forget-pass/${otp}">Change Password</a>
+    <p>A FIIN recebeu uma solicitação para alteração da sua password.<br/>
+    Para tal, nas próximas 24h deverá aceder ao seguinte link: </p><br/>
+    <a href="https://fiin1.deleves.com/forget-pass/${otp}">Change Password Link</a><br/>
+    <span>Se não pediu para alterar a sua password, por favor, ignore o presente email.</span>
     </body></html>`;
     sendSmtpEmail.sender = {"name":"Fiin","email":"arash@gandotech.com"};
     sendSmtpEmail.to = [{"email":email}];
