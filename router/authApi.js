@@ -122,16 +122,16 @@ router.post('/register',auth,jsonParser, async (req,res)=>{
       const user = await User.findOne({username: data.username });
       if(!user){
         data.password = data.password&&await bcrypt.hash(data.password, 10);
-        const bitrixData = {}//await sendBitrix(data,"crm.contact.add.json")
+        const bitrixData = await sendBitrix(data,"crm.contact.add.json")
         //console.log(bitrixData)
         if(bitrixData.error){
           res.status(400).json({error:bitrixData.error_description})
           return
         }
-        //const bitrixDealConst=await bitrixDeal(bitrixData.result,"crm.deal.add.json",data)
+        const bitrixDealConst=await bitrixDeal(bitrixData.result,"crm.deal.add.json",data)
 
         //console.log(bitrixDealConst)
-        const user = //bitrixData.result&&
+        const user = bitrixData.result&&
           await User.create({...data,bitrixCode:bitrixData.result});
         
         res.status(201).json({user:user,message:"User Created"})
@@ -173,6 +173,50 @@ router.post('/list-users',auth,jsonParser, async (req,res)=>{
         { $match : data.email?{email:{$regex: data.email}}:{}},
         { $match : data.phone?{phone:{$regex: data.phone}}:{}},
         { $match : (userOwner&&(userOwner.access==="agent"||userOwner.access==="agency"))?
+          {agent: {$regex:userOwner._id.toString()}}:{}},
+        
+        { $addFields: { "agent": { "$toObjectId": "$agent" }}},
+        {$lookup:{
+            from : "users", 
+            localField: "agent", 
+            foreignField: "_id", 
+            as : "agentDetail"
+        }}
+    ])
+    var pageUser=[];
+    for(var i=data.offset;i<data.offset+parseInt(pageSize);i++)
+      user[i]&&pageUser.push(user[i])
+      res.status(200).json({user:pageUser,message:"User List",size:user.length})
+      
+      } 
+  catch(error){
+      res.status(500).json({message: error.message})
+  }
+})
+router.post('/list-search',auth,jsonParser, async (req,res)=>{
+  try {
+    var pageSize = req.body.pageSize?req.body.pageSize:"10";
+      const data = {
+        agent: req.body.agent,
+        search: req.body.search,
+        access: req.body.access,
+        offset:req.body.offset?req.body.offset:0,
+        date: Date.now()
+      }
+      // Validate if user exist in our database
+      const userOwner = await User.findOne({_id:req.headers["userid"]});
+      //console.log(userOwner)
+      const user = await User.aggregate([
+        { $match : data.access?{access:data.access}:{}},
+        { $match : data.search?{$or:[
+            {cName:{$regex: data.search}},
+            {sName:{$regex: data.search}},
+            {nif:{$regex: data.search}},
+            {email:{$regex: data.search}},
+            {phone:{$regex: data.search}}
+          ]}:{}},
+        
+          { $match : (userOwner&&(userOwner.access==="agent"||userOwner.access==="agency"))?
           {agent: {$regex:userOwner._id.toString()}}:{}},
         
         { $addFields: { "agent": { "$toObjectId": "$agent" }}},
