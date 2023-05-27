@@ -11,6 +11,7 @@ const sendEmailNow = require('../middleware/sendMail');
 const sendBitrix = require('../middleware/Bitrix');
 const bitrixDeal = require('../middleware/Bitrixdeal');
 const sendMailBrevo = require('../middleware/sendMail');
+const sendMailRegBrevo = require('../middleware/sendMailReg');
 
 router.post('/login',jsonParser, async (req,res)=>{
     try {
@@ -21,23 +22,13 @@ router.post('/login',jsonParser, async (req,res)=>{
         }
         // Validate if user exist in our database
         const user = await User.findOne({username: username });
+        //console.log(user)
         if(!user){
-          /*encryptedPassword = await bcrypt.hash(password, 10);
-        const user = await User.create({
-            username,
-            email:username+"@mgmlenz.com",
-            password: encryptedPassword,
-            date:Date.now()
-          });
-          const token = jwt.sign(
-            { user_id: user._id },
-            process.env.TOKEN_KEY,
-            {expiresIn: "2h",}
-          );
-          user.token = token;
-          res.status(201).json(user)
-          return;*/
           res.status(400).json({error:"user not found"});
+          return;
+        }
+        if(!user.password){
+          res.status(400).json({error:"password not set"});
           return;
         }
         if (user && (await bcrypt.compare(password, user.password))) {
@@ -134,7 +125,12 @@ router.post('/register',auth,jsonParser, async (req,res)=>{
         //console.log(bitrixDealConst)
         const user = bitrixData.result&&
           await User.create({...data,bitrixCode:bitrixData.result});
-        
+
+        const newOtp=user.cName+(Math.floor(Math.random() * 10000000) + 10000000)
+        await User.updateOne({email: data.email },{$set:{otp:newOtp}})
+        const sendMailResult = await sendMailRegBrevo(data.email,
+            data.access==="customer"?newOtp:req.body.password,data.access)
+        //console.log(sendMailResult)
         res.status(201).json({user:user,message:"User Created"})
         return;
       }
@@ -226,7 +222,7 @@ router.post('/list-search',auth,jsonParser, async (req,res)=>{
             localField: "agent", 
             foreignField: "_id", 
             as : "agentDetail"
-        }}
+        }},{$sort:{date:-1}}
     ])
     var pageUser=[];
     for(var i=data.offset;i<data.offset+parseInt(pageSize);i++)
@@ -252,7 +248,21 @@ router.post('/find-user-admin',auth,jsonParser, async (req,res)=>{
   try {
         const userOwner = await User.findOne({_id:req.headers["userid"]});
         const userData = await User.findOne({_id:req.body.userId});
+        if(userData)
+          await User.updateOne({_id:req.body.userId},{$set:{active:"true"}});
         res.status(200).json({user:userData,message:"User Data"})
+      } 
+  catch(error){
+      res.status(500).json({message: error.message})
+  }
+})
+router.post('/active-user',jsonParser, async (req,res)=>{
+  try {
+        const userData = await User.findOne({otp:req.body.otp});
+        if(userData)
+          await User.updateOne({otp:req.body.otp},
+            {$set:{active:"true"}});
+        res.status(200).json({user:userData,message:"User Activated"})
       } 
   catch(error){
       res.status(500).json({message: error.message})
@@ -301,12 +311,12 @@ router.post('/forget-password-set',jsonParser, async (req,res)=>{
       }
       if(data.newPass === data.confPass){
         const user = await User.findOne({otp:data.otp})
-        res.status(200).json({user:user,message:"User Found"})
+        //res.status(200).json({user:user,message:"User Found"})
         var encryptedNew = await bcrypt.hash(data.newPass, 10);
           await User.updateOne({otp:data.otp},
           {$set:{password:encryptedNew}})
 
-          res.status(200).json({user:user,message:"User Pass Changes"})
+          res.status(200).json({user:user,message:"User Pass Changed"})
         
       }
       else{
