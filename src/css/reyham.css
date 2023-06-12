@@ -1,0 +1,56 @@
+:root{
+	--main-color:#002A54;
+	--main-dark:rgb(48, 127, 226);
+    
+}
+html{
+    scroll-behavior: smooth;
+}
+.reyhamForm{
+    width: 70%;
+}
+
+.errorSmall{
+    color:brown;
+    float:right;
+}
+.hidden{
+    display: none;
+}
+.lang{
+    display: grid;
+
+}
+.lang li{
+    cursor: pointer;
+    color:#fff;
+}
+.filterIcon{
+    position: absolute;
+    bottom: 15px;
+    font-size: 22px;
+    font-weight: bold;
+    color: var(--blue);
+    right: 20px;
+    cursor: pointer;
+}
+@media only screen and (max-width:1200px){
+    .table-fiin table {
+        max-width: 1300px;
+        width: 100%;
+      }
+}
+@media only screen and (max-width:992px){
+    .header-logo{
+        margin:auto;
+    }
+    .main-menu > li:hover .sub-menu {
+        display: block;
+    }
+    
+}
+@media only screen and (max-width: 768px) {
+    .account-head:hover ul {
+        display: block;
+    }
+}
