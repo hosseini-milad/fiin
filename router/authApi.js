@@ -31,6 +31,10 @@ router.post('/login',jsonParser, async (req,res)=>{
           res.status(400).json({error:"password not set"});
           return;
         }
+        if(user.active==="false"){
+          res.status(400).json({error:"user not active"});
+          return;
+        }
         if (user && (await bcrypt.compare(password, user.password))) {
           const token = jwt.sign(
             { user_id: user._id, username },
@@ -102,6 +106,15 @@ router.post('/register',auth,jsonParser, async (req,res)=>{
         group: req.body.group,
         agent:req.body.agent?req.body.agent:req.headers["userid"],
         nif: req.body.nif,
+
+        nameCompany:req.body.nameCompany,
+        firma:req.body.firma,
+        morada:req.body.morada,
+        nifCompany:req.body.nifCompany,
+        phoneCompany:req.body.phoneCompany,
+        emailCompany:req.body.emailCompany,
+        IBANCompany:req.body.IBANCompany,
+
         date: Date.now()
       }
       if (!(data.cName && data.sName&&data.phone)) {
@@ -114,16 +127,16 @@ router.post('/register',auth,jsonParser, async (req,res)=>{
         {username: data.username },{email:data.email}]});
       if(!user){
         data.password = data.password&&await bcrypt.hash(data.password, 10);
-        const bitrixData = await sendBitrix(data,"crm.contact.add.json")
+        const bitrixData = {}//await sendBitrix(data,"crm.contact.add.json")
         //console.log(bitrixData)
         if(bitrixData.error){
           res.status(400).json({error:bitrixData.error_description})
           return
         }
-        const bitrixDealConst=await bitrixDeal(bitrixData.result,"crm.deal.add.json",data)
+        //const bitrixDealConst=await bitrixDeal(bitrixData.result,"crm.deal.add.json",data)
 
         //console.log(bitrixDealConst)
-        const user = bitrixData.result&&
+        const user = //bitrixData.result&&
           await User.create({...data,bitrixCode:bitrixData.result});
 
         const newOtp=user.cName+(Math.floor(Math.random() * 10000000) + 10000000)
@@ -248,7 +261,7 @@ router.post('/find-user-admin',auth,jsonParser, async (req,res)=>{
   try {
         const userOwner = await User.findOne({_id:req.headers["userid"]});
         const userData = await User.findOne({_id:req.body.userId});
-        if(userData)
+        if(userData&&userData.access==="customer")
           await User.updateOne({_id:req.body.userId},{$set:{active:"true"}});
         res.status(200).json({user:userData,message:"User Data"})
       } 
@@ -336,6 +349,16 @@ router.post('/change-user',auth,jsonParser, async (req,res)=>{
         phone:req.body.phone,
         email:req.body.email,
         nif:req.body.nif,
+
+        nameCompany:req.body.nameCompany,
+        firma:req.body.firma,
+        morada:req.body.morada,
+        nifCompany:req.body.nifCompany,
+        phoneCompany:req.body.phoneCompany,
+        emailCompany:req.body.emailCompany,
+        IBANCompany:req.body.IBANCompany,
+  
+        active:req.body.active,
         date: Date.now()
       }
       // Validate if user exist in our database

@@ -22,6 +22,15 @@ const userSchema = new mongoose.Schema({
   nif: { type: String },
   agent:{ type: String },
   active:{ type: String },
+
+  nameCompany:{ type: String },
+  firma:{ type: String },
+  morada:{ type: String },
+  nifCompany:{ type: String },
+  phoneCompany:{ type: String },
+  emailCompany:{ type: String },
+  IBANCompany:{ type: String },
+
   date:{type:Date}
 });
 

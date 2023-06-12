@@ -19,7 +19,7 @@ const sendMailRegBrevo=async(email,otp,access)=>{
     change password after login`}<br/>
     <span>Se não pediu para alterar a sua password, por favor, ignore o presente email.</span>
     </body></html>`;
-    sendSmtpEmail.sender = {"name":"Fiin","email":"arash@gandotech.com"};
+    sendSmtpEmail.sender = {"name":"Fiin","email":"fiinservice@fiinservice.com"};
     sendSmtpEmail.to = [{"email":email}];
     //sendSmtpEmail.cc = [{"email":"tetikak@gmail.com","name":"Janice Doe"}];
     //sendSmtpEmail.bcc = [{"email":"dkmehr.com@gmail.com","name":"DKMehr"}];

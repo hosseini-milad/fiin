@@ -16,7 +16,7 @@ const sendMailBrevo=async(email,otp,user)=>{
     <a href="https://fiin1.deleves.com/forget-pass/${otp}">Change Password Link</a><br/>
     <span>Se não pediu para alterar a sua password, por favor, ignore o presente email.</span>
     </body></html>`;
-    sendSmtpEmail.sender = {"name":"Fiin","email":"arash@gandotech.com"};
+    sendSmtpEmail.sender = {"name":"Fiin","email":"fiinservice@fiinservice.com"};
     sendSmtpEmail.to = [{"email":email}];
     //sendSmtpEmail.cc = [{"email":"tetikak@gmail.com","name":"Janice Doe"}];
     //sendSmtpEmail.bcc = [{"email":"dkmehr.com@gmail.com","name":"DKMehr"}];
