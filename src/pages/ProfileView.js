@@ -66,8 +66,65 @@ function ProfileView(){
                     <div className="form-fiin form-box-style">
                         <div className="section-head">
                             <h1 className="section-title">Dados Do utilizador <span>{token?token.access:''}</span></h1>
-                            <p className="hidden">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt .</p>
+                            {token&&token.access==="agency"?
+                            <><p>Dados do parceiro</p><hr/></>:<></>}
                         </div>
+                        {/*Comercial Profile*/}
+                        {token&&token.access==="agency"?<><div className="row">
+                            <div className="col-md-6">
+                                <div className="form-field-fiin">
+                                    <label htmlFor="Nome-Comercial">Nome Comercial</label>
+                                    <input type="text" name="Nome-Comercial" id="Nome-Comercial" value={users&&users.nameCompany}
+                                     disabled={disableState}/>
+                                </div>
+                            </div>
+                            <div className="col-md-6">
+                                <div className="form-field-fiin">
+                                    <label htmlFor="Firma">Firma</label>
+                                    <input type="text" name="Firma" id="Firma" value={users&&users.firma}
+                                     disabled={disableState}/>
+                                </div>
+                            </div>
+                            <div className="col-md-6">
+                                <div className="form-field-fiin">
+                                    <label htmlFor="nif">NIF Comercial</label>
+                                    <input type="text" name="nif" id="nif" value={users&&users.nifCompany}
+                                     disabled={disableState}/>
+                                </div>
+                            </div>
+                            <div className="col-md-6">
+                                <div className="form-field-fiin">
+                                    <label htmlFor="Morada">Morada</label>
+                                    <input type="text" name="Morada" id="Morada" value={users&&users.morada}
+                                     disabled={disableState}/>
+                                </div>
+                            </div>
+                            <div className="col-md-6">
+                                <div className="form-field-fiin">
+                                    <label htmlFor="telefoneCompany">Telefone Comercial</label>
+                                    <input type="tel" name="telefoneCompany" id="telefoneCompany" value={users&&users.phoneCompany}
+                                     disabled={disableState}/>
+                                </div>
+                            </div>
+                            <div className="col-md-6">
+                                <div className="form-field-fiin">
+                                    <label htmlFor="emailCompany">E-main Comercial</label>
+                                    <input type="email" name="emailCompany" id="emailCompany" value={users&&users.emailCompany}
+                                     disabled={disableState}/>
+                                </div>
+                            </div>
+                            <div className="col-md-6">
+                                <div className="form-field-fiin">
+                                    <label htmlFor="IBAN">IBAN</label>
+                                    <input type="text" name="IBAN" id="IBAN" value={users&&users.IBANCompany}
+                                     disabled={disableState}/>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="section-head">
+                            <p >Administrador da parceria</p>
+                            <hr/>
+                        </div></>:<></>}
                         <div className="row">
                             <div className="col-md-6">
                                 <div className="form-field-fiin">

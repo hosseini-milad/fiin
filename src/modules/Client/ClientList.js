@@ -88,6 +88,11 @@ const ClientList = (props)=>{
                 <ClientListTable users={users} pageNumber={pageNumber} access={token&&token.level}
                     setPageNumber={setPageNumber} setDoFilter={setDoFilter}/>
             </div>
+            <div className="footer-form-fiin rev">
+                <button type="input" className="btn-fiin"
+                onClick={()=>{window.location.href="/client/register"}}>
+                    Registo de cliente</button>
+            </div>
         </div>
     </div>
     )

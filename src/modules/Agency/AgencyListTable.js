@@ -1,7 +1,7 @@
 function AgentListTable(props){
     const usersList = props.users&&props.users.user
     //console.log(usersList)
-    return(
+    return(<>
         <table>
             <thead>
                 <tr>
@@ -27,6 +27,7 @@ function AgentListTable(props){
                 
             </tbody>
         </table>
+    </>
     )
 }
 export default AgentListTable

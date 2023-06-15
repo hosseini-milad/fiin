@@ -73,6 +73,12 @@ const AgencyList = (props)=>{
             <div className="table-fiin">
                 <AgentListTable users={users}/>
             </div>
+            
+            <div className="footer-form-fiin rev">
+                <button type="input" className="btn-fiin"
+                onClick={()=>{window.location.href="/agency/register"}}>
+                    Registo de agência</button>
+            </div>
         </div>
     </div>
     )

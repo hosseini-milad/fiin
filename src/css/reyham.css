@@ -34,6 +34,9 @@ html{
     right: 20px;
     cursor: pointer;
 }
+.rev{
+    flex-direction: row-reverse;
+}
 @media only screen and (max-width:1200px){
     .table-fiin table {
         max-width: 1300px;
