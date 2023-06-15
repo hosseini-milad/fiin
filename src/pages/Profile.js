@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import Breadcrumb from "../components/BreadCrumb"
 import Cookies from 'universal-cookie';
 import env from "../env";
+import Switch from "react-switch";
 const cookies = new Cookies();
 
 function Profile(){
@@ -58,6 +59,7 @@ function Profile(){
             setTimeout(()=>setError({message:'',color:"brown"}),3000)
         })
     }
+    console.log(users&&users.active)
     return(
         <div className="container">
         <Breadcrumb title={"Dados do utilizador"}/>
@@ -68,8 +70,87 @@ function Profile(){
                     <div className="form-fiin form-box-style">
                         <div className="section-head">
                             <h1 className="section-title">Dados do utilizador <span>{users?users.access:''}</span></h1>
-                            <p className="hidden">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt .</p>
+                            {users&&users.access==="agency"?
+                            <><p>Dados do parceiro</p><hr/></>:''}
                         </div>
+                        {/*Comercial Profile*/}
+                        {users&&users.access==="agency"?<><div className="row">
+                            <div className="col-md-6">
+                                <div className="form-field-fiin">
+                                    <label htmlFor="Nome-Comercial">Nome Comercial</label>
+                                    <input type="text" name="Nome-Comercial" id="Nome-Comercial" value={users&&users.nameCompany}
+                                    onChange={(e)=>setUsers(data => ({
+                                        ...data,
+                                        ...{nameCompany:e.target.value}
+                                      }))}/>
+                                </div>
+                            </div>
+                            <div className="col-md-6">
+                                <div className="form-field-fiin">
+                                    <label htmlFor="Firma">Firma</label>
+                                    <input type="text" name="Firma" id="Firma" value={users&&users.firma}
+                                    onChange={(e)=>setUsers(data => ({
+                                        ...data,
+                                        ...{firma:e.target.value}
+                                      }))}/>
+                                </div>
+                            </div>
+                            <div className="col-md-6">
+                                <div className="form-field-fiin">
+                                    <label htmlFor="nif">NIF Comercial</label>
+                                    <input type="text" name="nif" id="nif" value={users&&users.nifCompany}
+                                    onChange={(e)=>setUsers(data => ({
+                                        ...data,
+                                        ...{nifCompany:e.target.value}
+                                      }))}/>
+                                </div>
+                            </div>
+                            <div className="col-md-6">
+                                <div className="form-field-fiin">
+                                    <label htmlFor="Morada">Morada</label>
+                                    <input type="text" name="Morada" id="Morada" value={users&&users.morada}
+                                    onChange={(e)=>setUsers(data => ({
+                                        ...data,
+                                        ...{morada:e.target.value}
+                                      }))}/>
+                                </div>
+                            </div>
+                            <div className="col-md-6">
+                                <div className="form-field-fiin">
+                                    <label htmlFor="telefoneCompany">Telefone Comercial</label>
+                                    <input type="tel" name="telefoneCompany" id="telefoneCompany" value={users&&users.phoneCompany}
+                                    onChange={(e)=>setUsers(data => ({
+                                        ...data,
+                                        ...{phoneCompany:e.target.value}
+                                      }))}/>
+                                </div>
+                            </div>
+                            <div className="col-md-6">
+                                <div className="form-field-fiin">
+                                    <label htmlFor="emailCompany">E-main Comercial</label>
+                                    <input type="email" name="emailCompany" id="emailCompany" value={users&&users.emailCompany}
+                                    onChange={(e)=>setUsers(data => ({
+                                        ...data,
+                                        ...{emailCompany:e.target.value}
+                                      }))}/>
+                                </div>
+                            </div>
+                            <div className="col-md-6">
+                                <div className="form-field-fiin">
+                                    <label htmlFor="IBAN">IBAN</label>
+                                    <input type="text" name="IBAN" id="IBAN" value={users&&users.IBANCompany}
+                                    onChange={(e)=>setUsers(data => ({
+                                        ...data,
+                                        ...{IBANCompany:e.target.value}
+                                      }))}/>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="section-head">
+                            <p >Administrador da parceria</p>
+                            <hr/>
+                        </div></>:<></>}
+                        {/*Individual Profile*/}
                         <div className="row">
                             <div className="col-md-6">
                                 <div className="form-field-fiin">
@@ -119,6 +200,15 @@ function Profile(){
                                         ...data,
                                         ...{phone:e.target.value}
                                       }))}/>
+                                </div>
+                            </div>
+                            <div className="col-md-6">
+                                <div className="form-field-fiin">
+                                    <label htmlFor="active">Ativa</label>
+                                    <Switch onChange={(e)=>setUsers(data => ({
+                                        ...data,
+                                        ...{active:e?"true":"false"}
+                                      }))} checked={users&&users.active==="true"?true:false} />
                                 </div>
                             </div>
                         </div>

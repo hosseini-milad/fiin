@@ -1,5 +1,5 @@
 import Breadcrumb from "../../components/BreadCrumb"
-import Register from "../Register"
+import RegisterCompany from "./RegisterCompany"
 
 const RegAgency = (props)=>{
     return(
@@ -9,7 +9,7 @@ const RegAgency = (props)=>{
         <div className="section-fiin registo-de-consultores">
             <div className="row justify-content-center">
                 <div className="col-lg-8">
-                    <Register access={"agency"} showpass="true" title="agência"/>
+                    <RegisterCompany access={"agency"} showpass="true" title="agência"/>
                 </div>
             </div>
         </div>

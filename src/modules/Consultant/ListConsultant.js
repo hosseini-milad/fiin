@@ -80,6 +80,12 @@ const ConsultantList = (props)=>{
             <div className="table-fiin">
                 <AgentListTable users={users}/>
             </div>
+            
+            <div className="footer-form-fiin rev">
+                <button type="input" className="btn-fiin"
+                onClick={()=>{window.location.href="/consultant/register"}}>
+                    Registo de consultores</button>
+            </div>
         </div>
     </div>
     )

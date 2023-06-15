@@ -47,7 +47,9 @@ function ClientListTable(props){
             setPageNumber={props.setPageNumber} 
             pageNumber={props.pageNumber} perPage={5}
             setDoFilter={props.setDoFilter}/>
+            
         </>
+        
     )
 }
 export default ClientListTable
