@@ -113,7 +113,7 @@ function Register(props){
             </div>
             <div className="footer-form-fiin">
                 <WaitingBtn class="btn-fiin" title="Registar" 
-                    waiting={'registrando.'}
+                    waiting={'Registering.'}
                     function={RegisterNow} name="submit" error={error}/> 
             </div>
             <small className="errorSmall" style={{color:error.color}}>
