@@ -10,8 +10,10 @@ const User = require("../models/auth/users");
 const sendEmailNow = require('../middleware/sendMail');
 const sendBitrix = require('../middleware/Bitrix');
 const bitrixDeal = require('../middleware/Bitrixdeal');
+const LogCreator = require('../middleware/LogCreator')
 const sendMailBrevo = require('../middleware/sendMail');
 const sendMailRegBrevo = require('../middleware/sendMailReg');
+const sendMailChangeEmailBrevo = require('../middleware/sendMailChange');
 
 router.post('/login',jsonParser, async (req,res)=>{
     try {
@@ -141,8 +143,9 @@ router.post('/register',auth,jsonParser, async (req,res)=>{
 
         const newOtp=user.cName+(Math.floor(Math.random() * 10000000) + 10000000)
         await User.updateOne({email: data.email },{$set:{otp:newOtp}})
-        const sendMailResult = await sendMailRegBrevo(data.email,
-            data.access==="customer"?newOtp:req.body.password,data.access)
+        const sendMailResult = await sendMailRegBrevo(data.email,'',
+            data.access==="customer"?newOtp:req.body.password,
+            user._id)
         //console.log(sendMailResult)
         res.status(201).json({user:user,message:"User Created"})
         return;
@@ -257,6 +260,33 @@ router.post('/find-users',auth,jsonParser, async (req,res)=>{
       res.status(500).json({message: error.message})
   }
 })
+router.post('/change-email',auth,jsonParser, async (req,res)=>{
+  const data={
+    email:req.body.email,
+    username:req.body.email,
+    active:"false"
+  }
+  try {
+
+    const userOwner = await User.findOne({_id:req.body.userId});
+    const newOwner = await User.findOne({email:data.email});
+    data.oldEmail=userOwner.email;
+    const logData = await LogCreator(userOwner,"change email",
+    "user email change by administrator to: "+data.email)
+    if(newOwner){
+      res.status(500).json({error: "user already exists"})
+    }
+    else{
+      const sendMailResult = await sendMailChangeEmailBrevo(data.email,userOwner._id)
+      const newData=await User.updateOne({_id:req.body.userId},data)
+      res.status(200).json({user:userOwner,message:"User Email Updated"})
+    }
+    
+  } 
+  catch(error){
+      res.status(500).json({message: error.message})
+  }
+})
 router.post('/find-user-admin',auth,jsonParser, async (req,res)=>{
   try {
         const userOwner = await User.findOne({_id:req.headers["userid"]});
@@ -271,9 +301,9 @@ router.post('/find-user-admin',auth,jsonParser, async (req,res)=>{
 })
 router.post('/active-user',jsonParser, async (req,res)=>{
   try {
-        const userData = await User.findOne({otp:req.body.otp});
+        const userData = await User.findOne({_id:req.body.userId});
         if(userData)
-          await User.updateOne({otp:req.body.otp},
+          await User.updateOne({_id:req.body.userId},
             {$set:{active:"true"}});
         res.status(200).json({user:userData,message:"User Activated"})
       } 

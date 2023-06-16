@@ -1,6 +1,6 @@
 const SibApiV3Sdk = require('sib-api-v3-sdk');
 
-const sendMailBrevo=async(email,otp,user)=>{
+const sendMailChangeEmailBrevo=async(email,userId)=>{
     let defaultClient = SibApiV3Sdk.ApiClient.instance;
     
     let apiKey = defaultClient.authentications['api-key'];
@@ -9,11 +9,12 @@ const sendMailBrevo=async(email,otp,user)=>{
     let apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
     let sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
 
-    sendSmtpEmail.subject = "Fiin Change Password";
+    sendSmtpEmail.subject = "Fiin Active Email";
     sendSmtpEmail.htmlContent = `<html><body>
     <p>A FIIN recebeu uma solicitação para alteração da sua password.<br/>
     Para tal, nas próximas 24h deverá aceder ao seguinte link: </p><br/>
-    <a href="https://portal.fiinservice.com/forget-pass/${otp}">Change Password Link</a><br/>
+    Active account using below link:<br/>
+    <a href="https://portal.fiinservice.com/active-user/${userId}">Active Now</a><br/>
     <span>Se não pediu para alterar a sua password, por favor, ignore o presente email.</span>
     </body></html>`;
     sendSmtpEmail.sender = {"name":"Fiin","email":"fiinservice@fiinservice.com"};
@@ -21,8 +22,6 @@ const sendMailBrevo=async(email,otp,user)=>{
     //sendSmtpEmail.cc = [{"email":"tetikak@gmail.com","name":"Janice Doe"}];
     //sendSmtpEmail.bcc = [{"email":"dkmehr.com@gmail.com","name":"DKMehr"}];
     sendSmtpEmail.replyTo = {"email":"replyto@domain.com","name":"John Doe"};
-    sendSmtpEmail.headers = {"Some-Custom-Name":"unique-id-1234"};
-    sendSmtpEmail.params = {"parameter":"My param value","subject":"New Subject"};
     var result = "";
     await apiInstance.sendTransacEmail(sendSmtpEmail)
     .then(function(data) {
@@ -36,4 +35,4 @@ const sendMailBrevo=async(email,otp,user)=>{
     });
     return(result)
 }
-module.exports =sendMailBrevo
+module.exports =sendMailChangeEmailBrevo
