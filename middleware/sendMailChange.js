@@ -1,6 +1,6 @@
 const SibApiV3Sdk = require('sib-api-v3-sdk');
 
-const sendMailChangeEmailBrevo=async(email,userId)=>{
+const sendMailChangeEmailBrevo=async(email,otp)=>{
     let defaultClient = SibApiV3Sdk.ApiClient.instance;
     
     let apiKey = defaultClient.authentications['api-key'];
@@ -14,7 +14,7 @@ const sendMailChangeEmailBrevo=async(email,userId)=>{
     <p>A FIIN recebeu uma solicitação para alteração da sua password.<br/>
     Para tal, nas próximas 24h deverá aceder ao seguinte link: </p><br/>
     Active account using below link:<br/>
-    <a href="https://portal.fiinservice.com/active-user/${userId}">Active Now</a><br/>
+    <a href="https://portal.fiinservice.com/active-user/${otp}">Active Now</a><br/>
     <span>Se não pediu para alterar a sua password, por favor, ignore o presente email.</span>
     </body></html>`;
     sendSmtpEmail.sender = {"name":"Fiin","email":"fiinservice@fiinservice.com"};
