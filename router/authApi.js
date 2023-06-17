@@ -276,16 +276,18 @@ router.post('/change-email',auth,jsonParser, async (req,res)=>{
     const userOwner = await User.findOne({_id:req.body.userId});
     const newOwner = await User.findOne({email:data.email});
     data.oldEmail=userOwner.email;
-    const logData = await LogCreator(userOwner,"change email",
-    "user email change by administrator to: "+data.email)
     if(newOwner){
       res.status(500).json({error: "user already exists"})
+      return
     }
     else{
-      const userData = await User.updateOne({_id:req.body.userId},
-        {$set:{otp:createOTP(userOwner.cName)}})
-      const sendMailResult = await sendMailChangeEmailBrevo(data.email,userData.otp)
-      const newData=await User.updateOne({_id:req.body.userId},data)
+      const newOtp = createOTP(userOwner.cName)
+    const logData = await LogCreator(userOwner,"change email",
+    "user email change by administrator to: "+data.email)
+      
+      const sendMailResult = await sendMailChangeEmailBrevo(data.email,newOtp)
+      const newData=await User.updateOne({_id:req.body.userId},
+          {$set:{...data,otp:newOtp}})
       res.status(200).json({user:userOwner,message:"User Email Updated"})
     }
     
