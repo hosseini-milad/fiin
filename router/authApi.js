@@ -65,6 +65,10 @@ router.post('/login',jsonParser, async (req,res)=>{
         res.status(500).json({message: error.message})
     }
 })
+const createOTP=(cName)=>{
+  return(cName+(Math.floor(Math.random() * 10000000)
+   + 10000000))
+}
 router.post('/forget',jsonParser, async (req,res)=>{
   try {
       const { email } = req.body;
@@ -80,7 +84,7 @@ router.post('/forget',jsonParser, async (req,res)=>{
         return;
       }
       if (user) {
-        const newOtp=user.cName+(Math.floor(Math.random() * 10000000) + 10000000)
+        const newOtp=createOTP(user.cName)
         await User.updateOne({email: email },{$set:{otp:newOtp}})
         const sendMailResult = await sendMailBrevo(email,newOtp)
         //console.log(sendMailResult)
@@ -119,7 +123,7 @@ router.post('/register',auth,jsonParser, async (req,res)=>{
 
         date: Date.now()
       }
-      if (!(data.cName && data.sName&&data.phone)) {
+      if (!(data.cName && data.sName&&data.phone&&data.email)) {
         res.status(400).json(
           {error:"All input is required"});
         return;
@@ -138,14 +142,16 @@ router.post('/register',auth,jsonParser, async (req,res)=>{
         //const bitrixDealConst=await bitrixDeal(bitrixData.result,"crm.deal.add.json",data)
 
         //console.log(bitrixDealConst)
+        const newOtp=createOTP(data.cName)
         const user = //bitrixData.result&&
-          await User.create({...data,bitrixCode:bitrixData.result});
+          await User.create({...data,bitrixCode:bitrixData.result,
+          otp:newOtp});
 
-        const newOtp=user.cName+(Math.floor(Math.random() * 10000000) + 10000000)
-        await User.updateOne({email: data.email },{$set:{otp:newOtp}})
+        //const newOtp=user.cName+(Math.floor(Math.random() * 10000000) + 10000000)
+        //await User.updateOne({email: data.email },{$set:{otp:newOtp}})
         const sendMailResult = await sendMailRegBrevo(data.email,'',
             data.access==="customer"?newOtp:req.body.password,
-            user._id)
+            user.otp)
         //console.log(sendMailResult)
         res.status(201).json({user:user,message:"User Created"})
         return;
@@ -267,7 +273,6 @@ router.post('/change-email',auth,jsonParser, async (req,res)=>{
     active:"false"
   }
   try {
-
     const userOwner = await User.findOne({_id:req.body.userId});
     const newOwner = await User.findOne({email:data.email});
     data.oldEmail=userOwner.email;
@@ -277,7 +282,9 @@ router.post('/change-email',auth,jsonParser, async (req,res)=>{
       res.status(500).json({error: "user already exists"})
     }
     else{
-      const sendMailResult = await sendMailChangeEmailBrevo(data.email,userOwner._id)
+      const userData = await User.updateOne({_id:req.body.userId},
+        {$set:{otp:createOTP(userOwner.cName)}})
+      const sendMailResult = await sendMailChangeEmailBrevo(data.email,userData.otp)
       const newData=await User.updateOne({_id:req.body.userId},data)
       res.status(200).json({user:userOwner,message:"User Email Updated"})
     }
@@ -300,12 +307,17 @@ router.post('/find-user-admin',auth,jsonParser, async (req,res)=>{
   }
 })
 router.post('/active-user',jsonParser, async (req,res)=>{
+
   try {
-        const userData = await User.findOne({_id:req.body.userId});
-        if(userData)
-          await User.updateOne({_id:req.body.userId},
-            {$set:{active:"true"}});
-        res.status(200).json({user:userData,message:"User Activated"})
+        const userData = await User.findOne({otp:req.body.otp});
+        if(userData){
+          await User.updateOne({otp:req.body.otp},
+            {$set:{active:"true",otp:""}});
+          res.status(200).json({user:userData,message:"User Activated"})
+          }
+        else{
+          res.status(500).json({error:"Expired OTP"})
+        }
       } 
   catch(error){
       res.status(500).json({message: error.message})
@@ -352,19 +364,22 @@ router.post('/forget-password-set',jsonParser, async (req,res)=>{
         otp:req.body.otp,
         date: Date.now()
       }
-      if(data.newPass === data.confPass){
-        const user = await User.findOne({otp:data.otp})
-        //res.status(200).json({user:user,message:"User Found"})
+      if(data.newPass !== data.confPass){
+        res.status(400).json({error:"Not Equal Passwords"});
+        return
+      }
+        const user = await User.findOne(data.otp&&{otp:data.otp})
+        if(!user){
+          res.status(400).json({error:"Expired OTP"});
+          return
+        }
+      //res.status(200).json({user:user,message:"User Found"})
         var encryptedNew = await bcrypt.hash(data.newPass, 10);
-          await User.updateOne({otp:data.otp},
-          {$set:{password:encryptedNew}})
+        await User.updateOne(data.otp&&{otp:data.otp},
+          {$set:{password:encryptedNew,otp:""}})
 
           res.status(200).json({user:user,message:"User Pass Changed"})
         
-      }
-      else{
-        res.status(400).json({error:"Not Equal Passwords"});
-      }
     } 
   catch(error){
       res.status(500).json({message: error.message})
