@@ -31,6 +31,9 @@
 .icon-close:before {
     content: "\e901";
 }
+.icon-edit:before {
+    content: "\e906";
+}
 .icon-note:before {
     content: "\e902";
 }

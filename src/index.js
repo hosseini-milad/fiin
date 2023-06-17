@@ -31,6 +31,7 @@ import Profile from './pages/Profile';
 import ForgetPass from './pages/ForgetPass';
 import errortrans from './translate/error';
 import ProfileView from './pages/ProfileView';
+import ActiveUser from './pages/ActiveUser';
 const cookies = new Cookies();
 var lang = JSON.parse(localStorage.getItem('fiin-lang'));
 
@@ -75,6 +76,7 @@ root.render(
         <Route path="/:login" element={<Login lang={lang}/>}/>
         <Route path="/:login/:page" element={<Login lang={lang}/>}/>
         <Route path="/forget-pass/:otp" element={<ForgetPass/>}/>
+        <Route path="/active-user/:otp" element={<ActiveUser/>}/>
       </Routes>}
      </Router>
     </React.StrictMode>

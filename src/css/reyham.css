@@ -37,6 +37,41 @@ html{
 .rev{
     flex-direction: row-reverse;
 }
+
+.form-field-fiin .icon-edit {
+    position: absolute;
+    bottom: 18px;
+    right: -30px;
+    cursor: pointer;
+}
+.form-field-fiin:hover {
+    color:var(--blue)
+}
+.email-form-fiin{
+    margin-top: 35px;
+
+}
+.btn-email {
+    background: var(--main-dark);
+    border: 1px solid var(--main-dark);
+    border-radius: 4px;
+    font-size: 13px;
+    color: #fff;
+    padding: 15px;
+    transition: 0.3s;
+    width: 90%;
+}
+
+.btn-email:hover {
+    background-color: transparent;
+    color: var(--main-dark);
+}
+.change-email{
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
 @media only screen and (max-width:1200px){
     .table-fiin table {
         max-width: 1300px;

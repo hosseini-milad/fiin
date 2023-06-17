@@ -9,6 +9,8 @@ function Profile(){
     const userId = document.location.pathname.split('/')[2]
 
     const [users,setUsers] = useState()
+    const [changeEmail,setChangeEmail] = useState()
+    const [email,setEmail] = useState()
     const [error,setError] = useState({message:'',color:"brown"})
     
     const token=cookies.get('fiin-login')
@@ -59,7 +61,35 @@ function Profile(){
             setTimeout(()=>setError({message:'',color:"brown"}),3000)
         })
     }
-    console.log(users&&users.active)
+    const changeEmailFunction=()=>{
+        const token=cookies.get('fiin-login')
+        const postOptions={
+            method:'post',
+            headers: { 'Content-Type': 'application/json' ,
+            "x-access-token": token&&token.token,
+            "userId":token&&token.userId},
+            body:JSON.stringify({userId:users._id,email:email})
+          }
+        
+        fetch(env.siteApi + "/auth/change-email",postOptions)
+      .then(res => res.json())
+      .then(
+        (result) => {
+            console.log(result)
+            if(result.error){
+                setError({message:result.error,color:"brown"})
+            setTimeout(()=>setError({message:'',color:"brown"}),3000)
+            }
+            else{
+                setError({message:result.message,color:"green"})
+                setTimeout(()=>window.location.reload(),3000)
+            }
+        },
+        (error) => {
+            setError({message:"error",color:"brown"})
+            setTimeout(()=>setError({message:'',color:"brown"}),3000)
+        })
+    }
     return(
         <div className="container">
         <Breadcrumb title={"Dados do utilizador"}/>
@@ -185,13 +215,28 @@ function Profile(){
                             <div className="col-md-6">
                                 <div className="form-field-fiin">
                                     <label htmlFor="email">E-mail</label>
-                                    <input type="email" name="email" id="email" value={users&&users.email}
-                                    onChange={(e)=>setUsers(data => ({
-                                        ...data,
-                                        ...{email:e.target.value}
-                                      }))}/>
+                                    <input type="email" name="email" id="email" 
+                                    value={users&&users.email} disabled={true}
+                                    />
+                                    <span className="icon-edit icon-edit" onClick={()=>setChangeEmail(1)}></span>
+
                                 </div>
                             </div>
+                            {changeEmail?<div className="change-email col-md-12" >
+                                <div className="col-md-6">
+                                  <div className="form-field-fiin">
+                                    <label htmlFor="email">new E-mail</label>
+                                    <input type="email" name="email" id="email" 
+                                    value={email}
+                                    onChange={(e)=>setEmail(e.target.value)}/>
+                                </div>
+                            </div>
+                            <div className="col-md-6">
+                                <div className="email-form-fiin">
+                                    <button type="submit" className="btn-email" name="submit"
+                                    onClick={changeEmailFunction}>Change Email</button>
+                                </div>
+                            </div></div>:<div className="change-email"></div>}
                             <div className="col-md-6">
                                 <div className="form-field-fiin">
                                     <label htmlFor="telefone">Telefone</label>
