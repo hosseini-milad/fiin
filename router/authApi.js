@@ -120,7 +120,7 @@ router.post('/register',auth,jsonParser, async (req,res)=>{
         phoneCompany:req.body.phoneCompany,
         emailCompany:req.body.emailCompany,
         IBANCompany:req.body.IBANCompany,
-
+        active:"false",
         date: Date.now()
       }
       if (!(data.cName && data.sName&&data.phone&&data.email)) {
