@@ -15,7 +15,7 @@ function ForgetPass(){
             body:JSON.stringify({otp:otp})
           }
           //console.log(postOptions)
-        fetch(env.siteApi + "/auth/active-user",postOptions)
+        0&&fetch(env.siteApi + "/auth/active-user",postOptions)
       .then(res => res.json())
       .then(
         (result) => {
@@ -40,7 +40,7 @@ function ForgetPass(){
             },
             body:JSON.stringify({otp:otp,...pass})
           }
-          //console.log(postOptions)
+          console.log(postOptions)
         fetch(env.siteApi + "/auth/forget-password-set",postOptions)
       .then(res => res.json())
       .then(
