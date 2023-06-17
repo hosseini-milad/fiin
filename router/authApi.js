@@ -127,7 +127,7 @@ router.post('/register',auth,jsonParser, async (req,res)=>{
         res.status(400).json(
           {error:"All input is required"});
         return;
-      }
+      } 
       // Validate if user exist in our database
       const user = await User.findOne({$or:[
         {username: data.username },{email:data.email}]});
@@ -300,8 +300,8 @@ router.post('/find-user-admin',auth,jsonParser, async (req,res)=>{
   try {
         const userOwner = await User.findOne({_id:req.headers["userid"]});
         const userData = await User.findOne({_id:req.body.userId});
-        if(userData&&userData.access==="customer")
-          await User.updateOne({_id:req.body.userId},{$set:{active:"true"}});
+        /*if(userData&&userData.access==="customer")
+          await User.updateOne({_id:req.body.userId},{$set:{active:"true"}});*/
         res.status(200).json({user:userData,message:"User Data"})
       } 
   catch(error){
