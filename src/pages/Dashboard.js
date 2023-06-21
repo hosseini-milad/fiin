@@ -1,8 +1,11 @@
+import Board from "../modules/Board/Board"
 
 function Dashboard(){
     return(
         <main>
-            Main
+            <div className="Board">
+                <Board />
+            </div>
         </main>
     )
 }

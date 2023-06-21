@@ -71,7 +71,7 @@ const AgencyList = (props)=>{
                 <p className="hidden">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt .</p>
             </div>   
             <div className="table-fiin">
-                <AgentListTable users={users}/>
+                <AgentListTable users={users} access={"agency"}/>
             </div>
             
             <div className="footer-form-fiin rev">

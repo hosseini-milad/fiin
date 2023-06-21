@@ -43,7 +43,6 @@ if(!lang){
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-    <React.StrictMode>
     <Router>
     {cookies.get('fiin-login')?
       <Routes>
@@ -79,7 +78,6 @@ root.render(
         <Route path="/active-user/:otp" element={<ActiveUser/>}/>
       </Routes>}
      </Router>
-    </React.StrictMode>
 );
 
 serviceWorkerRegistration.unregister();

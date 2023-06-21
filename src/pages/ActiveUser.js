@@ -23,7 +23,7 @@ function ActiveUser(){
             }
             else{
                 setError({message:result.message,color:"green"})
-                setTimeout(()=>window.location.href="/",20000)
+                setTimeout(()=>window.location.href="/",2000)
             }
             
         },
