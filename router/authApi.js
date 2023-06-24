@@ -14,6 +14,7 @@ const LogCreator = require('../middleware/LogCreator')
 const sendMailBrevo = require('../middleware/sendMail');
 const sendMailRegBrevo = require('../middleware/sendMailReg');
 const sendMailChangeEmailBrevo = require('../middleware/sendMailChange');
+const task = require('../models/main/task');
 
 router.post('/login',jsonParser, async (req,res)=>{
     try {
@@ -147,11 +148,11 @@ router.post('/register',auth,jsonParser, async (req,res)=>{
           await User.create({...data,bitrixCode:bitrixData.result,
           otp:newOtp});
 
-        //const newOtp=user.cName+(Math.floor(Math.random() * 10000000) + 10000000)
+        const createTask =await task.create({userId:user._id,
+          state:"lead",date:Date.now()})
         //await User.updateOne({email: data.email },{$set:{otp:newOtp}})
         const sendMailResult = await sendMailRegBrevo(data.email,'',
-            data.access==="customer"?newOtp:req.body.password,
-            user.otp)
+            data.access==="customer"?newOtp:req.body.password,newOtp)
         //console.log(sendMailResult)
         res.status(201).json({user:user,message:"User Created"})
         return;

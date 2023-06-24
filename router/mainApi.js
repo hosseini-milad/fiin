@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router()
 const slider = require('../models/main/slider');
 const authApi = require('./authApi');
-const reportApi = require('./reportApi');
+const taskApi = require('./taskApi');
 const productApi = require('./productApi');
 
 router.get('/main', async (req,res)=>{
@@ -18,6 +18,6 @@ router.get('/main', async (req,res)=>{
 })
 
 router.use('/auth', authApi)
-router.use('/report', reportApi)
+router.use('/task', taskApi)
 router.use('/product', productApi)
 module.exports = router;
