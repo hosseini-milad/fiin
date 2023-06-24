@@ -1,10 +1,11 @@
 import Task from "./Task"
 import {Droppable} from 'react-beautiful-dnd';
 function Column(props){
-    //console.log(props.tasks)
     return(
         <div className="columnHolder">
-            <h2>{props.column.title}</h2>
+            <h2>{props.column.title}
+            <small>({props.tasks.length})</small></h2>
+            
             <Droppable droppableId={props.column.id}>
                 {(provided,snapshot)=>(
                 <div className={snapshot.isDraggingOver?"taskList dragCol":"taskList"}

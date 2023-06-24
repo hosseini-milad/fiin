@@ -9,7 +9,16 @@ function Task(props){
                     data-dragging={snapshot.isDragging}>
                         <div className='handler' 
                             {...provided.dragHandleProps}  ></div>
-                    {props.taskList.content}
+                    <span>{props.taskList.content.user}
+                    <a href={`tel:${props.taskList.content.phone}`}>
+                        <span className="icon-phone"></span></a>
+                    <a href={`mail:${props.taskList.content.email}`}>
+                        <span className="icon-phone"></span></a>
+                    <a href={`/profile/${props.taskList.content.id}`}>
+                        <span className="icon-phone"></span></a>
+                    
+                    </span>
+                    
                 </div>
             )}
         
