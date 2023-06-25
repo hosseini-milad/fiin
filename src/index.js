@@ -43,11 +43,11 @@ if(!lang){
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-    <React.StrictMode>
     <Router>
     {cookies.get('fiin-login')?
       <Routes>
-        <Route path="/" element={<Layout><Dashboard/></Layout>}/>
+        <Route path="/" element={<Layout></Layout>}/>
+        <Route path="/dashboard" element={<Layout><Dashboard/></Layout>}/>
         <Route path="/password" element={<Layout><Password/></Layout>}/>
         <Route path="/upload" element={<Layout><UpLoad/></Layout>}/>
         <Route path="/profile" element={<Layout><ProfileView/></Layout>}/>
@@ -79,7 +79,6 @@ root.render(
         <Route path="/active-user/:otp" element={<ActiveUser/>}/>
       </Routes>}
      </Router>
-    </React.StrictMode>
 );
 
 serviceWorkerRegistration.unregister();

@@ -10,7 +10,7 @@ function ActiveUser(){
             method:'post',
             headers: { 'Content-Type': 'application/json' ,
             },
-            body:JSON.stringify({userId:otp})
+            body:JSON.stringify({otp:otp})
           }
           //console.log(postOptions)
         fetch(env.siteApi + "/auth/active-user",postOptions)
@@ -19,7 +19,7 @@ function ActiveUser(){
         (result) => {
             if(result.error){
                 setError({message:result.error,color:"brown"})
-                setTimeout(()=>setError({message:'',color:"brown"}),3000)
+                setTimeout(()=>window.location.href="/",20000)
             }
             else{
                 setError({message:result.message,color:"green"})

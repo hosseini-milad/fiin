@@ -52,6 +52,9 @@
 .icon-user:before {
     content: "\e907";
 }
+.icon-phone:before {
+    content: "\e907";
+}
 
 * {
     outline: none;
