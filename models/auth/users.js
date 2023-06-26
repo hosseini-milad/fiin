@@ -23,6 +23,7 @@ const userSchema = new mongoose.Schema({
   nif: { type: String },
   agent:{ type: String },
   active:{ type: String },
+  status:{ type: String },
 
   nameCompany:{ type: String },
   firma:{ type: String },

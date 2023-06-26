@@ -28,9 +28,18 @@ router.get('/currentState',auth,jsonParser, async (req,res)=>{
         const leadTask= await task.find({state:'lead'}).sort({'prior':1})
         const informationTask= await task.find({state:'informations'}).sort({'prior':1})
         const fiinTask= await task.find({state:'fiin'}).sort({'prior':1})
+        
+        const propertyTask= await task.find({state:'property'}).sort({'prior':1})
+        const segurosTask= await task.find({state:'seguros'}).sort({'prior':1})
+        const escrituraTask= await task.find({state:'escritura'}).sort({'prior':1})
+        const commissionsTask= await task.find({state:'commissions'}).sort({'prior':1})
+        const suspendedTask= await task.find({state:'suspended'}).sort({'prior':1})
         res.status(200).json({allTasks:allTasks,
             leadTask:leadTask,informationTask:informationTask,
-            fiinTask:fiinTask})
+            fiinTask:fiinTask,propertyTask:propertyTask,
+            segurosTask:segurosTask,escrituraTask:escrituraTask,
+            commissionsTask:commissionsTask,suspendedTask:suspendedTask
+        })
     }
     catch(error){
         res.status(500).json({message: error.message})
