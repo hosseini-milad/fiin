@@ -4,6 +4,7 @@ const slider = require('../models/main/slider');
 const authApi = require('./authApi');
 const taskApi = require('./taskApi');
 const productApi = require('./productApi');
+const formApi = require('./formApi');
 
 router.get('/main', async (req,res)=>{
     try{
@@ -20,4 +21,5 @@ router.get('/main', async (req,res)=>{
 router.use('/auth', authApi)
 router.use('/task', taskApi)
 router.use('/product', productApi)
+router.use('/form', formApi)
 module.exports = router;

@@ -225,7 +225,10 @@ router.post('/list-search',auth,jsonParser, async (req,res)=>{
       }
       // Validate if user exist in our database
       const userOwner = await User.findOne({_id:req.headers["userid"]});
-      //console.log(userOwner)
+      if(userOwner.access ==="customer"){
+        res.status(403).json({error:"not Authorized"});
+        return
+      }
       const user = await User.aggregate([
         { $match : data.access?{access:data.access}:{}},
         { $match : data.search?{$or:[
