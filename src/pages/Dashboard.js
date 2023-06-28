@@ -2,8 +2,8 @@ import Board from "../modules/Board/Board"
 
 function Dashboard(){
     return(
-        <main>
-            <div className="Board">
+        <main className="container-fluid">
+            <div className="boards">
                 <Board />
             </div>
         </main>

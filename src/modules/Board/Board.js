@@ -86,7 +86,7 @@ function Board(){
             "userId":token&&token.userId},
             body:JSON.stringify({tasks:tasks})
           }
-        0&&fetch(env.siteApi + "/task/changeOrder",postOptions)
+        fetch(env.siteApi + "/task/changeOrder",postOptions)
         .then(res => res.json())
         .then(
             (result) => {
@@ -114,7 +114,7 @@ function Board(){
             newTaskIds.splice(source.index,1);
             newTaskIds.splice(destination.index,0,draggableId);
             
-            //changeOrder(newTaskIds)
+            changeOrder(newTaskIds)
             const newColumn = {
                 ...start, taskIds:newTaskIds,
             }
@@ -167,7 +167,7 @@ function Board(){
         document.body.style.backgroundColor=`rgba(153,141,217,${opacity})`*/
     }
     return(
-        <div className='toDoHolder'>
+        <div className='board-list'>
             {boardArray?<DragDropContext
             onDragStart={DragStart}
             onDragUpdate={DragUpdate}

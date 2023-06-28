@@ -10,12 +10,12 @@ const cookies = new Cookies();
 const ClientList = (props)=>{
     const [users,setUsers] = useState()
     const [filter,setFilter] = useState()
+    const [error,setError] = useState({message:'',color:"brown"})
     const [doFilter,setDoFilter] = useState(1)
     const [pageNumber,setPageNumber] = useState(0)
     
     const token=cookies.get('fiin-login')
     useEffect(()=>{
-        
         setUsers('')
         const postOptions={
             method:'post',
@@ -29,15 +29,13 @@ const ClientList = (props)=>{
         .then(res => res.json())
         .then(
             (result) => {
-                setUsers(result)
-                /*if(result.error){
+                if(result.error){
                     setError({message:result.error,color:"brown"})
-                    setTimeout(()=>setError({message:'',color:"brown"}),3000)
+                    
                 }
                 else{
-                    setError({message:result.message,color:"green"})
-                    setTimeout(()=>window.location.reload(),1000)
-                }*/
+                    setUsers(result)
+                }
                 
             },
             (error) => {
@@ -79,7 +77,7 @@ const ClientList = (props)=>{
             {/*<ListFilters setDoFilter={setDoFilter} filter={filter} setFilter={setFilter}/>    */}
             <FilterBitrix  setDoFilter={setDoFilter} filter={filter} setFilter={setFilter}/> 
         </div>
-        <div className="section-fiin">
+        {!error.message?<div className="section-fiin">
             <div className="section-head">
                 <h1 className="section-title">Lista de Clientes</h1>
                 <p className="hidden">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt .</p>
@@ -93,7 +91,9 @@ const ClientList = (props)=>{
                 onClick={()=>{window.location.href="/client/register"}}>
                     Registo de cliente</button>
             </div>
-        </div>
+        </div>:
+        <small className="errorSmall" style={{color:error.color}}>
+            {error.message}</small>}
     </div>
     )
 }

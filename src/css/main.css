@@ -53,7 +53,15 @@
     content: "\e907";
 }
 .icon-phone:before {
-    content: "\e907";
+    content: "\e902";
+}
+.icon-envelope::before {
+    content: "\e901";
+  }
+.icon-calendar::before {
+
+    content: "\e900";
+
 }
 
 * {

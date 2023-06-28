@@ -5,6 +5,8 @@ import './css/all.min.css';
 import './css/App.css';
 import './css/main.css';
 import './css/reyham.css';
+import './css/board.css'
+
 import {
   BrowserRouter as Router,
   Routes,
@@ -32,6 +34,8 @@ import ForgetPass from './pages/ForgetPass';
 import errortrans from './translate/error';
 import ProfileView from './pages/ProfileView';
 import ActiveUser from './pages/ActiveUser';
+import ClientDetail from './modules/Client/ClientDetail';
+import Steps from './modules/StepsFill/Steps';
 const cookies = new Cookies();
 var lang = JSON.parse(localStorage.getItem('fiin-lang'));
 
@@ -70,6 +74,11 @@ root.render(
         {/* Client Pages */}
         <Route path="/client/list" element={<Layout><ClientList/></Layout>}/>
         <Route path="/client/register" element={<Layout><RegClient/></Layout>}/>
+        
+        {/* Form Pages */}
+        <Route path="/client/steps" element={<Layout><Steps/></Layout>}/>
+        <Route path="/form/client/:data" element={<Layout><ClientDetail/></Layout>}/>
+
       </Routes>:
       <Routes>
         <Route path="/" element={<Login lang={lang}/>}/>
