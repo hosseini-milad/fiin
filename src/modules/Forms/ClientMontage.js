@@ -8,50 +8,172 @@ const cookies = new Cookies();
 function ClientMontage(props){
     const userId = props.userId?props.userId:document.location.pathname.split('/')[3]
     const [userData,setUserData] = useState()
+    const [fromDate,setFromDate] = useState()
     const [regElement,setRegElement] = useState()
     const [error,setError] = useState({message:'',color:"brown"})
-    
+    useEffect(()=>{
+        const token=cookies.get('fiin-login')
+        const postOptions={
+            method:'post',
+            headers: { 'Content-Type': 'application/json' ,
+            "x-access-token": token&&token.token,
+            "userId":token&&token.userId},
+            body:JSON.stringify({userId:userId})
+          }
+        fetch(env.siteApi + "/form/user-montage",postOptions)
+        .then(res => res.json())
+        .then(
+            (result) => {
+                setUserData(result.user[0]&&result.user[0].userDetail[0])
+                setRegElement(result.user[0])
+            },
+            (error) => {
+                cookies.remove('fiin-login',{ path: '/' });
+                setTimeout(()=>(document.location.reload(),500))
+            })
+        },[])
+    const UpdateData=()=>{
+        const token=cookies.get('fiin-login')
+        const postOptions={
+            method:'post',
+            headers: { 'Content-Type': 'application/json' ,
+            "x-access-token": token&&token.token,
+            "userId":token&&token.userId},
+            body:JSON.stringify(userId?{...regElement,...{userId:userId}}:{})
+          }
+        fetch(env.siteApi + "/form/update-user-montage",postOptions)
+        .then(res => res.json())
+        .then(
+            (result) => {
+                if(result.error){
+                    setError({message:result.error,color:"brown"})
+                    setTimeout(()=>setError({message:'',color:"brown"}),3000)
+                }
+                else{
+                    setError({message:result.message,color:"green"})
+                    setTimeout(()=>setError({message:'',color:"brown"}),3000)
+                    
+                }
+            },
+            (error) => {
+                cookies.remove('fiin-login',{ path: '/' });
+                setTimeout(()=>(document.location.reload(),500))
+            })
+        .catch((error)=>{
+                console.log(error)
+            })
+    }
+
     return(<>
         <div className="row">
+            <div className="section-head">
+                <h1 className="section-title">Mortage Data</h1>
+            </div>
             <div className="col-md-6">
                 <div className="form-field-fiin">
-                    <label htmlFor="Vencimento">Vencimento<sup>*</sup></label>
-                    <input type="text" name="Vencimento" id="Vencimento" placeholder="Vencimento" required
-                    defaultValue={props.regElement&&props.regElement.vencimento}
-                    onChange={(e)=>props.setRegElement(data => ({
+                    <label htmlFor="goal">Finalidade<sup>*</sup></label>
+                    <input type="text" name="goal" id="goal" placeholder="Finalidade" required
+                    defaultValue={regElement&&regElement.goal}
+                    onChange={(e)=>setRegElement(data => ({
                         ...data,
-                        ...{vencimento:e.target.value}
+                        ...{goal:e.target.value}
                     }))}/>
                 </div>
             </div>
             <div className="col-md-6">
                 <div className="form-field-fiin">
-                    <label htmlFor="recibos">Recibos Verdes<sup>*</sup></label>
-                    <input type="text" name="recibos" id="recibos" placeholder="Recibos Verdes" required
-                    defaultValue={props.regElement&&props.regElement.recibos}
-                    onChange={(e)=>props.setRegElement(data => ({
+                    <label htmlFor="propertyDestination">Destino do imóvel<sup>*</sup></label>
+                    <input type="text" name="propertyDestination" id="propertyDestination" placeholder="Destino do imóvel" required
+                    defaultValue={regElement&&regElement.propertyDestination}
+                    onChange={(e)=>setRegElement(data => ({
                         ...data,
-                        ...{recibos:e.target.value}
+                        ...{propertyDestination:e.target.value}
                     }))}/>
                 </div>
             </div>
             <div className="col-md-6">
                 <div className="form-field-fiin">
-                    <label htmlFor="rendas">Rendas<sup>*</sup></label>
-                    <input type="text" name="rendas" id="rendas" placeholder="Rendas" required
-                    defaultValue={props.regElement&&props.regElement.rendas}
-                    onChange={(e)=>props.setRegElement(data => ({
+                    <label htmlFor="proposersCount">Número de Proponentes<sup>*</sup></label>
+                    <input type="text" name="proposersCount" id="proposersCount" placeholder="Número de Proponentes" required
+                    defaultValue={regElement&&regElement.proposersCount}
+                    onChange={(e)=>setRegElement(data => ({
                         ...data,
-                        ...{rendas:e.target.value}
+                        ...{proposersCount:e.target.value}
                     }))}/>
                 </div>
             </div>
-            
+            <div className="col-md-6">
+                <div className="form-field-fiin">
+                    <label htmlFor="location">Localidade do Imóvel<sup>*</sup></label>
+                    <input type="text" name="location" id="location" placeholder="Localidade do Imóvel" required
+                    defaultValue={regElement&&regElement.location}
+                    onChange={(e)=>setRegElement(data => ({
+                        ...data,
+                        ...{location:e.target.value}
+                    }))}/>
+                </div>
+            </div>
+            <div className="col-md-6">
+                <div className="form-field-fiin">
+                    <label htmlFor="bookAmount">Valor a Escriturar<sup>*</sup></label>
+                    <input type="text" name="bookAmount" id="bookAmount" placeholder="Valor a Escriturar" required
+                    defaultValue={regElement&&regElement.bookAmount}
+                    onChange={(e)=>setRegElement(data => ({
+                        ...data,
+                        ...{bookAmount:e.target.value}
+                    }))}/>
+                </div>
+            </div>
+            <div className="col-md-6">
+                <div className="form-field-fiin">
+                    <label htmlFor="intendedFinancing">Financiamento Pretendido<sup>*</sup></label>
+                    <input type="text" name="intendedFinancing" id="intendedFinancing" placeholder="Financiamento Pretendido" required
+                    defaultValue={regElement&&regElement.intendedFinancing}
+                    onChange={(e)=>setRegElement(data => ({
+                        ...data,
+                        ...{intendedFinancing:e.target.value}
+                    }))}/>
+                </div>
+            </div>
+            <div className="col-md-6">
+                <div className="form-field-fiin">
+                    <label htmlFor="entryAvailable">Valor Disponível para Entrada<sup>*</sup></label>
+                    <input type="text" name="entryAvailable" id="entryAvailable" placeholder="Valor Disponível para Entrada" required
+                    defaultValue={regElement&&regElement.entryAvailable}
+                    onChange={(e)=>setRegElement(data => ({
+                        ...data,
+                        ...{entryAvailable:e.target.value}
+                    }))}/>
+                </div>
+            </div>
+            <div className="col-md-6">
+                <div className="form-field-fiin">
+                    <label htmlFor="intendedTerm">Prazo Pretendido (anos)<sup>*</sup></label>
+                    <input type="text" name="intendedTerm" id="intendedTerm" placeholder="Prazo Pretendido (anos)" required
+                    defaultValue={regElement&&regElement.intendedTerm}
+                    onChange={(e)=>setRegElement(data => ({
+                        ...data,
+                        ...{intendedTerm:e.target.value}
+                    }))}/>
+                </div>
+            </div>
+            <div className="col-md-12">
+                <div className="form-field-fiin">
+                    <label htmlFor="notes">Notas</label>
+                    <textarea name="notes" id="notes" placeholder="Notas"
+                    defaultValue={regElement&&regElement.notes}
+                    onChange={(e)=>setRegElement(data => ({
+                        ...data,
+                        ...{notes:e.target.value}
+                    }))}>
+                    </textarea>
+                </div>
+            </div>
         </div>
         <div className="footer-form-fiin">
             <WaitingBtn class="btn-fiin" title="Update" 
                 waiting={'Updating.'}
-                function={()=>{}} name="submit" error={error}/> 
+                function={UpdateData} name="submit" error={error}/> 
         </div>
         <small className="errorSmall" style={{color:error.color}}>
             {error.message}</small>
