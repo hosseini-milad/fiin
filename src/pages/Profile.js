@@ -185,7 +185,8 @@ function Profile(){
                             <div className="col-md-6">
                                 <div className="form-field-fiin">
                                     <label htmlFor="first-name">Name</label>
-                                    <input type="text" name="firstname" id="first-name" value={users&&users.cName}
+                                    <input type="text" name="firstname" id="first-name" 
+                                    defaultValue={users&&users.cName}
                                     onChange={(e)=>setUsers(data => ({
                                         ...data,
                                         ...{cName:e.target.value}
@@ -195,7 +196,8 @@ function Profile(){
                             <div className="col-md-6">
                                 <div className="form-field-fiin">
                                     <label htmlFor="last-name">Apelido</label>
-                                    <input type="text" name="lastname" id="last-name" value={users&&users.sName}
+                                    <input type="text" name="lastname" id="last-name" 
+                                    defaultValue={users&&users.sName}
                                     onChange={(e)=>setUsers(data => ({
                                         ...data,
                                         ...{sName:e.target.value}
@@ -205,7 +207,8 @@ function Profile(){
                             <div className="col-md-6">
                                 <div className="form-field-fiin">
                                     <label htmlFor="nif">NIF</label>
-                                    <input type="text" name="nif" id="nif" value={users&&users.nif}
+                                    <input type="text" name="nif" id="nif" 
+                                    defaultValue={users&&users.nif}
                                     onChange={(e)=>setUsers(data => ({
                                         ...data,
                                         ...{nif:e.target.value}
@@ -216,7 +219,7 @@ function Profile(){
                                 <div className="form-field-fiin">
                                     <label htmlFor="email">E-mail</label>
                                     <input type="email" name="email" id="email" 
-                                    value={users&&users.email} disabled={true}
+                                    defaultValue={users&&users.email} disabled={true}
                                     />
                                     <span className="icon-edit icon-edit" onClick={()=>setChangeEmail(1)}></span>
 
@@ -227,7 +230,7 @@ function Profile(){
                                   <div className="form-field-fiin">
                                     <label htmlFor="email">new E-mail</label>
                                     <input type="email" name="email" id="email" 
-                                    value={email}
+                                    defaultValue={email}
                                     onChange={(e)=>setEmail(e.target.value)}/>
                                 </div>
                             </div>
@@ -240,7 +243,8 @@ function Profile(){
                             <div className="col-md-6">
                                 <div className="form-field-fiin">
                                     <label htmlFor="telefone">Telefone</label>
-                                    <input type="tel" name="telefone" id="telefone" value={users&&users.phone}
+                                    <input type="tel" name="telefone" id="telefone" 
+                                    defaultValue={users&&users.phone}
                                     onChange={(e)=>setUsers(data => ({
                                         ...data,
                                         ...{phone:e.target.value}
@@ -260,6 +264,9 @@ function Profile(){
                         <div className="footer-form-fiin">
                             <button type="submit" className="btn-fiin" name="submit"
                             onClick={saveData}>Save</button>
+                             <button className="btn-fiin" name="submit"
+                            onClick={()=>window.location.href="/form/client/"+userId}>
+                                Add Data</button>
                         </div>
                         <small className="errorSmall" style={{color:error.color}}>
                             {error.message}</small>

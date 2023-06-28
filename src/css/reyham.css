@@ -111,6 +111,55 @@ html{
     border-radius: 4px;
 }
 
+
+/*Steps Client*/
+.tabStepHolder{
+    display: flex;
+    justify-content: center;
+    margin: auto;
+}
+.tabStep{
+    background-color: #f5f5f5;
+    border-bottom: 3px solid var(--blue);
+    border-radius: 5px 5px 0 0;
+    cursor: pointer;
+    display: grid;
+    font-size: 15px;
+    margin: auto .5%;
+    padding: 20px 10px;
+    text-align: center;
+    white-space: nowrap;
+    width: 120px;
+}
+.tabStepActive{
+    background-color: var(--blue);
+    color:#f5f5f5
+}
+.tabStepDeactive{
+    background-color: #eee;
+    border-bottom-color: gray;
+}
+.tabStep span{
+    cursor: pointer;
+    text-align: center;
+    white-space: nowrap;
+}
+.step-placeHolder{
+    margin:50px auto;
+    width: 70%;
+}
+.deact-fiin{
+    background: gray;
+    border: 1px solid gray;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #fff;
+    padding: 14px 60px;
+    transition: 0.3s;
+}
+
+
+
 @media only screen and (max-width:1200px){
     .table-fiin table {
         max-width: 1300px;

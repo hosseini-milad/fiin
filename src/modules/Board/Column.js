@@ -2,13 +2,16 @@ import Task from "./Task"
 import {Droppable} from 'react-beautiful-dnd';
 function Column(props){
     return(
-        <div className="columnHolder">
-            <h2>{props.column.title}
-            <small>({props.tasks.length})</small></h2>
+        <div className="board-item columnHolder">
+            <h2 className="board-title">
+                {props.column.title}
+            
+            <span className="count-lead">({props.tasks.length})</span>
+            </h2>
             
             <Droppable droppableId={props.column.id}>
                 {(provided,snapshot)=>(
-                <div className={snapshot.isDraggingOver?"taskList dragCol":"taskList"}
+                <ul className={snapshot.isDraggingOver?"board-list-item dragCol":"board-list-item"}
                     ref={provided.innerRef}
                     data-draggingover={snapshot.isDraggingOver}
                     {...provided.droppableProps}>
@@ -18,7 +21,7 @@ function Column(props){
                             index={i}/>
                     ))}
                 {provided.placeholder}
-                </div>
+                </ul>
                 )}
             </Droppable>
         </div>
