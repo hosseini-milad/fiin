@@ -38,8 +38,15 @@ router.post('/update-user-detail',auth,jsonParser, async (req,res)=>{
   const data={
     userId:req.body.userId?req.body.userId:req.headers['userid'],
     birthday: req.body.birthday ,
+    nationality: req.body.nationality ,
+    morada: req.body.morada ,
     address: req.body.address ,
-    profession: req.body.profession 
+
+    profession: req.body.profession ,
+    contract: req.body.contract ,
+    household: req.body.household ,
+    homeContractual: req.body.homeContractual ,
+    academicDegree: req.body.academicDegree ,
   }
   
   try {
