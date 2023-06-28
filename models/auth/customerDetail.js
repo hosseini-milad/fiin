@@ -14,6 +14,16 @@ const customerDetailSchema = new mongoose.Schema({
   homeContractual: { type: String },
   academicDegree: { type: String },
 
+  maturity: { type: String },
+  receipts: { type: String },
+  income: { type: String },
+  otherIncome: { type: String },
+
+  mortgageLoans: { type: String },
+  personalCredit: { type: String },
+  carLoan: { type: String },
+  otherCharges: { type: String },
+  
   date:{type:Date}
 });
 

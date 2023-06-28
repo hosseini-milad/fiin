@@ -8,6 +8,7 @@ const router = express.Router()
 const auth = require("../middleware/auth");
 const User = require("../models/auth/users");
 const UserDetail = require("../models/auth/customerDetail")
+const UserMontage = require("../models/auth/customerMontage")
 
 router.post('/user-detail',auth,jsonParser, async (req,res)=>{
   const userId =req.body.userId?req.body.userId:req.headers['userid']
@@ -47,6 +48,18 @@ router.post('/update-user-detail',auth,jsonParser, async (req,res)=>{
     household: req.body.household ,
     homeContractual: req.body.homeContractual ,
     academicDegree: req.body.academicDegree ,
+
+    maturity: req.body.maturity,
+    receipts: req.body.receipts,
+    income: req.body.income,
+    otherIncome: req.body.otherIncome,
+
+    mortgageLoans: req.body.mortgageLoans,
+    personalCredit: req.body.personalCredit,
+    carLoan: req.body.carLoan,
+    otherCharges:req.body.otherCharges,
+
+    date:new Date()
   }
   
   try {
@@ -58,6 +71,62 @@ router.post('/update-user-detail',auth,jsonParser, async (req,res)=>{
         else{
           await UserDetail.create(data);
           res.status(200).json({user:userDetails,message:"UserDetail Created"})
+        }
+      } 
+  catch(error){
+      res.status(500).json({message: error.message})
+  }
+})
+router.post('/user-montage',auth,jsonParser, async (req,res)=>{
+  const userId =req.body.userId?req.body.userId:req.headers['userid']
+  try {
+        const userMontage = await UserMontage.aggregate([
+        { $match :({userId:userId})},
+        { $addFields: { "userId": { "$toObjectId": "$userId" }}},
+        {$lookup:{
+            from : "users", 
+            localField: "userId", 
+            foreignField: "_id", 
+            as : "userDetail"
+        }}])
+        if(userMontage){
+          
+          res.status(200).json({user:userMontage,message:"User Exists"})
+          }
+        else{
+          res.status(500).json({error:"User Not Found"})
+        }
+      } 
+  catch(error){
+      res.status(500).json({message: error.message})
+  }
+})
+router.post('/update-user-montage',auth,jsonParser, async (req,res)=>{
+
+  const data={
+    userId:req.body.userId?req.body.userId:req.headers['userid'],
+    goal: req.body.goal,
+    propertyDestination: req.body.propertyDestination,
+    proposersCount: req.body.proposersCount,
+
+    location: req.body.location,
+    bookAmount: req.body.bookAmount,
+    intendedFinancing: req.body.intendedFinancing,
+    entryAvailable: req.body.entryAvailable,
+    intendedTerm: req.body.intendedTerm,
+    notes:req.body.notes,
+    date:new Date()
+  }
+  
+  try {
+        const userMontage = await UserMontage.findOne({userId:ObjectID(data.userId)});
+        if(userMontage){
+          await UserMontage.updateOne({userId:data.userId},{$set:data});
+          res.status(200).json({user:userMontage,message:"UserMortage Updated"})
+        }
+        else{
+          await UserMontage.create(data);
+          res.status(200).json({user:userMontage,message:"UserMortage Created"})
         }
       } 
   catch(error){
