@@ -53,8 +53,8 @@ function Board(){
                 setBoardArray(()=>UpdateTaskStatus(result))
             },
             (error) => {
-                cookies.remove('fiin-login',{ path: '/' });
-                setTimeout(()=>(document.location.reload(),500))
+                //cookies.remove('fiin-login',{ path: '/' });
+                //setTimeout(()=>(document.location.reload(),500))
                 console.log(error)
             })
     },[])
