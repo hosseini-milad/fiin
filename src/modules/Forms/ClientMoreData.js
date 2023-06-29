@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react"
 import 'react-modern-calendar-datepicker/lib/DatePicker.css';
 import DatePicker, {Calendar } from "react-modern-calendar-datepicker";
-import env from "../../env"
+import env, { normalDate, splitDate } from "../../env"
 import Cookies from 'universal-cookie';
 import WaitingBtn from "../../components/Button/waitingBtn";
 const cookies = new Cookies();
+
 
 
 
@@ -68,17 +69,14 @@ function ClientMoreData(props){
             </div>
             <div className="col-md-6">
                 <div className="form-field-fiin">
-                    <label htmlFor="birthday">birthday<sup>*</sup></label>
-                    <input type="text" name="birthday" id="birthday" placeholder="birthday" required
-                    defaultValue={regElement&&regElement.birthday}
-                    onChange={(e)=>setRegElement(data => ({
-                        ...data,
-                        ...{birthday:e.target.value}
-                    }))}/>
+                    <label htmlFor="birthday">Data Nascimento<sup>*</sup></label>
                     <DatePicker
-                        value={fromDate}
-                        onChange={setFromDate}
-                        inputPlaceholder="birthDate"
+                        value={regElement&&splitDate(regElement.birthday)}
+                        onChange={(e)=>setRegElement(data => ({
+                            ...data,
+                            ...{birthday:normalDate(e)}
+                        }))}
+                        inputPlaceholder="Data Nascimento"
                         shouldHighlightWeekends
                     />
                 </div>
@@ -149,6 +147,102 @@ function ClientMoreData(props){
                     onChange={(e)=>setRegElement(data => ({
                         ...data,
                         ...{academicDegree:e.target.value}
+                    }))}/>
+                </div>
+            </div>
+        </div>
+        <div className="row">
+            <div className="section-head">
+                <h1 className="section-title">Rendimentos Fixos Mensais</h1>
+            </div>
+            <div className="col-md-6">
+                <div className="form-field-fiin">
+                    <label htmlFor="maturity">Vencimento<sup>*</sup></label>
+                    <input type="text" name="maturity" id="maturity" placeholder="Vencimento" required
+                    defaultValue={regElement&&regElement.maturity}
+                    onChange={(e)=>setRegElement(data => ({
+                        ...data,
+                        ...{maturity:e.target.value}
+                    }))}/>
+                </div>
+            </div>
+            <div className="col-md-6">
+                <div className="form-field-fiin">
+                    <label htmlFor="receipts">Recibos Verdes<sup>*</sup></label>
+                    <input type="text" name="receipts" id="receipts" placeholder="Recibos Verdes" required
+                    defaultValue={regElement&&regElement.receipts}
+                    onChange={(e)=>setRegElement(data => ({
+                        ...data,
+                        ...{receipts:e.target.value}
+                    }))}/>
+                </div>
+            </div>
+            <div className="col-md-6">
+                <div className="form-field-fiin">
+                    <label htmlFor="income">Rendas<sup>*</sup></label>
+                    <input type="text" name="income" id="income" placeholder="Rendas" required
+                    defaultValue={regElement&&regElement.income}
+                    onChange={(e)=>setRegElement(data => ({
+                        ...data,
+                        ...{income:e.target.value}
+                    }))}/>
+                </div>
+            </div>
+            <div className="col-md-6">
+                <div className="form-field-fiin">
+                    <label htmlFor="otherIncome">Outros Rendimentos<sup>*</sup></label>
+                    <input type="text" name="otherIncome" id="otherIncome" placeholder="Outros Rendimentos" required
+                    defaultValue={regElement&&regElement.otherIncome}
+                    onChange={(e)=>setRegElement(data => ({
+                        ...data,
+                        ...{otherIncome:e.target.value}
+                    }))}/>
+                </div>
+            </div>
+            <div className="section-head">
+                <h1 className="section-title">Encargos Fixos Mensais</h1>
+            </div>
+            <div className="col-md-6">
+                <div className="form-field-fiin">
+                    <label htmlFor="mortgageLoans">Crédito Habitação<sup>*</sup></label>
+                    <input type="text" name="mortgageLoans" id="mortgageLoans" placeholder="Crédito Habitação" required
+                    defaultValue={regElement&&regElement.mortgageLoans}
+                    onChange={(e)=>setRegElement(data => ({
+                        ...data,
+                        ...{mortgageLoans:e.target.value}
+                    }))}/>
+                </div>
+            </div>
+            <div className="col-md-6">
+                <div className="form-field-fiin">
+                    <label htmlFor="personalCredit">Crédito Pessoal<sup>*</sup></label>
+                    <input type="text" name="personalCredit" id="personalCredit" placeholder="Crédito Pessoal" required
+                    defaultValue={regElement&&regElement.personalCredit}
+                    onChange={(e)=>setRegElement(data => ({
+                        ...data,
+                        ...{personalCredit:e.target.value}
+                    }))}/>
+                </div>
+            </div>
+            <div className="col-md-6">
+                <div className="form-field-fiin">
+                    <label htmlFor="carLoan">Crédito Automóvel<sup>*</sup></label>
+                    <input type="text" name="carLoan" id="carLoan" placeholder="Crédito Automóvel" required
+                    defaultValue={regElement&&regElement.carLoan}
+                    onChange={(e)=>setRegElement(data => ({
+                        ...data,
+                        ...{carLoan:e.target.value}
+                    }))}/>
+                </div>
+            </div>
+            <div className="col-md-6">
+                <div className="form-field-fiin">
+                    <label htmlFor="otherCharges">Outros Encargos<sup>*</sup></label>
+                    <input type="text" name="otherCharges" id="otherCharges" placeholder="Outros Encargos" required
+                    defaultValue={regElement&&regElement.otherCharges}
+                    onChange={(e)=>setRegElement(data => ({
+                        ...data,
+                        ...{otherCharges:e.target.value}
                     }))}/>
                 </div>
             </div>

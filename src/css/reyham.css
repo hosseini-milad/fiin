@@ -157,8 +157,23 @@ html{
     padding: 14px 60px;
     transition: 0.3s;
 }
-
-
+.DatePicker{
+    width:100%;
+}
+.DatePicker input{
+    text-align: left;
+}
+.DatePicker button{
+    direction: ltr;
+    position: relative;
+}
+.form-fiin textarea {
+    border: 1px solid #E7E7E8;
+    border-radius: 4px;
+    font-size: 14px;
+    padding: 14px 18px;
+    width: 100%;
+  }
 
 @media only screen and (max-width:1200px){
     .table-fiin table {

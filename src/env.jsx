@@ -46,3 +46,16 @@ function formatAMPM(date) {
     var strTime = hours + ':' + minutes + ' ' + ampm;
     return strTime;
   }
+
+export const normalDate=(dateObj)=>{
+  return(dateObj.year+'/'+dateObj.month+'/'+dateObj.day)
+}
+export const splitDate=(dateRaw)=>{
+  try{
+    const dateArray = dateRaw.split('/')
+  return({year:parseInt(dateArray[0]),
+    month:parseInt(dateArray[1]),
+    day:parseInt(dateArray[2])})
+  }
+  catch{return}
+}
