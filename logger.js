@@ -1,6 +1,7 @@
 var express = require('express');
 require("dotenv").config();
 require("./middleware/database").connect();
+const bodyParser = require('body-parser');
 var expressWinston = require('express-winston');
 var winston = require('winston'); // for transports.Console
 var app = module.exports = express();
@@ -23,14 +24,16 @@ eventsEmitter.on('tqi9z2oj5x1gu3iuqtv1d9pyc1gtfkef', () => {
 app.get('/hook-lead', (req, res) => {    //Subscribing to an event
   console.log("req")
   eventsEmitter.emit('tqi9z2oj5x1gu3iuqtv1d9pyc1gtfkef');});
-
-const bodyParser = require('body-parser');
+app.use('/uploads', express.static('uploads'));
 //app.use(express.methodOverride());
 // Let's make our express `Router` first.
 var router = express.Router();
 router.use(bodyParser.urlencoded({
   extended: true
-}))
+})) 
+router.use('/uploads', express.static('uploads'));
+router.use(bodyParser.json({limit: '50mb'}));
+router.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 router.use(bodyParser.json())
 router.get('/error', function(req, res, next) {
   // here we cause an error in the pipeline so we see express-winston in action.

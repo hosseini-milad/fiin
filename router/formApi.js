@@ -10,6 +10,7 @@ const User = require("../models/auth/users");
 const UserDetail = require("../models/auth/customerDetail")
 const UserMontage = require("../models/auth/customerMontage");
 const task = require('../models/main/task');
+const LogCreator = require('../middleware/LogCreator');
 
 router.post('/user-detail',auth,jsonParser, async (req,res)=>{
   const userId =req.body.userId?req.body.userId:req.headers['userid']
@@ -209,17 +210,20 @@ router.post('/user-montage',auth,jsonParser, async (req,res)=>{
 router.post('/confirm-user-data',auth,jsonParser, async (req,res)=>{
 
   const data={
-    taskId:req.body.taskId,
+    userId:req.body.userId,
     state: req.body.state,
     date:new Date()
   }
   
   try {
-        await task.updateOne({_id:req.body.taskId},
+        await task.updateOne({userId:ObjectID(data.userId),
+          state:req.body.oldState},
           {$set:{state:req.body.state}})
+          const userOwner = await User.findOne({_id:req.body.userId});
+          await LogCreator(userOwner,"Confirm Data",
+            "user Data Confirmed by administrator")
           res.status(200).json({message:"User Data Confirmed"})
         
-      
   } 
   catch(error){
       res.status(500).json({message: error.message})
