@@ -51,6 +51,9 @@ html{
     margin-top: 35px;
 
 }
+.btn-fiin{
+    min-width: 180px;
+}
 .btn-email {
     background: var(--main-dark);
     border: 1px solid var(--main-dark);
@@ -109,6 +112,13 @@ html{
     height: 25px;
     margin-right: 8px;
     border-radius: 4px;
+}
+.acceptBtn{
+    background-color: green;
+    border-color: green;
+}
+.acceptBtn:hover{
+    color: green;
 }
 
 

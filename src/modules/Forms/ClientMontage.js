@@ -64,6 +64,9 @@ function ClientMontage(props){
             })
     }
 
+    const ConfirmData=()=>{
+
+    }
     return(<>
         <div className="row">
             <div className="section-head">
@@ -175,6 +178,12 @@ function ClientMontage(props){
                 waiting={'Updating.'}
                 function={UpdateData} name="submit" error={error}/> 
         </div>
+        
+        {props.userId?<div className="footer-form-fiin">
+            <WaitingBtn class="btn-fiin acceptBtn" title="Confirm" 
+                waiting={'Confirming.'}
+                function={ConfirmData} name="submit" error={error}/> 
+        </div>:<></>}
         <small className="errorSmall" style={{color:error.color}}>
             {error.message}</small>
         </>

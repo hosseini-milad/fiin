@@ -11,10 +11,7 @@ function ClientDetail(props){
             <div className="row justify-content-center">
                 <div className="col-lg-8">
                 <div className="form-fiin form-box-style">
-                    <div className="section-head">
-                        <h1 className="section-title">Update User Data</h1>
-                        <p className="hidden">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt .</p>
-                    </div>
+                    
                     <ClientMoreData />
                     
                 </div>

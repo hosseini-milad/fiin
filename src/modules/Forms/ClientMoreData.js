@@ -6,9 +6,6 @@ import Cookies from 'universal-cookie';
 import WaitingBtn from "../../components/Button/waitingBtn";
 const cookies = new Cookies();
 
-
-
-
 function ClientMoreData(props){
     const userId = props.userId?props.userId:document.location.pathname.split('/')[3]
     const [userData,setUserData] = useState()
