@@ -33,7 +33,7 @@ router.post('/upload',async (req,res)=>{
         let imageBuffer = decodedImg.data;
         let type = decodedImg.type;
         let extension = mime.extension(type);
-        let fileName = `Fiin-${Date.now().toString()+"-"+req.body.imgName}`;
+        let fileName = `Fiin-${Date.now().toString()+"-"+req.body.imgName}.${extension}`;
         
         try {
         fs.writeFileSync("./uploads/" + fileName, imageBuffer, 'utf8');
