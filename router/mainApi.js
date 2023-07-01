@@ -7,6 +7,7 @@ const productApi = require('./productApi');
 const formApi = require('./formApi');
 const formidable = require('formidable'); 
 const mime = require('mime');
+const fs = require('fs');
 
 router.get('/main', async (req,res)=>{
     try{
@@ -21,13 +22,11 @@ router.get('/main', async (req,res)=>{
 })
 router.post('/upload',async (req,res)=>{
     try{
-        console.log(req.body.file)
         var matches = req.body.file.match(/^data:([A-Za-z-+/]+);base64,(.+)$/),
         response = {};
         if (matches.length !== 3) {
         return new Error('Invalid input string');
         }
-        
         response.type = matches[1];
         response.data = new Buffer(matches[2], 'base64');
         let decodedImg = response;
