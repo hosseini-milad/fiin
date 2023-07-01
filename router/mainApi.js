@@ -22,7 +22,7 @@ router.get('/main', async (req,res)=>{
 })
 router.post('/upload',async (req,res)=>{
     try{
-        var matches = req.body.file.match(/^data:([A-Za-z-+/]+);base64,(.+)$/),
+        var matches = req.body.data.match(/^data:([A-Za-z-+/]+);base64,(.+)$/),
         response = {};
         if (matches.length !== 3) {
         return new Error('Invalid input string');
