@@ -266,7 +266,10 @@ function Profile(){
                             onClick={saveData}>Save</button>
                              <button className="btn-fiin" name="submit"
                             onClick={()=>window.location.href="/form/client/"+userId}>
-                                Add Data</button>
+                                More Data</button>
+                            <button className="btn-fiin" name="submit"
+                            onClick={()=>window.location.href="/form/set-plan/"+userId}>
+                                Set Plans</button>
                         </div>
                         <small className="errorSmall" style={{color:error.color}}>
                             {error.message}</small>

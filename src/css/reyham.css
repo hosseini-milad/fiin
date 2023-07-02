@@ -120,8 +120,25 @@ html{
 .acceptBtn:hover{
     color: green;
 }
-
-
+.reyhamBtn{
+    flex-direction: row-reverse;
+}
+.reyhamUpload{
+    border:none;
+    padding: 0;
+}
+.reyhamUpload .btn-cancel:hover{
+    color:#fff;
+}
+.planOption{
+    display: flex;
+}
+.radioPlan {
+    margin-right: 15px;
+}
+.planOption .accordion-item{
+    width: 100%;
+}
 /*Steps Client*/
 .tabStepHolder{
     display: flex;

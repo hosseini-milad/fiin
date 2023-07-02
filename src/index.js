@@ -36,6 +36,8 @@ import ProfileView from './pages/ProfileView';
 import ActiveUser from './pages/ActiveUser';
 import ClientDetail from './modules/Client/ClientDetail';
 import Steps from './modules/StepsFill/Steps';
+import Plans from './modules/Forms/Plans';
+import ClientPlan from './modules/Client/ClientPlan';
 const cookies = new Cookies();
 var lang = JSON.parse(localStorage.getItem('fiin-lang'));
 
@@ -53,7 +55,7 @@ root.render(
         <Route path="/" element={<Layout></Layout>}/>
         <Route path="/dashboard" element={<Layout><Dashboard/></Layout>}/>
         <Route path="/password" element={<Layout><Password/></Layout>}/>
-        <Route path="/upload" element={<Layout><UpLoad/></Layout>}/>
+        <Route path="/upload/:userId" element={<Layout><UpLoad/></Layout>}/>
         <Route path="/profile" element={<Layout><ProfileView/></Layout>}/>
         <Route path="/profile/:profileId" element={<Layout><Profile/></Layout>}/>
         
@@ -77,7 +79,9 @@ root.render(
         
         {/* Form Pages */}
         <Route path="/client/steps" element={<Layout><Steps/></Layout>}/>
+        <Route path="/client/plans" element={<Layout><ClientPlan/></Layout>}/>
         <Route path="/form/client/:data" element={<Layout><ClientDetail/></Layout>}/>
+        <Route path="/form/set-plan/:data" element={<Layout><Plans/></Layout>}/>
 
       </Routes>:
       <Routes>

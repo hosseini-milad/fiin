@@ -8,6 +8,7 @@ import ClientDetail from "../Client/ClientDetail";
 import ClientMoreData from "../Forms/ClientMoreData";
 import ClientMontage from "../Forms/ClientMontage";
 import SelectPlan from "../Forms/SelectPlan";
+import WaitingBtn from "../../components/Button/waitingBtn";
 const cookies = new Cookies();
 
 const Steps = (props)=>{
@@ -32,6 +33,9 @@ const Steps = (props)=>{
     useEffect(()=>{
         window.scroll(0,150)
     },[index])
+    const ConfirmData=()=>{
+
+    }
     const token=cookies.get('fiin-login')
     return(
         <div className="container">
@@ -47,9 +51,15 @@ const Steps = (props)=>{
                 {index===2?<SelectPlan/>:<></>}
             </div>
             <div className="footer-form-fiin rev">
-                <button type="input" className="btn-fiin"
+                {index===1?<></>:<button type="input" className="btn-fiin"
                 onClick={()=>{setIndex(index+1);updateTab(index+1)}}>
-                    Next</button>
+                    Next</button>}
+                
+                {index===1?
+                    <WaitingBtn class="btn-fiin acceptBtn rev" title="Confirm" 
+                        waiting={'Confirming.'}
+                        function={ConfirmData} name="submit" error={error}/> 
+                :<></>}
                 <button type="input" className={index?"btn-fiin":"deact-fiin"}
                 onClick={()=>{setIndex(index?index-1:0);updateTab(index?index-1:0)}}>
                     Prev</button>

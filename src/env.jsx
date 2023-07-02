@@ -59,3 +59,11 @@ export const splitDate=(dateRaw)=>{
   }
   catch{return}
 }
+export const findSize = (size)=>{
+  try{
+    return(parseFloat(size)/1024).toFixed(2)
+  }
+  catch{
+    return(0)
+  }
+}

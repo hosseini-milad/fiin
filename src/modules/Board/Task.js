@@ -6,6 +6,7 @@ function Task(props){
             {(provided,snapshot)=>(
                 <li className={snapshot.isDragging?"board-task dragTask":"board-task"}
                     {...provided.draggableProps}
+                    {...provided.dragHandleProps}
                     ref={provided.innerRef} 
                     data-dragging={snapshot.isDragging}>
                         
@@ -20,11 +21,12 @@ function Task(props){
                             <span className="icon-phone"></span>
                             {props.taskList.content.phone}</a></li>
                     </ul>
-                    <span className={props.taskList.content.status==="active"?
+                    {props.taskList.content.tag&&props.taskList.content.tag!="undefined"?
+                    <span className={props.taskList.content.tag==="active"?
                         "task-status status-active":"task-status status-deactive"}>
-                            {props.taskList.content.status}</span>
-                    <div className='task-handler' 
-                            {...provided.dragHandleProps}  ></div>
+                            {props.taskList.content.tag}</span>:<></>}
+                    {/*<div className='task-handler' 
+                            {...provided.dragHandleProps}  ></div>*/}
                     
                 </li>
             )}

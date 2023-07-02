@@ -18,7 +18,7 @@ function UpdateTaskStatus(props){
             "phone":"${task.userDetail[0].phone}",
             "email":"${task.userDetail[0].email}",
             "date":"${task.userDetail[0].date}",
-            "status":"${task.userDetail[0].active==="true"?"active":"not active"}",
+            "tag":"${task.tag}",
             "id":"${task.userId}"}}`
         ))
     return(
