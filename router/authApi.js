@@ -382,8 +382,8 @@ router.post('/forget-password-set',jsonParser, async (req,res)=>{
       //res.status(200).json({user:user,message:"User Found"})
         var encryptedNew = await bcrypt.hash(data.newPass, 10);
         await User.updateOne(data.otp&&{otp:data.otp},
-          {$set:{password:encryptedNew,otp:""}})
-
+          {$set:{password:encryptedNew,otp:"",active:"true"}})
+          await task.updateOne({userId:user._id},{tag:"Active"})
           res.status(200).json({user:user,message:"User Pass Changed"})
         
     } 

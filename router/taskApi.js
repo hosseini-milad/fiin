@@ -118,7 +118,7 @@ router.post('/confirm-proposal',auth,jsonParser, async (req,res)=>{
         await plans.updateOne({_id:req.body.taskId},
         {$set:{selectedPlan:"true"}})
         //if(leadTask)
-        res.json({status:"proposal Confirm",data:leadTask})
+        res.json({message:"proposal Confirmed",data:leadTask})
     }
     catch(error){
         res.status(500).json({message: error.message})

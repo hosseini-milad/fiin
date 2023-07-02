@@ -211,7 +211,7 @@ router.post('/user-montage',auth,jsonParser, async (req,res)=>{
 router.post('/confirm-user-data',auth,jsonParser, async (req,res)=>{
 
   const data={
-    userId:req.body.userId,
+    userId:req.body.userId?req.body.userId:req.headers["userid"],
     state: req.body.state,
     date:new Date()
   }
