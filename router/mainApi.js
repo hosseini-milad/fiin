@@ -36,8 +36,8 @@ router.post('/upload',async (req,res)=>{
         let fileName = `Fiin-${Date.now().toString()+"-"+req.body.imgName}.${extension}`;
         
         try {
-        fs.writeFileSync("./uploads/" + fileName, imageBuffer, 'utf8');
-        return res.send({"status":"success",url:"./uploads/"+fileName});
+        fs.writeFileSync("/uploads/" + fileName, imageBuffer, 'utf8');
+        return res.send({"status":"success",url:"/uploads/"+fileName});
         } catch (e) {
             res.send({"status":"failed",error:e});
         }

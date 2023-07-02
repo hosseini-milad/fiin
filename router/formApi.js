@@ -11,6 +11,7 @@ const UserDetail = require("../models/auth/customerDetail")
 const UserMontage = require("../models/auth/customerMontage");
 const task = require('../models/main/task');
 const LogCreator = require('../middleware/LogCreator');
+const plans = require('../models/main/plans');
 
 router.post('/user-detail',auth,jsonParser, async (req,res)=>{
   const userId =req.body.userId?req.body.userId:req.headers['userid']
@@ -125,7 +126,7 @@ router.post('/update-user-montage',auth,jsonParser, async (req,res)=>{
         
       //console.log(userTask)
       await task.updateOne({userId:ObjectID(data.userId),state:"lead"},
-      {$set:{state:"informations"}})
+      {$set:{state:"informations",tag:""}})
         if(userMontage){
           await UserMontage.updateOne({userId:data.userId},{$set:data});
           res.status(200).json({user:userMontage,message:"UserMortage Updated"})
@@ -218,13 +219,71 @@ router.post('/confirm-user-data',auth,jsonParser, async (req,res)=>{
   try {
         await task.updateOne({userId:ObjectID(data.userId),
           state:req.body.oldState},
-          {$set:{state:req.body.state}})
+          {$set:{state:req.body.state,tag:""}})
           const userOwner = await User.findOne({_id:req.body.userId});
           await LogCreator(userOwner,"Confirm Data",
             "user Data Confirmed by administrator")
           res.status(200).json({message:"User Data Confirmed"})
         
   } 
+  catch(error){
+      res.status(500).json({message: error.message})
+  }
+})
+router.post('/user-plans',auth,jsonParser, async (req,res)=>{
+  const userId =req.body.userId?req.body.userId:req.headers['userid']
+  try {
+        const planData = await plans.aggregate([
+        { $match :({userId:userId})},
+        { $addFields: { "userId": { "$toObjectId": "$userId" }}},
+        {$lookup:{
+            from : "users", 
+            localField: "userId", 
+            foreignField: "_id", 
+            as : "userDetail"
+        }}])
+        if(planData){
+          
+          res.status(200).json({plans:planData,message:"Plan Lists"})
+          }
+        else{
+          res.status(500).json({error:"Plan Not Found"})
+        }
+      } 
+  catch(error){
+      res.status(500).json({message: error.message})
+  }
+})
+router.post('/update-user-plan',auth,jsonParser, async (req,res)=>{
+
+  const data={
+    userId:req.body.userId?req.body.userId:req.headers['userid'],
+    
+    planName:   req.body.planName, 
+    bankName:   req.body.bankName,
+    planDescription:   req.body.planDescription,
+    fileUrl:req.body.fileUrl,
+
+    date:new Date()
+  }
+  
+  try {
+        
+          await plans.create(data);
+          res.status(200).json({message:"User Plan Created"})
+        
+      } 
+  catch(error){
+      res.status(500).json({message: error.message})
+  }
+})
+router.post('/delete-user-plan',auth,jsonParser, async (req,res)=>{
+
+  try {
+        await plans.deleteOne({_id:req.body.planId});
+          res.status(200).json({message:"User Plan Deleted"})
+        
+      } 
   catch(error){
       res.status(500).json({message: error.message})
   }

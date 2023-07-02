@@ -6,6 +6,7 @@ const auth = require("../middleware/auth");
 const task = require('../models/main/task');
 const LogCreator = require('../middleware/LogCreator');
 const users = require('../models/auth/users');
+const plans = require('../models/main/plans');
 
 router.get('/report', async (req,res)=>{
     try{
@@ -78,6 +79,46 @@ router.post('/changeOrder',auth,jsonParser, async (req,res)=>{
        
         //if(leadTask)
         res.json({status:"sort done"})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
+})
+router.post('/changeTask',auth,jsonParser, async (req,res)=>{
+    const data={
+        state:req.body.state,
+        tag:req.body.tag,
+    }
+    try{
+        const userData = await users.findOne({_id:req.headers['userid']})
+
+    const logData = await LogCreator(userData,"change State",
+        `task no ${req.body.id}'s state change to ${data.state} and tag to ${data.tag}`)
+        const leadTask= await task.updateOne({userId:req.body.userId},
+            {$set:data})
+        //if(leadTask)
+        res.json({status:"report done",data:leadTask})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
+})
+router.post('/confirm-proposal',auth,jsonParser, async (req,res)=>{
+    const data={
+        state:req.body.state,
+        tag:req.body.tag,
+    }
+    try{
+        const userData = await users.findOne({_id:req.headers['userid']})
+
+    const logData = await LogCreator(userData,"change State",
+        `task no ${req.body.id}'s state change to ${data.state} and tag to ${data.tag}`)
+        const leadTask= await task.updateOne({userId:req.headers['userid']},
+            {$set:data})
+        await plans.updateOne({_id:req.body.taskId},
+        {$set:{selectedPlan:"true"}})
+        //if(leadTask)
+        res.json({status:"proposal Confirm",data:leadTask})
     }
     catch(error){
         res.status(500).json({message: error.message})

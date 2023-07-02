@@ -6,6 +6,7 @@ const TaskSchema = new Schema({
     userId:  String, // String is shorthand for {type: String}
     state:   String, 
     prior:   Number,
+    tag: String,
     priority:   String,
     date:    Date
 })

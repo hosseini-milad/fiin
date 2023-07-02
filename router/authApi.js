@@ -149,7 +149,7 @@ router.post('/register',auth,jsonParser, async (req,res)=>{
           otp:newOtp});
 
         const createTask =await task.create({userId:user._id,
-          state:"lead",date:Date.now()})
+          state:"lead",tag:"Not Active",date:Date.now()})
         //await User.updateOne({email: data.email },{$set:{otp:newOtp}})
         const sendMailResult = await sendMailRegBrevo(data.email,'',
             data.access==="customer"?newOtp:req.body.password,newOtp)
