@@ -2,7 +2,7 @@ const SibApiV3Sdk = require('sib-api-v3-sdk');
 
 const sendMailRegBrevo=async(email,otp,access,userId)=>{
     let defaultClient = SibApiV3Sdk.ApiClient.instance;
-    
+    console.log(email,otp,access,userId)
     let apiKey = defaultClient.authentications['api-key'];
     apiKey.apiKey = process.env.email_key;
     
