@@ -49,7 +49,7 @@ router.post('/upload',uploadImg.single('upload'),async (req,res)=>{
         let fileName = `Fiin-${Date.now().toString()+"-"+req.body.imgName}.${extension}`;
         //console.log(fileName)
         try {
-        fs.writeFileSync("/uploads/" + fileName, imageBuffer, 'utf8');
+        fs.writeFileSync("./uploads/" + fileName, imageBuffer, 'utf8');
         console.log("write")
         return res.send({message:"upload Done",
             url:"/uploads/"+fileName});
