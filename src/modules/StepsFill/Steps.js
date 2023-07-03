@@ -34,7 +34,32 @@ const Steps = (props)=>{
         window.scroll(0,150)
     },[index])
     const ConfirmData=()=>{
-
+        const token=cookies.get('fiin-login')
+        const postOptions={
+            method:'post',
+            headers: { 'Content-Type': 'application/json' ,
+            "x-access-token": token&&token.token,
+            "userId":token&&token.userId},
+            body:JSON.stringify({state:"fiin", oldState:"informations"})
+          }
+        fetch(env.siteApi + "/form/confirm-user-data",postOptions)
+      .then(res => res.json())
+      .then(
+        (result) => {
+            if(result.error){
+                setError({message:result.error,color:"brown"})
+            setTimeout(()=>setError({message:'',color:"brown"}),3000)
+            }
+            else{
+                setError({message:result.message,color:"green"})
+                setTimeout(()=>document.location.href="/dashboard",1000)
+            }
+        },
+        (error) => {
+            setError({message:"error",color:"brown"})
+            setTimeout(()=>setError({message:'',color:"brown"}),3000)
+        })
+        
     }
     const token=cookies.get('fiin-login')
     return(
@@ -42,7 +67,7 @@ const Steps = (props)=>{
         <Breadcrumb title={"Lista de Clientes"}/>
 
         <div className="step-fiin">
-           <StepTab index={index}/>
+           <StepTab index={index} setIndex={setIndex}/>
         </div>
         <div className="step-placeHolder">
             <div className="form-fiin form-box-style">

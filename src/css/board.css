@@ -132,13 +132,27 @@ margin-left: auto;
     padding-left: 0;
     list-style: none;
   }
+  .task-meta span{
+    font-size: 14px;
+  font-weight: bold;
+  }
+  .task-meta a {
+    display: flex;
+    align-items: center;
+    column-gap: 5px;
+    color: #666;
+    transition: 0.3s;
+  }
+  .task-meta a:hover {
+    color: var(--blue);
+  }
   .task-status {
     border-radius: 4px;
     padding: 2px 6px;
     font-size: 12px;
     position: absolute;
     right: 10px;
-    bottom: 10px;
+    top: 10px;
     color: #fff;
     pointer-events: none;
   }
@@ -148,7 +162,7 @@ margin-left: auto;
     font-size: 12px;
     position: absolute;
     right: 10px;
-    top: 10px;
+    bottom: 10px;
     width: 45px;
     height: 25px;
     background-color: var(--blue);

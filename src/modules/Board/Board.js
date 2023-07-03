@@ -49,6 +49,7 @@ function Board(){
         .then(res => res.json())
         .then(
             (result) => {
+                console.log(result)
                 setTaskState(result);
                 setBoardArray(()=>UpdateTaskStatus(result))
             },
@@ -166,8 +167,8 @@ function Board(){
             destination.index/Object.keys(boardArray.tasks).length:0
         document.body.style.backgroundColor=`rgba(153,141,217,${opacity})`*/
     }
-    return(
-        <div className='board-list'>
+    return(<>
+        {token.level>2?<div className='board-list'>
             {boardArray?<DragDropContext
             onDragStart={DragStart}
             onDragUpdate={DragUpdate}
@@ -178,7 +179,8 @@ function Board(){
                     return(<Column key={column.id} column={column} tasks={tasks}/>)
                 })}
             </DragDropContext>:<div>Updating</div>}
-        </div>
+        </div>:
+        <div className='board-list'>Client Dashboard</div>}</>
     )
 }
 export default Board

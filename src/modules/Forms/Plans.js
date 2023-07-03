@@ -49,7 +49,7 @@ function Plans(){
       .then(
         (result) => {
             console.log(result)
-                        
+            setTimeout(()=>document.location.href="/dashboard",1000)       
         },
         (error) => {
             console.log(error)

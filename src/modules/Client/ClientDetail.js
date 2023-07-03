@@ -22,10 +22,9 @@ function ClientDetail(props){
             headers: { 'Content-Type': 'application/json' ,
             "x-access-token": token&&token.token,
             "userId":token&&token.userId},
-            body:JSON.stringify({state:"fiin", oldState:"informations",
+            body:JSON.stringify({state:"informations", oldState:"lead",
                 userId:document.location.pathname.split('/')[3]})
           }
-        console.log(postOptions)
         fetch(env.siteApi + "/form/confirm-user-data",postOptions)
       .then(res => res.json())
       .then(

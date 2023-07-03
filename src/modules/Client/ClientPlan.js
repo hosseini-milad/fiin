@@ -9,6 +9,8 @@ const cookies = new Cookies();
 function ClientPlan(){
     const [plans,setPlans] = useState([])
     const [acceptTask,setAcceptTask] = useState()
+    const [error,setError] = useState({message:'',color:"brown"})
+
     useEffect(()=>{
         const token=cookies.get('fiin-login')
         const postOptions={
@@ -45,7 +47,14 @@ function ClientPlan(){
         .then(res => res.json())
         .then(
           (result) => {
-              console.log(result)
+            if(result.error){
+                setError({message:result.error,color:"brown"})
+            setTimeout(()=>setError({message:'',color:"brown"}),3000)
+            }
+            else{
+                setError({message:result.message,color:"green"})
+                setTimeout(()=>document.location.href="/dashboard",1000)
+            }
                           
           },
           (error) => {

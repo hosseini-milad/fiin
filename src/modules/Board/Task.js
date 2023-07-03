@@ -12,7 +12,9 @@ function Task(props){
                         
                     <a href={`/profile/${props.taskList.content.id}`}>
                         <h3 className="task-title">{props.taskList.content.user}</h3></a>
-                    <span className="task-date">{dayFromNow(props.taskList.content.date)}</span>
+                    <span className="task-date">
+                        <span className="icon-calendar"></span>
+                        {dayFromNow(props.taskList.content.date)}</span>
                     <ul className="task-meta">
                         <li><a href={`mailto:${props.taskList.content.email}`}>
                             <span className="icon-envelope"></span> 

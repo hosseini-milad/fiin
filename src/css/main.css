@@ -26,7 +26,7 @@
 }
   
 .icon-arrow-bottom:before {
-    content: "\e900";
+    content: "\e903";
 }
 .icon-close:before {
     content: "\e901";
@@ -41,16 +41,16 @@
     content: "\e903";
 }
 .icon-pass:before {
-    content: "\e904";
+    content: "\e906";
 }
 .icon-search:before {
     content: "\e905";
 }
 .icon-upload:before {
-    content: "\e906";
+    content: "\e909";
 }
 .icon-user:before {
-    content: "\e907";
+    content: "\e90a";
 }
 .icon-phone:before {
     content: "\e902";

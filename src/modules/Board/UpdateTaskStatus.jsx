@@ -13,6 +13,7 @@ function UpdateTaskStatus(props){
 
     const tasks=
         allTasks.map((task,i)=>(
+            task.userDetail[0]&&
             `"${task._id}":{"id":"${task._id}",
             "content":{"user":"${task.userDetail[0].cName} ${task.userDetail[0].sName}",
             "phone":"${task.userDetail[0].phone}",

@@ -65,7 +65,7 @@ function PlanView(props){
                         </div>
                     </div>
                     <div className="show-more list-item reyhamUpload">
-                    <a href={props.data.fileUrl} className="">
+                    <a href={env.siteApiUrl+props.data.fileUrl} className="">
                         <span className="icon-upload"></span></a>
                     </div>
                     
