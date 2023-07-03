@@ -21,7 +21,8 @@ router.get('/main', async (req,res)=>{
     }
 })
 router.post('/upload',async (req,res)=>{
-    try{
+    res.json({message:"upload Done"})
+    /*try{
         console.log("upload Start")
         var matches = req.body.data.match(/^data:([A-Za-z-+/]+);base64,(.+)$/),
         response = {};
@@ -49,7 +50,7 @@ router.post('/upload',async (req,res)=>{
     }
     catch(error){
         res.status(500).json({message: error.message})
-    }
+    }*/
 })
 
 router.use('/auth', authApi)
