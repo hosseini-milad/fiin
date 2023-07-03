@@ -8,8 +8,15 @@ const taskApi = require('./taskApi');
 const productApi = require('./productApi');
 const formApi = require('./formApi');
 const multer = require('multer');
-const upload = multer({ dest: '/uploads/' })
-
+var storage = multer.diskStorage(
+    {
+        destination: '/uploads/',
+        filename: function ( req, file, cb ) {
+            cb( null, "Fiin"+ '-' + Date.now()+ '-'+file.originalname);
+        }
+    }
+);
+const uploadImg = multer({ storage: storage })
 const fs = require('fs');
 
 router.get('/main', async (req,res)=>{
@@ -23,7 +30,7 @@ router.get('/main', async (req,res)=>{
         res.status(500).json({message: error.message})
     }
 })
-router.post('/upload-file',upload.single('uploaded_file'),async (req,res)=>{
+router.post('/upload-file',uploadImg.single('upload'),async (req,res)=>{
     res.json({message:"upload Done"})
     /*try{
         console.log("upload Start")
