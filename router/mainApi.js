@@ -7,6 +7,7 @@ const authApi = require('./authApi');
 const taskApi = require('./taskApi');
 const productApi = require('./productApi');
 const formApi = require('./formApi');
+const mime = require('mime');
 const multer = require('multer');
 var storage = multer.diskStorage(
     {
