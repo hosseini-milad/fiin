@@ -29,8 +29,7 @@ const sendMailRegBrevo=async(email,otp,access,userId)=>{
     var result = "";
     await apiInstance.sendTransacEmail(sendSmtpEmail)
     .then(function(data) {
-        result = "accept"
-        //console.log(JSON.stringify(data));
+        result = (JSON.stringify(data));
     }, function(err) {
         //console.log(err)
         result=({error:JSON.parse(err.response&&
