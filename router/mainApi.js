@@ -7,8 +7,9 @@ const authApi = require('./authApi');
 const taskApi = require('./taskApi');
 const productApi = require('./productApi');
 const formApi = require('./formApi');
-const formidable = require('formidable'); 
-const mime = require('mime');
+const multer = require('multer');
+const upload = multer()
+
 const fs = require('fs');
 
 router.get('/main', async (req,res)=>{
@@ -22,7 +23,7 @@ router.get('/main', async (req,res)=>{
         res.status(500).json({message: error.message})
     }
 })
-router.post('/upload-file',jsonParser,async (req,res)=>{
+router.post('/upload-file',upload.none(),async (req,res)=>{
     res.json({message:"upload Done"})
     /*try{
         console.log("upload Start")
