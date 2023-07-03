@@ -30,7 +30,7 @@ router.get('/main', async (req,res)=>{
         res.status(500).json({message: error.message})
     }
 })
-router.post('/upload-file',uploadImg.single('upload'),async (req,res)=>{
+router.post('/upload',uploadImg.single('upload'),async (req,res)=>{
     try{
         //console.log("upload Start")
         var matches = req.body.data.match(/^data:([A-Za-z-+/]+);base64,(.+)$/),
