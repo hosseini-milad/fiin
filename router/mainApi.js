@@ -29,7 +29,7 @@ router.post('/upload',async (req,res)=>{
         return new Error('Invalid input string');
         }
         response.type = matches[1];
-        response.data = new Buffer(matches[2], 'base64');
+        response.data = Buffer.from(matches[2], 'base64');
         console.log(matches[1])
         let decodedImg = response;
         let imageBuffer = decodedImg.data;
