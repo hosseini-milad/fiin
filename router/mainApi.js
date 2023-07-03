@@ -22,6 +22,7 @@ router.get('/main', async (req,res)=>{
 })
 router.post('/upload',async (req,res)=>{
     try{
+        console.log("upload Start")
         var matches = req.body.data.match(/^data:([A-Za-z-+/]+);base64,(.+)$/),
         response = {};
         if (matches.length !== 3) {
@@ -29,19 +30,22 @@ router.post('/upload',async (req,res)=>{
         }
         response.type = matches[1];
         response.data = new Buffer(matches[2], 'base64');
+        console.log(matches[1])
         let decodedImg = response;
         let imageBuffer = decodedImg.data;
         let type = decodedImg.type;
         let extension = mime.extension(type);
         let fileName = `Fiin-${Date.now().toString()+"-"+req.body.imgName}.${extension}`;
-        
+        console.log(fileName)
         try {
         fs.writeFileSync("/uploads/" + fileName, imageBuffer, 'utf8');
-        return res.send({"status":"success",url:"/uploads/"+fileName});
+        console.log("write")
+        return res.send({message:"upload Done",
+            url:"/uploads/"+fileName});
         } catch (e) {
             res.send({"status":"failed",error:e});
         }
-        res.json({message:"sliders"})
+        //res.json({message:"upload Done"})
     }
     catch(error){
         res.status(500).json({message: error.message})
