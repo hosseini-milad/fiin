@@ -1,5 +1,7 @@
 const express = require('express');
 const router = express.Router()
+const bodyParser = require('body-parser');
+const jsonParser = bodyParser.json();
 const slider = require('../models/main/slider');
 const authApi = require('./authApi');
 const taskApi = require('./taskApi');
@@ -20,10 +22,7 @@ router.get('/main', async (req,res)=>{
         res.status(500).json({message: error.message})
     }
 })
-router.get('/upload-file',async (req,res)=>{
-    res.json({message:"upload Done"})
-})
-router.post('/upload-file',async (req,res)=>{
+router.post('/upload-file',jsonParser,async (req,res)=>{
     res.json({message:"upload Done"})
     /*try{
         console.log("upload Start")
