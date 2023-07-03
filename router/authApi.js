@@ -153,7 +153,7 @@ router.post('/register',auth,jsonParser, async (req,res)=>{
         //await User.updateOne({email: data.email },{$set:{otp:newOtp}})
         const sendMailResult = await sendMailRegBrevo(data.email,
             data.access==="customer"?newOtp:req.body.password,data.access,user._id)
-        //console.log(sendMailResult)
+        console.log(sendMailResult)
         res.status(201).json({user:user,message:"User Created"})
         return;
       }
