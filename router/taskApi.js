@@ -7,6 +7,7 @@ const task = require('../models/main/task');
 const LogCreator = require('../middleware/LogCreator');
 const users = require('../models/auth/users');
 const plans = require('../models/main/plans');
+const sendMailAlert = require('../middleware/sendMailAlert');
 
 router.get('/report', async (req,res)=>{
     try{
@@ -94,6 +95,8 @@ router.post('/changeTask',auth,jsonParser, async (req,res)=>{
 
     const logData = await LogCreator(userData,"change State",
         `task no ${req.body.id}'s state change to ${data.state} and tag to ${data.tag}`)
+        const userDetail = await users.findOne({_id:req.body.userId});
+        await sendMailAlert(userDetail.email,"Your Proposal Sets by administrator please visit Fiin profile")
         const leadTask= await task.updateOne({userId:req.body.userId},
             {$set:data})
         //if(leadTask)
@@ -115,8 +118,10 @@ router.post('/confirm-proposal',auth,jsonParser, async (req,res)=>{
         `task no ${req.body.id}'s state change to ${data.state} and tag to ${data.tag}`)
         const leadTask= await task.updateOne({userId:req.headers['userid']},
             {$set:data})
+            //await sendMailAlert(userDetail.email,"Your Proposal Sets by administrator please visit Fiin profile")
         await plans.updateOne({_id:req.body.taskId},
         {$set:{selectedPlan:"true"}})
+
         //if(leadTask)
         res.json({message:"proposal Confirmed",data:leadTask})
     }

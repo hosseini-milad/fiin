@@ -223,6 +223,7 @@ router.post('/confirm-user-data',auth,jsonParser, async (req,res)=>{
           const userOwner = await User.findOne({_id:req.body.userId});
           await LogCreator(userOwner,"Confirm Data",
             "user Data Confirmed by administrator")
+          await sendMailAlert(userOwner.email,"Data Set please visit Fiin profile")
           res.status(200).json({message:"User Data Confirmed"})
         
   } 
