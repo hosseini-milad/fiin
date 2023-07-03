@@ -20,6 +20,9 @@ router.get('/main', async (req,res)=>{
         res.status(500).json({message: error.message})
     }
 })
+router.get('/upload-file',async (req,res)=>{
+    res.json({message:"upload Done"})
+})
 router.post('/upload-file',async (req,res)=>{
     res.json({message:"upload Done"})
     /*try{
