@@ -33,7 +33,7 @@ router.use(bodyParser.urlencoded({
 })) 
 router.use('/uploads', express.static('uploads'));
 router.use(bodyParser.json({limit: '50mb'}));
-router.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
+router.use(bodyParser.urlencoded({limit: '50mb', extended: true, parameterLimit: 50000}));
 router.use(bodyParser.json())
 router.get('/error', function(req, res, next) {
   // here we cause an error in the pipeline so we see express-winston in action.
