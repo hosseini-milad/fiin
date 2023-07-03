@@ -16,15 +16,6 @@ var eventsEmitter = new emitter();
 const { API_PORT } = process.env;
 const port = 4090 || API_PORT;
 
-eventsEmitter.on('tqi9z2oj5x1gu3iuqtv1d9pyc1gtfkef', () => {
-  
-  console.log('Test Event Successful!');
-
-});
-app.get('/hook-lead', (req, res) => {    //Subscribing to an event
-  console.log("req")
-  eventsEmitter.emit('tqi9z2oj5x1gu3iuqtv1d9pyc1gtfkef');});
-app.use('/uploads', express.static('uploads'));
 //app.use(express.methodOverride());
 // Let's make our express `Router` first.
 var router = express.Router();
