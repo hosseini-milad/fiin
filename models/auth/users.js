@@ -22,6 +22,9 @@ const userSchema = new mongoose.Schema({
   otp:{ type: String , default: null },
   nif: { type: String },
   agent:{ type: String },
+  agentName:{ type: String },
+  agency:{ type: String },
+  agencyName:{ type: String },
   active:{ type: String },
   status:{ type: String },
 

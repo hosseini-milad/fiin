@@ -111,7 +111,10 @@ router.post('/register',auth,jsonParser, async (req,res)=>{
         email: req.body.email,
         access: req.body.access,
         group: req.body.group,
-        agent:req.body.agent?req.body.agent:req.headers["userid"],
+        agent:req.body.agent?req.body.agent:
+          req.headers["userid"],
+        agentName:req.body.agentName?req.body.agentName:
+          req.headers["username"],
         nif: req.body.nif,
 
         nameCompany:req.body.nameCompany,
@@ -141,7 +144,9 @@ router.post('/register',auth,jsonParser, async (req,res)=>{
           return
         }
         //const bitrixDealConst=await bitrixDeal(bitrixData.result,"crm.deal.add.json",data)
-
+        const agentData=await User.findOne({_id:ObjectID(data.agent)})
+        data.agencyName = agentData.agentName;
+        data.agency = agentData.agent
         //console.log(bitrixDealConst)
         const newOtp=createOTP(data.cName)
         const user = //bitrixData.result&&
@@ -415,6 +420,8 @@ router.post('/change-user',auth,jsonParser, async (req,res)=>{
       // Validate if user exist in our database
       const userOwner = await User.updateOne({_id:ObjectID(req.body._id)},
         {$set:data});
+        await task.updateOne({userId:ObjectID(req.body._id)},
+          {$set:{tag:data.active?"Active":"Not Active"}})
       //console.log(await bcrypt.compare(userOwner.password, data.oldPass))
       
       res.status(200).json({user:userOwner,message:"User Data Changed."})
