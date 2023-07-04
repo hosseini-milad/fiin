@@ -12,6 +12,7 @@ const UserMontage = require("../models/auth/customerMontage");
 const task = require('../models/main/task');
 const LogCreator = require('../middleware/LogCreator');
 const plans = require('../models/main/plans');
+const control = require('../models/main/control');
 
 router.post('/user-detail',auth,jsonParser, async (req,res)=>{
   const userId =req.body.userId?req.body.userId:req.headers['userid']
@@ -26,8 +27,8 @@ router.post('/user-detail',auth,jsonParser, async (req,res)=>{
             as : "userDetail"
         }}])
         if(userData){
-          
-          res.status(200).json({user:userData,message:"User Exists"})
+          const taskData = await task.findOne({userId:userId})
+          res.status(200).json({user:userData,task:taskData,message:"User Exists"})
           }
         else{
           res.status(500).json({error:"User Not Found"})
@@ -93,8 +94,8 @@ router.post('/user-montage',auth,jsonParser, async (req,res)=>{
             as : "userDetail"
         }}])
         if(userMontage){
-          
-          res.status(200).json({user:userMontage,message:"User Exists"})
+          const taskData = await task.findOne({userId:userId})
+          res.status(200).json({user:userMontage,task:taskData,message:"User Exists"})
           }
         else{
           res.status(500).json({error:"User Not Found"})
@@ -283,6 +284,54 @@ router.post('/delete-user-plan',auth,jsonParser, async (req,res)=>{
   try {
         await plans.deleteOne({_id:req.body.planId});
           res.status(200).json({message:"User Plan Deleted"})
+        
+      } 
+  catch(error){
+      res.status(500).json({message: error.message})
+  }
+})
+router.post('/user-control',auth,jsonParser, async (req,res)=>{
+  const userId =req.body.userId
+  try {
+        const controlData = await control.aggregate([
+        { $match :({userId:userId})},
+        { $addFields: { "userId": { "$toObjectId": "$userId" }}},
+        {$lookup:{
+            from : "users", 
+            localField: "userId", 
+            foreignField: "_id", 
+            as : "userDetail"
+        }},{$sort:{date:-1}}])
+        if(controlData){
+          
+          res.status(200).json({control:controlData,message:"Control Lists"})
+          }
+        else{
+          res.status(500).json({error:"Control Not Found"})
+        }
+      } 
+  catch(error){
+      res.status(500).json({message: error.message})
+  }
+})
+router.post('/update-user-control',auth,jsonParser, async (req,res)=>{
+
+  const data={
+    userId:req.body.userId,
+    controlName:   req.body.controlName, 
+    controlValue:   req.body.controlValue,
+    controlDescription:   req.body.controlDescription,
+    controlState:req.body.controlState,
+
+    date:new Date()
+  }
+  
+  try {
+        
+          await control.create(data);
+          res.status(200).json({message:"User Control Created"})
+          await task.updateOne({userId:req.body.userId},
+            {$set:{tag:data.controlName}})
         
       } 
   catch(error){

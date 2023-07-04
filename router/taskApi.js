@@ -19,7 +19,18 @@ router.get('/report', async (req,res)=>{
 })
 router.get('/currentState',auth,jsonParser, async (req,res)=>{
     try{
+        const userOwner = await users.findOne({_id:req.headers['userid']})
+
+        if(userOwner.access === "customer"){
+            res.status(500).json({message: "low privilage"})
+            return
+        }
+        var limitState = {}
+        if(userOwner.access === "agent"){
+            limitState = {agentId:req.headers['userid']}
+        }
         const allTasks= await task.aggregate([
+            { $match:limitState},
             { $addFields: { "userId": { "$toObjectId": "$userId" }}},
             {$lookup:{
                 from : "users", 
@@ -27,15 +38,15 @@ router.get('/currentState',auth,jsonParser, async (req,res)=>{
                 foreignField: "_id", 
                 as : "userDetail"
             }},{$sort:{prior:-1}}])
-        const leadTask= await task.find({state:'lead'}).sort({'prior':1})
-        const informationTask= await task.find({state:'informations'}).sort({'prior':1})
-        const fiinTask= await task.find({state:'fiin'}).sort({'prior':1})
+        const leadTask= await task.find({state:'lead',...limitState}).sort({'prior':1})
+        const informationTask= await task.find({state:'informations',...limitState}).sort({'prior':1})
+        const fiinTask= await task.find({state:'fiin',...limitState}).sort({'prior':1})
         
-        const propertyTask= await task.find({state:'property'}).sort({'prior':1})
-        const segurosTask= await task.find({state:'seguros'}).sort({'prior':1})
-        const escrituraTask= await task.find({state:'escritura'}).sort({'prior':1})
-        const commissionsTask= await task.find({state:'commissions'}).sort({'prior':1})
-        const suspendedTask= await task.find({state:'suspended'}).sort({'prior':1})
+        const propertyTask= await task.find({state:'property',...limitState}).sort({'prior':1})
+        const segurosTask= await task.find({state:'seguros',...limitState}).sort({'prior':1})
+        const escrituraTask= await task.find({state:'escritura',...limitState}).sort({'prior':1})
+        const commissionsTask= await task.find({state:'commissions',...limitState}).sort({'prior':1})
+        const suspendedTask= await task.find({state:'suspended',...limitState}).sort({'prior':1})
         res.status(200).json({allTasks:allTasks,
             leadTask:leadTask,informationTask:informationTask,
             fiinTask:fiinTask,propertyTask:propertyTask,
@@ -47,9 +58,23 @@ router.get('/currentState',auth,jsonParser, async (req,res)=>{
         res.status(500).json({message: error.message})
     }
 })
+const findStep=(state)=>{
+    switch(state){
+        case 'lead':return(0);
+        case 'informations':return(1);
+        case 'fiin':return(2);
+        case 'property':return(3);
+        case 'seguros':return(4);
+        case 'escritura':return(5);
+        case 'commissions':return(6);
+        case 'suspended':return(7);
+        default:return(-1);
+    }
+}
 router.post('/changeState',auth,jsonParser, async (req,res)=>{
     const data={
         state:req.body.state,
+        step:findStep(req.body.state),
         prior:req.body.prior*5+1
     }
     try{
@@ -88,6 +113,7 @@ router.post('/changeOrder',auth,jsonParser, async (req,res)=>{
 router.post('/changeTask',auth,jsonParser, async (req,res)=>{
     const data={
         state:req.body.state,
+        step:findStep(req.body.state),
         tag:req.body.tag,
     }
     try{
@@ -109,6 +135,7 @@ router.post('/changeTask',auth,jsonParser, async (req,res)=>{
 router.post('/confirm-proposal',auth,jsonParser, async (req,res)=>{
     const data={
         state:req.body.state,
+        step:findStep(req.body.state),
         tag:req.body.tag,
     }
     try{

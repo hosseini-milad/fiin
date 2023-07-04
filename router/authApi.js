@@ -153,8 +153,8 @@ router.post('/register',auth,jsonParser, async (req,res)=>{
           await User.create({...data,bitrixCode:bitrixData.result,
           otp:newOtp});
 
-        const createTask =await task.create({userId:user._id,
-          state:"lead",tag:"Not Active",date:Date.now()})
+        const createTask =await task.create({userId:user._id,agentId:user.agent,
+          state:"lead",tag:"Not Active",step:0,date:Date.now()})
         //await User.updateOne({email: data.email },{$set:{otp:newOtp}})
         const sendMailResult = await sendMailRegBrevo(data.email,
             data.access==="customer"?newOtp:req.body.password,data.access,user._id)
@@ -309,9 +309,10 @@ router.post('/find-user-admin',auth,jsonParser, async (req,res)=>{
   try {
         const userOwner = await User.findOne({_id:req.headers["userid"]});
         const userData = await User.findOne({_id:req.body.userId});
+        const taskData = await task.findOne({userId:req.body.userId});
         /*if(userData&&userData.access==="customer")
           await User.updateOne({_id:req.body.userId},{$set:{active:"true"}});*/
-        res.status(200).json({user:userData,message:"User Data"})
+        res.status(200).json({user:userData,task:taskData,message:"User Data"})
       } 
   catch(error){
       res.status(500).json({message: error.message})
