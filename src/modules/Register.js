@@ -16,7 +16,8 @@ function Register(props){
             method:'post',
             headers: { 'Content-Type': 'application/json' ,
             "x-access-token": token&&token.token,
-            "userId":token&&token.userId},
+            "userId":token&&token.userId,
+            "userName":token&&token.username},
             body:JSON.stringify(
                 {access:access,...regElement,
                 username:regElement.email})
@@ -32,7 +33,7 @@ function Register(props){
             }
             else{
                 setError({message:result.message,color:"green"})
-                setTimeout(()=>window.location.reload(),1000)
+                //setTimeout(()=>window.location.reload(),1000)
             }
             
         },

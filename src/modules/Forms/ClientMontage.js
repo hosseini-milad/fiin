@@ -8,7 +8,7 @@ const cookies = new Cookies();
 function ClientMontage(props){
     const userId = props.userId?props.userId:document.location.pathname.split('/')[3]
     const [userData,setUserData] = useState()
-    const [fromDate,setFromDate] = useState()
+    const [task,setTask] = useState()
     const [regElement,setRegElement] = useState()
     const [error,setError] = useState({message:'',color:"brown"})
     useEffect(()=>{
@@ -26,6 +26,7 @@ function ClientMontage(props){
             (result) => {
                 setUserData(result.user[0]&&result.user[0].userDetail[0])
                 setRegElement(result.user[0])
+                setTask(result.task)
             },
             (error) => {
                 cookies.remove('fiin-login',{ path: '/' });
@@ -171,9 +172,9 @@ function ClientMontage(props){
             </div>
         </div>
         <div className="footer-form-fiin">
-            <WaitingBtn class="btn-fiin" title="Update" 
+        {task&&(task.step<2)?<WaitingBtn class="btn-fiin" title="Update" 
                 waiting={'Updating.'}
-                function={UpdateData} name="submit" error={error}/> 
+                function={UpdateData} name="submit" error={error}/> :<></>}
         </div>
         
         <small className="errorSmall" style={{color:error.color}}>

@@ -23,12 +23,14 @@ function Task(props){
                             <span className="icon-phone"></span>
                             {props.taskList.content.phone}</a></li>
                     </ul>
-                    {props.taskList.content.tag&&props.taskList.content.tag!="undefined"?
-                    <span className={props.taskList.content.tag==="active"?
+                    {props.taskList.content.tag?
+                    <span className={props.taskList.content.tag==="Active"?
                         "task-status status-active":"task-status status-deactive"}>
                             {props.taskList.content.tag}</span>:<></>}
-                    {/*<div className='task-handler' 
-                            {...provided.dragHandleProps}  ></div>*/}
+                    <div className='task-handler'>
+                        <small>{props.taskList.content.agent}</small>
+                        <small>{props.taskList.content.agency}</small>
+                    </div>
                     
                 </li>
             )}

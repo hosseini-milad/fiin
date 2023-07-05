@@ -97,6 +97,7 @@ function Login(props){
                                 <label htmlFor="first-name">{errortrans.password[lang]}</label>
                                 <input type={showPass?"input":"password"} name="firstname" 
                                     id="password" placeholder={errortrans.password[lang]}
+                                    value={loginInfo.password}
                                     onChange={(e)=>setLoginInfo(data => ({
                                         ...data,
                                         ...{password:e.target.value}

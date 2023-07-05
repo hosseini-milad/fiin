@@ -1,6 +1,7 @@
 import env from "../../env"
 
-function UpdateTaskStatus(props){
+function UpdateTaskStatus(propsElement){
+    const props = propsElement.result
     const allTasks = props.allTasks
     const leadTask = props.leadTask
     const informationTask = props.informationTask
@@ -13,15 +14,29 @@ function UpdateTaskStatus(props){
 
     const tasks=
         allTasks.map((task,i)=>(
-            task.userDetail[0]&&
+            task.userDetail.length?
             `"${task._id}":{"id":"${task._id}",
             "content":{"user":"${task.userDetail[0].cName} ${task.userDetail[0].sName}",
             "phone":"${task.userDetail[0].phone}",
             "email":"${task.userDetail[0].email}",
+            "agent":"${task.userDetail[0].agentName?
+                task.userDetail[0].agentName:''}",
+            "agency":"${task.userDetail[0].agencyName?
+                task.userDetail[0].agencyName:''}",
             "date":"${task.userDetail[0].date}",
-            "tag":"${task.tag}",
-            "id":"${task.userId}"}}`
+            "tag":"${task.tag?task.tag:''}",
+            "id":"${task.userId}"}}`:
+            `"${task._id}":{"id":"${task._id}",
+            "content":{"user":"-",
+            "phone":"-",
+            "email":"-",
+            "agent":"-",
+            "agency":"-",
+            "date":"-",
+            "tag":"-",
+            "id":"-"}}`
         ))
+        
     return(
         {
             tasks:JSON.parse(`{${tasks}}`),
@@ -59,7 +74,8 @@ function UpdateTaskStatus(props){
                     taskIds:suspendedTask.map(lead=>lead._id)
                 }
             },
-            columnOrder:env.columnOrder
+            columnOrder:propsElement.token.level<10?
+                env.columnAgentOrder:env.columnOrder
         }
     )
 }

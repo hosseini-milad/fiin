@@ -7,9 +7,10 @@ import Cookies from 'universal-cookie';
 import env from "../../env";
 const cookies = new Cookies();
 
-function Plans(){
+function Control(){
     const userId = document.location.pathname.split('/')[3]
-    const [plans,setPlans] = useState()
+    const [control,setControls] = useState()
+    const [option,setOption] = useState()
     useEffect(()=>{
         const token=cookies.get('fiin-login')
         const postOptions={
@@ -21,18 +22,22 @@ function Plans(){
                 {userId:userId})
           }
           //console.log(postOptions)
-        fetch(env.siteApi + "/form/user-plans",postOptions)
+        fetch(env.siteApi + "/form/user-control",postOptions)
       .then(res => res.json())
       .then(
         (result) => {
-            setPlans(result.plans)
+            setControls(result.control?result.control[0]:'')
                         
         },
         (error) => {
             console.log(error)
         })
     },[])
-    const confirmProposal=()=>{
+    useEffect(()=>{
+        control&&
+        setOption(control.controlName)
+    },[control])
+    const confirmControl=()=>{
         
         const token=cookies.get('fiin-login')
         const postOptions={
@@ -40,11 +45,9 @@ function Plans(){
             headers: { 'Content-Type': 'application/json' ,
             "x-access-token": token&&token.token,
             "userId":token&&token.userId},
-            body:JSON.stringify(
-                {userId:userId,tag:"proposal"})
+            body:JSON.stringify({userId:userId,controlName:option})
           }
-          //console.log(postOptions)
-        fetch(env.siteApi + "/task/changeTask",postOptions)
+        fetch(env.siteApi + "/form/update-user-control",postOptions)
       .then(res => res.json())
       .then(
         (result) => {
@@ -57,23 +60,25 @@ function Plans(){
     }
     return(
         <div className="container">
-            <Breadcrumb title={"Lista de Proposal"}/>
+            <Breadcrumb title={"Lista de Control"}/>
 
                 <div className="section-fiin">
                     <div className="section-head">
-                        <h1 className="section-title">Lista de Options</h1>
+                        <h1 className="section-title">Lista de Control</h1>
                         <p className="hidden">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt .</p>
-                    </div>   
-                    <PlanItem userId={userId}/>
-                    <div className="accordions">
-                        {plans&&plans.map((plan,i)=>(
-                            <PlanView data={plan} key={i} />
-                    ))}</div>
+                    </div>  
+                    <select className="reyhamSelect" onChange={(e)=>setOption(e.target.value)}
+                        value={option}>
+                        <option>Send Email</option>
+                        <option>Create Contact</option>
+                        <option>Send Contact</option>
+                        <option>Finalize</option>
+                    </select>
                 </div>
-                {plans?<WaitingBtn class="btn-fiin acceptBtn" title="Confirm Proposal" 
-                        waiting={'Confirm Proposal'}
-                    function={confirmProposal} name="submit" />:<></>}
+                <WaitingBtn class="btn-fiin acceptBtn" title="Confirm Control" 
+                        waiting={'Confirm Control'}
+                    function={confirmControl} name="submit" />
         </div>
     )
 }
-export default Plans
+export default Control

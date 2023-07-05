@@ -139,6 +139,22 @@ html{
 .planOption .accordion-item{
     width: 100%;
 }
+.disable-fiin{
+    background-color: silver;
+    border-color: gray;
+}
+.disable-fiin:hover{
+    color: gray;
+}
+.reyhamSelect{
+    border: 1px solid #E7E7E8;
+    border-radius: 4px;
+    background-color: #fff;
+    font-size: 14px;
+    padding: 14px 18px;
+    width: 50%;
+    margin: 20px auto
+}
 /*Steps Client*/
 .tabStepHolder{
     display: flex;

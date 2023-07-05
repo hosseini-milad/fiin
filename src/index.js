@@ -38,6 +38,8 @@ import ClientDetail from './modules/Client/ClientDetail';
 import Steps from './modules/StepsFill/Steps';
 import Plans from './modules/Forms/Plans';
 import ClientPlan from './modules/Client/ClientPlan';
+import Control from './modules/Forms/Control';
+import RegisterPartner from './modules/Client/RegisterPartner';
 const cookies = new Cookies();
 var lang = JSON.parse(localStorage.getItem('fiin-lang'));
 
@@ -76,12 +78,14 @@ root.render(
         {/* Client Pages */}
         <Route path="/client/list" element={<Layout><ClientList/></Layout>}/>
         <Route path="/client/register" element={<Layout><RegClient/></Layout>}/>
+        <Route path="/partner/register" element={<Layout><RegisterPartner/></Layout>}/>
         
         {/* Form Pages */}
         <Route path="/client/steps" element={<Layout><Steps/></Layout>}/>
         <Route path="/client/plans" element={<Layout><ClientPlan/></Layout>}/>
         <Route path="/form/client/:data" element={<Layout><ClientDetail/></Layout>}/>
         <Route path="/form/set-plan/:data" element={<Layout><Plans/></Layout>}/>
+        <Route path="/form/set-control/:data" element={<Layout><Control/></Layout>}/>
 
       </Routes>:
       <Routes>

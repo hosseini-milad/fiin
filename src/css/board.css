@@ -163,9 +163,10 @@ margin-left: auto;
     position: absolute;
     right: 10px;
     bottom: 10px;
-    width: 45px;
-    height: 25px;
-    background-color: var(--blue);
+    width: 100px;
+    display: grid;
+    text-align: right;
+    white-space: nowrap;
   }
 
   .status-active {

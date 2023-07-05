@@ -24,8 +24,11 @@ const Header = (props)=>{
                     <span className="menu-close" onClick={()=>setConvas(0)}>
                         <span className="icon-close"></span></span>
                     <ul className="main-menu">
-                        {token.level===2?<li><a href="/client/steps">Fill Data</a></li>:<></>}
-                        {token.level===2?<li><a href="/client/plans">Select Plan</a></li>:<></>}
+                        {token.level===2?<>
+                        <li><a href="/client/steps">Fill Data</a></li>
+                        <li><a href="/partner/register">Add Partner</a></li>
+                        <li><a href="/client/plans">Select Plan</a></li>
+                        </>:<></>}
                         {token.level>2?<li><a href="#">{errortrans.client[lang]}</a><span className="icon-arrow-bottom"></span>
                             <ul className="sub-menu">
                                 <li><a href="/client/register">{errortrans.clientRegister[lang]}</a></li>
