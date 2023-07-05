@@ -11,7 +11,7 @@ const userSchema = new mongoose.Schema({
   oldEmail: { type: String},
   access:{
     type:String,
-    enum:["manager","agent","agency","customer","credit","request"]
+    enum:["manager","agent","agency","customer","partner","request"]
   },
   group: {
     type:String,
@@ -21,6 +21,8 @@ const userSchema = new mongoose.Schema({
   token: { type: String },
   otp:{ type: String , default: null },
   nif: { type: String },
+  partner:{ type: String },
+  partnerName:{ type: String },
   agent:{ type: String },
   agentName:{ type: String },
   agency:{ type: String },

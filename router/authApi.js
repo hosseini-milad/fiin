@@ -152,9 +152,12 @@ router.post('/register',auth,jsonParser, async (req,res)=>{
         const user = //bitrixData.result&&
           await User.create({...data,bitrixCode:bitrixData.result,
           otp:newOtp});
-
-        const createTask =await task.create({userId:user._id,agentId:user.agent,
-          state:"lead",tag:"Not Active",step:0,date:Date.now()})
+        if(data.access ==="partner")
+            await User.updateOne({_id:req.headers["userid"]},{$set:{partner:user._id,
+            partnerName:data.username}})
+        if(data.access ==="customer")
+          await task.create({userId:user._id,agentId:user.agent,
+            state:"lead",tag:"Not Active",step:0,date:Date.now()})
         //await User.updateOne({email: data.email },{$set:{otp:newOtp}})
         const sendMailResult = await sendMailRegBrevo(data.email,
             data.access==="customer"?newOtp:req.body.password,data.access,user._id)
@@ -190,6 +193,40 @@ router.post('/list-users',auth,jsonParser, async (req,res)=>{
       // Validate if user exist in our database
       const userOwner = await User.findOne({_id:req.headers["userid"]});
       //console.log(userOwner)
+      const user = await User.aggregate([
+        { $match : data.access?{access:data.access}:{}},
+        { $match : data.cName?{cName:{$regex: data.cName}}:{}},
+        { $match : data.sName?{sName:{$regex: data.sName}}:{}},
+        { $match : data.nif?{nif:{$regex: data.nif}}:{}},
+        { $match : data.email?{email:{$regex: data.email}}:{}},
+        { $match : data.phone?{phone:{$regex: data.phone}}:{}},
+        { $match : (userOwner&&(userOwner.access==="agent"||userOwner.access==="agency"))?
+          {agent: {$regex:userOwner._id.toString()}}:{}},
+        
+        { $addFields: { "agent": { "$toObjectId": "$agent" }}},
+        {$lookup:{
+            from : "users", 
+            localField: "agent", 
+            foreignField: "_id", 
+            as : "agentDetail"
+        }}
+    ])
+    var pageUser=[];
+    for(var i=data.offset;i<data.offset+parseInt(pageSize);i++)
+      user[i]&&pageUser.push(user[i])
+      res.status(200).json({user:pageUser,message:"User List",size:user.length})
+      
+      } 
+  catch(error){
+      res.status(500).json({message: error.message})
+  }
+})
+router.post('/partner',auth,jsonParser, async (req,res)=>{
+  try {
+      // Validate if user exist in our database
+      const userOwner = await User.findOne({_id:req.headers["userid"]});
+      //console.log(userOwner)
+      
       const user = await User.aggregate([
         { $match : data.access?{access:data.access}:{}},
         { $match : data.cName?{cName:{$regex: data.cName}}:{}},
