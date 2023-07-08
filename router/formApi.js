@@ -222,14 +222,16 @@ router.post('/confirm-user-data',auth,jsonParser, async (req,res)=>{
   }
   
   try {
-        await task.updateOne({userId:ObjectID(data.userId),
-          state:req.body.oldState},
-          {$set:{state:req.body.state,tag:""}})
-          const userOwner = await User.findOne({_id:req.body.userId});
-          await LogCreator(userOwner,"Confirm Data",
-            "user Data Confirmed by administrator")
-          await sendMailAlert(userOwner.email,"Data Set please visit Fiin profile")
-          res.status(200).json({message:"User Data Confirmed"})
+    const userDetail = await User.findOne({_id:ObjectID(data.userId)})
+    //console.log(userDetail)
+    await task.updateOne({userId:ObjectID(data.userId),
+      state:req.body.oldState},
+      {$set:{state:req.body.state,tag:userDetail.partner?"partnerData":""}})
+      const userOwner = await User.findOne({_id:req.body.userId});
+      await LogCreator(userOwner,"Confirm Data",
+        "user Data Confirmed by administrator")
+      await sendMailAlert(userOwner.email,"Data Set please visit Fiin profile")
+      res.status(200).json({message:"User Data Confirmed"})
         
   } 
   catch(error){
