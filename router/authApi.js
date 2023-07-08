@@ -221,34 +221,16 @@ router.post('/list-users',auth,jsonParser, async (req,res)=>{
       res.status(500).json({message: error.message})
   }
 })
-router.post('/partner',auth,jsonParser, async (req,res)=>{
+router.get('/partner',auth,jsonParser, async (req,res)=>{
   try {
       // Validate if user exist in our database
       const userOwner = await User.findOne({_id:req.headers["userid"]});
-      //console.log(userOwner)
+      var userPartner = ''
+      if(userOwner.partner){
+        userPartner = await User.findOne({_id:userOwner.partner})
+      }
       
-      const user = await User.aggregate([
-        { $match : data.access?{access:data.access}:{}},
-        { $match : data.cName?{cName:{$regex: data.cName}}:{}},
-        { $match : data.sName?{sName:{$regex: data.sName}}:{}},
-        { $match : data.nif?{nif:{$regex: data.nif}}:{}},
-        { $match : data.email?{email:{$regex: data.email}}:{}},
-        { $match : data.phone?{phone:{$regex: data.phone}}:{}},
-        { $match : (userOwner&&(userOwner.access==="agent"||userOwner.access==="agency"))?
-          {agent: {$regex:userOwner._id.toString()}}:{}},
-        
-        { $addFields: { "agent": { "$toObjectId": "$agent" }}},
-        {$lookup:{
-            from : "users", 
-            localField: "agent", 
-            foreignField: "_id", 
-            as : "agentDetail"
-        }}
-    ])
-    var pageUser=[];
-    for(var i=data.offset;i<data.offset+parseInt(pageSize);i++)
-      user[i]&&pageUser.push(user[i])
-      res.status(200).json({user:pageUser,message:"User List",size:user.length})
+      res.status(200).json({user:userPartner,message:"User Partner"})
       
       } 
   catch(error){
