@@ -67,6 +67,7 @@ router.post('/login',jsonParser, async (req,res)=>{
     }
 })
 const createOTP=(cName)=>{
+  cName.replace( / /g, '')
   return(cName+(Math.floor(Math.random() * 10000000)
    + 10000000))
 }
