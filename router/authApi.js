@@ -340,9 +340,9 @@ router.post('/find-user-admin',auth,jsonParser, async (req,res)=>{
 router.post('/active-user',jsonParser, async (req,res)=>{
 
   try {
-        const userData = await User.findOne({otp:req.body.otp});
+        const userData = await User.findOne({_id:req.body.otp});
         if(userData){
-          await User.updateOne({otp:req.body.otp},
+          await User.updateOne({_id:req.body.otp},
             {$set:{active:"true",otp:""}});
           res.status(200).json({user:userData,message:"User Activated"})
           }

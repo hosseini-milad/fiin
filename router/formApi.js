@@ -97,7 +97,9 @@ router.post('/user-montage',auth,jsonParser, async (req,res)=>{
         }}])
         if(userMontage){
           const taskData = await task.findOne({userId:userId})
-          res.status(200).json({user:userMontage,task:taskData,message:"User Exists"})
+          const userDetail = await User.findOne({_id:req.body.userId})
+          res.status(200).json({user:userMontage,task:taskData,
+            userDetail:userDetail,message:"User Exists"})
           }
         else{
           res.status(500).json({error:"User Not Found"})
