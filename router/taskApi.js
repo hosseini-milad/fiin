@@ -122,7 +122,7 @@ router.post('/changeTask',auth,jsonParser, async (req,res)=>{
     const logData = await LogCreator(userData,"change State",
         `task no ${req.body.id}'s state change to ${data.state} and tag to ${data.tag}`)
         const userDetail = await users.findOne({_id:req.body.userId});
-        await sendMailAlert(userDetail.email,"Your Proposal Sets by administrator please visit Fiin profile")
+        await sendMailAlert(userDetail.email,"Caro Cliente, tem uma nova proposta bancária na sua área de cliente FIIN.")
         const leadTask= await task.updateOne({userId:req.body.userId},
             {$set:data})
         //if(leadTask)
