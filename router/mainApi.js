@@ -7,6 +7,7 @@ const authApi = require('./authApi');
 const taskApi = require('./taskApi');
 const productApi = require('./productApi');
 const formApi = require('./formApi');
+const configApi = require('./configApi');
 const mime = require('mime');
 const multer = require('multer');
 var storage = multer.diskStorage(
@@ -67,4 +68,5 @@ router.use('/auth', authApi)
 router.use('/task', taskApi)
 router.use('/product', productApi)
 router.use('/form', formApi)
+router.use('/config', configApi)
 module.exports = router;

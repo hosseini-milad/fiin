@@ -230,8 +230,8 @@ router.get('/partner',auth,jsonParser, async (req,res)=>{
       if(userOwner.partner){
         userPartner = await User.findOne({_id:userOwner.partner})
       }
-      
-      res.status(200).json({user:userPartner,message:"User Partner"})
+      const taskData = await task.findOne({userId:req.headers["userid"]});
+      res.status(200).json({user:userPartner,task:taskData,message:"User Partner"})
       
       } 
   catch(error){

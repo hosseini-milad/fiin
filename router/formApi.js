@@ -13,7 +13,24 @@ const task = require('../models/main/task');
 const LogCreator = require('../middleware/LogCreator');
 const plans = require('../models/main/plans');
 const control = require('../models/main/control');
+const sendMailAlert = require('../middleware/sendMailAlert');
+const config = require('../models/main/config');
 
+router.get('/user-task',auth,jsonParser, async (req,res)=>{
+  const userId =req.headers['userid']
+  try {
+        const taskData = await task.findOne({userId:userId})
+        if(taskData){
+          res.status(200).json({task:taskData,message:"User Exists"})
+          }
+        else{
+          res.status(500).json({error:"User Not Found"})
+        }
+      } 
+  catch(error){
+      res.status(500).json({message: error.message})
+  }
+})
 router.post('/user-detail',auth,jsonParser, async (req,res)=>{
   const userId =req.body.userId?req.body.userId:req.headers['userid']
   try {
@@ -226,7 +243,8 @@ router.post('/confirm-user-data',auth,jsonParser, async (req,res)=>{
     //console.log(userDetail)
     await task.updateOne({userId:ObjectID(data.userId),
       state:req.body.oldState},
-      {$set:{state:req.body.state,tag:userDetail.partner?"partnerData":""}})
+      {$set:{state:req.body.state,step:req.body.step,
+        tag:userDetail.partner?"partnerData":""}})
       const userOwner = await User.findOne({_id:req.body.userId});
       await LogCreator(userOwner,"Confirm Data",
         "user Data Confirmed by administrator")
@@ -251,8 +269,8 @@ router.post('/user-plans',auth,jsonParser, async (req,res)=>{
             as : "userDetail"
         }}])
         if(planData){
-          
-          res.status(200).json({plans:planData,message:"Plan Lists"})
+          const taskData = await task.findOne({userId:userId})
+          res.status(200).json({plans:planData,tasks:taskData,message:"Plan Lists"})
           }
         else{
           res.status(500).json({error:"Plan Not Found"})
@@ -309,8 +327,8 @@ router.post('/user-control',auth,jsonParser, async (req,res)=>{
             as : "userDetail"
         }},{$sort:{date:-1}}])
         if(controlData){
-          
-          res.status(200).json({control:controlData,message:"Control Lists"})
+          const userControlList = await config.find({configClass:"userControl"})
+          res.status(200).json({control:controlData,config:userControlList,message:"Control Lists"})
           }
         else{
           res.status(500).json({error:"Control Not Found"})
