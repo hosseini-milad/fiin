@@ -9,6 +9,7 @@ const cookies = new Cookies();
 function ClientPlan(){
     const [plans,setPlans] = useState([])
     const [acceptTask,setAcceptTask] = useState()
+    const [task,setTask] = useState()
     const [error,setError] = useState({message:'',color:"brown"})
 
     useEffect(()=>{
@@ -26,7 +27,7 @@ function ClientPlan(){
       .then(
         (result) => {
             setPlans(result.plans)
-                        
+            setTask(result.tasks)          
         },
         (error) => {
             console.log(error)
@@ -61,7 +62,7 @@ function ClientPlan(){
               console.log(error)
           })
     }
-    //console.log(acceptTask)
+    console.log(task)
     return(
         <div className="container">
             <Breadcrumb title={"Lista de Créditos"}/>
@@ -76,14 +77,17 @@ function ClientPlan(){
                     <fieldset id="group1">
                         {plans&&plans.map((plan,i)=>(<div className="planOption" key={i}>
                             <input type="radio" value={plan._id} className="radioPlan" 
+                                checked={plan.selectedPlan?true:false}
                                 name="group1" onChange={(e)=>setAcceptTask(e.target.value)}/>
                             <PlanView data={plan} /></div>
                     ))}</fieldset>
                     </form></div>
                 </div>
-                {plans.length?<WaitingBtn class="btn-fiin acceptBtn" title="Confirm Proposal" 
+                {plans.length&&task.step<3?
+                    <WaitingBtn class="btn-fiin acceptBtn" title="Confirm Proposal" 
                         waiting={'Confirm Proposal'}
                     function={confirmProposal} name="submit" />:<></>}
+                {task.step>=3?<small className="errorSmall">You have Choosen your plan. wait for administrator to call you.</small>:<></>}
         </div>
     )
 }

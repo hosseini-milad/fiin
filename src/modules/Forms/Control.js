@@ -1,8 +1,6 @@
 import { useEffect ,useState} from "react"
 import Breadcrumb from "../../components/BreadCrumb"
 import WaitingBtn from "../../components/Button/waitingBtn"
-import PlanItem from "./PlanItem"
-import PlanView from "./PlanView"
 import Cookies from 'universal-cookie';
 import env from "../../env";
 const cookies = new Cookies();
@@ -11,6 +9,7 @@ function Control(){
     const userId = document.location.pathname.split('/')[3]
     const [control,setControls] = useState()
     const [option,setOption] = useState()
+    const [config,setConfig] = useState()
     useEffect(()=>{
         const token=cookies.get('fiin-login')
         const postOptions={
@@ -27,12 +26,13 @@ function Control(){
       .then(
         (result) => {
             setControls(result.control?result.control[0]:'')
-                        
+            setConfig(result.config)         
         },
         (error) => {
             console.log(error)
         })
     },[])
+    console.log(config)
     useEffect(()=>{
         control&&
         setOption(control.controlName)
@@ -69,10 +69,9 @@ function Control(){
                     </div>  
                     <select className="reyhamSelect" onChange={(e)=>setOption(e.target.value)}
                         value={option}>
-                        <option>Send Email</option>
-                        <option>Create Contact</option>
-                        <option>Send Contact</option>
-                        <option>Finalize</option>
+                            {config&&config.map((opt,i)=>(
+                                <option key={i}>{opt.configTitle}</option>
+                            ))}
                     </select>
                 </div>
                 <WaitingBtn class="btn-fiin acceptBtn" title="Confirm Control" 

@@ -16,6 +16,7 @@ const Steps = (props)=>{
     const urlLocation = urlTab.includes('#')?urlTab.split('#')[1]:''
     //const [urlLocation,setUrlLocation] = useState()
     const [index,setIndex] = useState(0)
+    const [task,setTask] = useState(0)
     const [error,setError] = useState({message:'',color:"brown"})
     
     useEffect(()=>{
@@ -40,8 +41,9 @@ const Steps = (props)=>{
             headers: { 'Content-Type': 'application/json' ,
             "x-access-token": token&&token.token,
             "userId":token&&token.userId},
-            body:JSON.stringify({state:"fiin", oldState:"informations"})
+            body:JSON.stringify({state:"informations", oldState:"lead",step:1})
           }
+          //console.log()
         fetch(env.siteApi + "/form/confirm-user-data",postOptions)
       .then(res => res.json())
       .then(
@@ -62,6 +64,7 @@ const Steps = (props)=>{
         
     }
     const token=cookies.get('fiin-login')
+    
     return(
         <div className="container">
         <Breadcrumb title={"Lista de Clientes"}/>
@@ -71,7 +74,7 @@ const Steps = (props)=>{
         </div>
         <div className="step-placeHolder">
             <div className="form-fiin form-box-style">
-                {index===0?<ClientMoreData userId={token.userId}/>:<></>}
+                {index===0?<ClientMoreData userId={token.userId} setTask={setTask}/>:<></>}
                 {index===1?<ClientMontage userId={token.userId}/>:<></>}
                 {index===2?<SelectPlan/>:<></>}
             </div>
@@ -80,7 +83,7 @@ const Steps = (props)=>{
                 onClick={()=>{setIndex(index+1);updateTab(index+1)}}>
                     Next</button>}
                 
-                {index===1?
+                {index===1&&task&&task.step<2?
                     <WaitingBtn class="btn-fiin acceptBtn rev" title="Confirm" 
                         waiting={'Confirming.'}
                         function={ConfirmData} name="submit" error={error}/> 

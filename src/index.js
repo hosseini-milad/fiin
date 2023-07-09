@@ -40,6 +40,7 @@ import Plans from './modules/Forms/Plans';
 import ClientPlan from './modules/Client/ClientPlan';
 import Control from './modules/Forms/Control';
 import RegisterPartner from './modules/Client/RegisterPartner';
+import Configuration from './pages/Configuration';
 const cookies = new Cookies();
 var lang = JSON.parse(localStorage.getItem('fiin-lang'));
 
@@ -57,6 +58,7 @@ root.render(
         <Route path="/" element={<Layout><Dashboard/></Layout>}/>
         <Route path="/dashboard" element={<Layout><Dashboard/></Layout>}/>
         <Route path="/password" element={<Layout><Password/></Layout>}/>
+        <Route path="/configuration" element={<Layout><Configuration/></Layout>}/>
         <Route path="/upload/:userId" element={<Layout><UpLoad/></Layout>}/>
         <Route path="/profile" element={<Layout><ProfileView/></Layout>}/>
         <Route path="/profile/:profileId" element={<Layout><Profile/></Layout>}/>
@@ -92,6 +94,7 @@ root.render(
         <Route path="/" element={<Login lang={lang}/>}/>
         <Route path="/:login" element={<Login lang={lang}/>}/>
         <Route path="/:login/:page" element={<Login lang={lang}/>}/>
+        <Route path="/:login/:page/:id" element={<Login lang={lang}/>}/>
         <Route path="/forget-pass/:otp" element={<ForgetPass/>}/>
         <Route path="/active-user/:otp" element={<ActiveUser/>}/>
       </Routes>}

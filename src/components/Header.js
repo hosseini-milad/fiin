@@ -24,8 +24,8 @@ const Header = (props)=>{
                     <span className="menu-close" onClick={()=>setConvas(0)}>
                         <span className="icon-close"></span></span>
                     <ul className="main-menu">
+                        {token.level<3?<li><a href="/client/steps">Fill Data</a></li>:<></>}
                         {token.level===2?<>
-                        <li><a href="/client/steps">Fill Data</a></li>
                         <li><a href="/partner/register">Add Partner</a></li>
                         <li><a href="/client/plans">Select Plan</a></li>
                         </>:<></>}
@@ -48,11 +48,11 @@ const Header = (props)=>{
                                 <li><a href="/agency/list">Lista de Agência</a></li>
                             </ul>
                         </li>:<></>}
-                        <li><a href="#">Créditos​​​</a><span className="icon-arrow-bottom"></span>
+                        {/*<li><a href="#">Créditos​​​</a><span className="icon-arrow-bottom"></span>
                             <ul className="sub-menu">
                                 <li><a href="/credit/list">Lista de Créditos</a></li>
                             </ul>
-                        </li>
+                        </li>*/}
                     </ul>
                 </div>
                 <div className="account-head ms-auto">
@@ -65,6 +65,7 @@ const Header = (props)=>{
                     <ul>
                         <li><a href="/profile">Dados do utilizador</a></li>
                         <li><a href="/password">Password</a></li>
+                        <li><a href="/configuration">Configuração</a></li>
                         <li><a href="#" onClick={logOff}>Sair da Sessão</a></li>
                     </ul>
                 </div>

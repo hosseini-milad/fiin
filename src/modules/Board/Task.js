@@ -10,8 +10,14 @@ function Task(props){
                     ref={provided.innerRef} 
                     data-dragging={snapshot.isDragging}>
                         
-                    <a href={`/profile/${props.taskList.content.id}`}>
-                        <h3 className="task-title">{props.taskList.content.user}</h3></a>
+                    <div className='titles'>
+                        <a href={`/profile/${props.taskList.content.id}`}>
+                            <h3 className="task-title">{props.taskList.content.user}</h3></a>
+                        {props.taskList.content.partner?
+                        <a href={`/profile/${props.taskList.content.partner}`}>
+                            <h3 className="task-title">{props.taskList.content.partnerName}</h3></a>
+                            :<></>}
+                    </div>
                     <span className="task-date">
                         <span className="icon-calendar"></span>
                         {dayFromNow(props.taskList.content.date)}</span>

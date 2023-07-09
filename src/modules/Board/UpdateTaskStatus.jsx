@@ -19,6 +19,10 @@ function UpdateTaskStatus(propsElement){
             "content":{"user":"${task.userDetail[0].cName} ${task.userDetail[0].sName}",
             "phone":"${task.userDetail[0].phone}",
             "email":"${task.userDetail[0].email}",
+            "partnerName":"${task.userDetail[0].partnerName?
+                task.userDetail[0].partnerName:''}",
+            "partner":"${task.userDetail[0].partner?
+                task.userDetail[0].partner:''}",
             "agent":"${task.userDetail[0].agentName?
                 task.userDetail[0].agentName:''}",
             "agency":"${task.userDetail[0].agencyName?
@@ -30,6 +34,8 @@ function UpdateTaskStatus(propsElement){
             "content":{"user":"-",
             "phone":"-",
             "email":"-",
+            "partner":"-",
+            "partnerName":"-",
             "agent":"-",
             "agency":"-",
             "date":"-",

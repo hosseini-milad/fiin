@@ -49,7 +49,6 @@ function Board(props){
         .then(res => res.json())
         .then(
             (result) => {
-                console.log(result)
                 setTaskState(result);
                 setBoardArray(()=>UpdateTaskStatus({result:result,token:token}))
             },
@@ -167,8 +166,8 @@ function Board(props){
             destination.index/Object.keys(boardArray.tasks).length:0
         document.body.style.backgroundColor=`rgba(153,141,217,${opacity})`*/
     }
-    return(<>
-        {token.level>2?<div className='board-list'>
+    return(
+        <div className='board-list'>
             {boardArray?<DragDropContext
             onDragStart={DragStart}
             onDragUpdate={DragUpdate}
@@ -179,8 +178,7 @@ function Board(props){
                     return(<Column key={column.id} column={column} tasks={tasks}/>)
                 })}
             </DragDropContext>:<div>Updating</div>}
-        </div>:
-        <div className='board-list'>Client Dashboard</div>}</>
+        </div>
     )
 }
 export default Board

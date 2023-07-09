@@ -37,7 +37,8 @@ function Login(props){
                     name:result.cName+" "+result.sName,
                     date:result.date,
                     token:result.token,
-                    username:result.username
+                    username:accessLevel==="agent"?(result.cName+" "+result.sName):
+                    accessLevel==="agency"?result.nameCompany:result.email
                 }, { path: '/' });
                 window.location.reload()
             }

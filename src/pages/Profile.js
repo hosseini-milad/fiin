@@ -92,6 +92,7 @@ function Profile(){
             setTimeout(()=>setError({message:'',color:"brown"}),3000)
         })
     }
+    console.log(tasks&&tasks.step)
     return(
         <div className="container">
         <Breadcrumb title={"Dados do Profile"}/>
@@ -266,10 +267,12 @@ function Profile(){
                         <div className="footer-form-fiin">
                             <button type="submit" className="btn-fiin" name="submit"
                             onClick={saveData}>Save</button>
-                            {users&&users.access==="customer"&&token.level===10?<>
+                            {users&&(users.access==="customer"||
+                            users.access==="partner")&&token.level===10?
                             <button className="btn-fiin" name="submit"
                             onClick={()=>window.location.href="/form/client/"+userId}>
-                                More Data</button>
+                                More Data</button>:<></>}
+                            {users&&users.access==="customer"&&token.level===10?<>
                             <button className={tasks.step>1?"btn-fiin":"btn-fiin disable-fiin"} name="submit"
                             onClick={()=>window.location.href="/form/set-plan/"+userId}>
                                 Set Plans</button>

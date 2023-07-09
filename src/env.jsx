@@ -1,9 +1,9 @@
 const env={
-    siteApi:'http://localhost:4090/api',
-    //siteApi:'https://fiinadmin.deleves.com/api',
+    //siteApi:'http://localhost:4090/api',
+    siteApi:'https://fiinadmin.deleves.com/api',
     
-    siteApiUrl:'http://localhost:4090',
-    //siteApiUrl:'https://fiinadmin.deleves.com',
+    //siteApiUrl:'http://localhost:4090',
+    siteApiUrl:'https://fiinadmin.deleves.com',
 
     columnOrder:['lead','informations','fiin','property','seguros',
         'escritura','commissions','suspended'],
@@ -67,4 +67,11 @@ export const findSize = (size)=>{
   catch{
     return(0)
   }
+}
+export const StandardCurrency=(number)=>{
+  var pureNumber = parseInt(number.replace(/\D/g, ""))
+  var decimal = pureNumber%100
+  if(decimal<10)decimal="0"+decimal
+  var seprateComma = (pureNumber/100).toString().split('.')[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+  return seprateComma+"."+decimal+"€"
 }

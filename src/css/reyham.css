@@ -130,6 +130,17 @@ html{
 .reyhamUpload .btn-cancel:hover{
     color:#fff;
 }
+.reverseHover:hover{
+    background-color: transparent !important;
+}
+.removeItem{
+    color: red;
+    position: absolute;
+    right:30px;
+    top:18px;
+    width:30px;
+    font-size: 20px;
+}
 .planOption{
     display: flex;
 }
@@ -154,6 +165,14 @@ html{
     padding: 14px 18px;
     width: 50%;
     margin: 20px auto
+}
+.miniFont{
+    font-size: 10px;
+    position: absolute;
+    margin:5px;
+}
+.titles{
+    display: grid;
 }
 /*Steps Client*/
 .tabStepHolder{

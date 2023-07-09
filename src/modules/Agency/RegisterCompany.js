@@ -10,8 +10,8 @@ function RegisterCompany(props){
     const [error,setError] = useState({message:'',color:"brown"})
     
     const [showPass,setShowPass] = useState(0)
+    const token=cookies.get('fiin-login')
     const RegisterNow=()=>{
-        const token=cookies.get('fiin-login')
         const postOptions={
             method:'post',
             headers: { 'Content-Type': 'application/json' ,
@@ -40,7 +40,10 @@ function RegisterCompany(props){
             console.log(error)
         })
     }
-    return(
+    if(token.access!=="manager")
+      return(<main>No Access</main>)
+    else
+      return(
         <div className="form-fiin form-box-style">
             <div className="section-head">
                 <h1 className="section-title">Registo de {props.title}</h1>
@@ -50,7 +53,7 @@ function RegisterCompany(props){
             <div className="row">
                 <div className="col-md-6">
                     <div className="form-field-fiin">
-                        <label htmlFor="Nome-Comercial">Nome Comercial<sup>*</sup></label>
+                        <label htmlFor="Nome-Comercial">Nome<sup>*</sup></label>
                         <input type="text" id="Nome-Comercial" placeholder="Nome Comercial" required
                         onChange={(e)=>setRegElement(data => ({
                             ...data,
@@ -70,7 +73,7 @@ function RegisterCompany(props){
                 </div>
                 <div className="col-md-6">
                     <div className="form-field-fiin">
-                        <label htmlFor="NIFCompany">NIF Comercial<sup>*</sup></label>
+                        <label htmlFor="NIFCompany">NIF<sup>*</sup></label>
                         <input type="text" name="NIFCompany" id="NIFCompany" placeholder="NIF" required
                         onChange={(e)=>setRegElement(data => ({
                             ...data,
@@ -90,7 +93,7 @@ function RegisterCompany(props){
                 </div>
                 <div className="col-md-6">
                     <div className="form-field-fiin">
-                        <label htmlFor="Telefone">Telefone Comercial</label>
+                        <label htmlFor="Telefone">Telefone</label>
                         <input type="tel" name="Telefone" id="Telefone" placeholder="Telefone"
                         onChange={(e)=>setRegElement(data => ({
                             ...data,
@@ -100,7 +103,7 @@ function RegisterCompany(props){
                 </div>
                 <div className="col-md-6">
                     <div className="form-field-fiin">
-                        <label htmlFor="email">E-mail Comercial</label>
+                        <label htmlFor="email">E-mail</label>
                         <input type="email" name="email" id="email" placeholder="E-mail"
                         onChange={(e)=>setRegElement(data => ({
                             ...data,

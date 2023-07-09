@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import 'react-modern-calendar-datepicker/lib/DatePicker.css';
 import DatePicker, {Calendar } from "react-modern-calendar-datepicker";
-import env, { normalDate, splitDate } from "../../env"
+import env, { normalDate, splitDate, ValidateNumber } from "../../env"
 import Cookies from 'universal-cookie';
 import WaitingBtn from "../../components/Button/waitingBtn";
 const cookies = new Cookies();
@@ -25,9 +25,10 @@ function ClientMoreData(props){
         .then(res => res.json())
         .then(
             (result) => {
-                setUserData(result.user[0]&&result.user[0].userDetail[0])
+                setUserData(result.userDetail&&result.userDetail)
                 setRegElement(result.user[0])
-                setTask(result.task)
+                setTask(result.task);
+                props.setTask&&props.setTask(result.task)
             },
             (error) => {
                 console.log(error)
@@ -63,7 +64,8 @@ function ClientMoreData(props){
     return(<>
         <div className="row">
             <div className="section-head">
-                <h1 className="section-title">Dados Pessoais</h1>
+                <h1 className="section-title">Dados Pessoais
+                    <span>{(userData&&userData.cName)+ ' '+(userData&&userData.sName)}</span></h1>
             </div>
             <div className="col-md-6">
                 <div className="form-field-fiin">
@@ -129,12 +131,15 @@ function ClientMoreData(props){
             <div className="col-md-6">
                 <div className="form-field-fiin">
                     <label htmlFor="homeContractual">Início Vinc. Contratual<sup>*</sup></label>
-                    <input type="text" name="homeContractual" id="homeContractual" placeholder="Início Vinc. Contratual" required
-                    defaultValue={regElement&&regElement.homeContractual}
-                    onChange={(e)=>setRegElement(data => ({
-                        ...data,
-                        ...{homeContractual:e.target.value}
-                    }))}/>
+                    <DatePicker
+                        value={regElement&&splitDate(regElement.homeContractual)}
+                        onChange={(e)=>setRegElement(data => ({
+                            ...data,
+                            ...{homeContractual:normalDate(e)}
+                        }))}
+                        inputPlaceholder="Início Vinc. Contratual"
+                        shouldHighlightWeekends
+                    />
                 </div>
             </div>
             <div className="col-md-6">
@@ -157,10 +162,10 @@ function ClientMoreData(props){
                 <div className="form-field-fiin">
                     <label htmlFor="maturity">Vencimento<sup>*</sup></label>
                     <input type="text" name="maturity" id="maturity" placeholder="Vencimento" required
-                    defaultValue={regElement&&regElement.maturity}
+                    value={regElement&&regElement.maturity}
                     onChange={(e)=>setRegElement(data => ({
                         ...data,
-                        ...{maturity:e.target.value}
+                        ...{maturity:e.target.value.replace(/\D/g, "")}
                     }))}/>
                 </div>
             </div>
@@ -168,10 +173,10 @@ function ClientMoreData(props){
                 <div className="form-field-fiin">
                     <label htmlFor="receipts">Recibos Verdes<sup>*</sup></label>
                     <input type="text" name="receipts" id="receipts" placeholder="Recibos Verdes" required
-                    defaultValue={regElement&&regElement.receipts}
+                    value={regElement&&regElement.receipts}
                     onChange={(e)=>setRegElement(data => ({
                         ...data,
-                        ...{receipts:e.target.value}
+                        ...{receipts:e.target.value.replace(/\D/g, "")}
                     }))}/>
                 </div>
             </div>
@@ -179,10 +184,10 @@ function ClientMoreData(props){
                 <div className="form-field-fiin">
                     <label htmlFor="income">Rendas<sup>*</sup></label>
                     <input type="text" name="income" id="income" placeholder="Rendas" required
-                    defaultValue={regElement&&regElement.income}
+                    value={regElement&&regElement.income}
                     onChange={(e)=>setRegElement(data => ({
                         ...data,
-                        ...{income:e.target.value}
+                        ...{income:e.target.value.replace(/\D/g, "")}
                     }))}/>
                 </div>
             </div>
@@ -190,10 +195,10 @@ function ClientMoreData(props){
                 <div className="form-field-fiin">
                     <label htmlFor="otherIncome">Outros Rendimentos<sup>*</sup></label>
                     <input type="text" name="otherIncome" id="otherIncome" placeholder="Outros Rendimentos" required
-                    defaultValue={regElement&&regElement.otherIncome}
+                    value={regElement&&regElement.otherIncome}
                     onChange={(e)=>setRegElement(data => ({
                         ...data,
-                        ...{otherIncome:e.target.value}
+                        ...{otherIncome:e.target.value.replace(/\D/g, "")}
                     }))}/>
                 </div>
             </div>
@@ -204,10 +209,10 @@ function ClientMoreData(props){
                 <div className="form-field-fiin">
                     <label htmlFor="mortgageLoans">Crédito Habitação<sup>*</sup></label>
                     <input type="text" name="mortgageLoans" id="mortgageLoans" placeholder="Crédito Habitação" required
-                    defaultValue={regElement&&regElement.mortgageLoans}
+                    value={regElement&&regElement.mortgageLoans}
                     onChange={(e)=>setRegElement(data => ({
                         ...data,
-                        ...{mortgageLoans:e.target.value}
+                        ...{mortgageLoans:e.target.value.replace(/\D/g, "")}
                     }))}/>
                 </div>
             </div>
@@ -215,10 +220,10 @@ function ClientMoreData(props){
                 <div className="form-field-fiin">
                     <label htmlFor="personalCredit">Crédito Pessoal<sup>*</sup></label>
                     <input type="text" name="personalCredit" id="personalCredit" placeholder="Crédito Pessoal" required
-                    defaultValue={regElement&&regElement.personalCredit}
+                    value={regElement&&regElement.personalCredit}
                     onChange={(e)=>setRegElement(data => ({
                         ...data,
-                        ...{personalCredit:e.target.value}
+                        ...{personalCredit:e.target.value.replace(/\D/g, "")}
                     }))}/>
                 </div>
             </div>
@@ -226,10 +231,10 @@ function ClientMoreData(props){
                 <div className="form-field-fiin">
                     <label htmlFor="carLoan">Crédito Automóvel<sup>*</sup></label>
                     <input type="text" name="carLoan" id="carLoan" placeholder="Crédito Automóvel" required
-                    defaultValue={regElement&&regElement.carLoan}
+                    value={regElement&&regElement.carLoan}
                     onChange={(e)=>setRegElement(data => ({
                         ...data,
-                        ...{carLoan:e.target.value}
+                        ...{carLoan:e.target.value.replace(/\D/g, "")}
                     }))}/>
                 </div>
             </div>
@@ -240,7 +245,7 @@ function ClientMoreData(props){
                     defaultValue={regElement&&regElement.otherCharges}
                     onChange={(e)=>setRegElement(data => ({
                         ...data,
-                        ...{otherCharges:e.target.value}
+                        ...{otherCharges:e.target.value.replace(/\D/g, "")}
                     }))}/>
                 </div>
             </div>

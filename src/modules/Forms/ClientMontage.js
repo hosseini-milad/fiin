@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import env from "../../env"
+import env, { StandardCurrency } from "../../env"
 import Cookies from 'universal-cookie';
 import WaitingBtn from "../../components/Button/waitingBtn";
 const cookies = new Cookies();
@@ -24,7 +24,7 @@ function ClientMontage(props){
         .then(res => res.json())
         .then(
             (result) => {
-                setUserData(result.user[0]&&result.user[0].userDetail[0])
+                setUserData(result.userDetail&&result.userDetail)
                 setRegElement(result.user[0])
                 setTask(result.task)
             },
@@ -68,7 +68,8 @@ function ClientMontage(props){
     return(<>
         <div className="row">
             <div className="section-head">
-                <h1 className="section-title">Mortage Data</h1>
+                <h1 className="section-title">Mortage Data
+                <span>{(userData&&userData.cName)+ ' '+(userData&&userData.sName)}</span></h1>
             </div>
             <div className="col-md-6">
                 <div className="form-field-fiin">
@@ -118,7 +119,7 @@ function ClientMontage(props){
                 <div className="form-field-fiin">
                     <label htmlFor="bookAmount">Valor a Escriturar<sup>*</sup></label>
                     <input type="text" name="bookAmount" id="bookAmount" placeholder="Valor a Escriturar" required
-                    defaultValue={regElement&&regElement.bookAmount}
+                    value={regElement&&StandardCurrency(regElement.bookAmount)}
                     onChange={(e)=>setRegElement(data => ({
                         ...data,
                         ...{bookAmount:e.target.value}
@@ -129,7 +130,7 @@ function ClientMontage(props){
                 <div className="form-field-fiin">
                     <label htmlFor="intendedFinancing">Financiamento Pretendido<sup>*</sup></label>
                     <input type="text" name="intendedFinancing" id="intendedFinancing" placeholder="Financiamento Pretendido" required
-                    defaultValue={regElement&&regElement.intendedFinancing}
+                    value={regElement&&StandardCurrency(regElement.intendedFinancing)}
                     onChange={(e)=>setRegElement(data => ({
                         ...data,
                         ...{intendedFinancing:e.target.value}
@@ -140,7 +141,7 @@ function ClientMontage(props){
                 <div className="form-field-fiin">
                     <label htmlFor="entryAvailable">Valor Disponível para Entrada<sup>*</sup></label>
                     <input type="text" name="entryAvailable" id="entryAvailable" placeholder="Valor Disponível para Entrada" required
-                    defaultValue={regElement&&regElement.entryAvailable}
+                    value={regElement&&StandardCurrency(regElement.entryAvailable)}
                     onChange={(e)=>setRegElement(data => ({
                         ...data,
                         ...{entryAvailable:e.target.value}

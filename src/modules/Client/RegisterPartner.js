@@ -1,8 +1,15 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import Breadcrumb from "../../components/BreadCrumb"
+import env from "../../env"
 import Register from "../Register"
+import Cookies from 'universal-cookie';
+import PartnerData from "./PartnerData";
+const cookies = new Cookies();
 
 function RegisterPartner(){
+    const [error,setError] = useState({message:'',color:"brown"})
+    const [partnerData ,setPartnerData] = useState('')
+    const [taskData ,setTaskData] = useState('')
     useEffect(()=>{
     const token=cookies.get('fiin-login')
         const postOptions={
@@ -21,7 +28,9 @@ function RegisterPartner(){
                 setTimeout(()=>setError({message:'',color:"brown"}),3000)
             }
             else{
-                setError({message:result.message,color:"green"})
+                console.log(result)
+                setPartnerData(result.user)
+                setTaskData(result.task)
                 //setTimeout(()=>window.location.reload(),1000)
             }
             
@@ -37,7 +46,8 @@ function RegisterPartner(){
         <div className="section-fiin registo-de-cliente">
             <div className="row justify-content-center">
                 <div className="col-lg-8">
-                    <Register access={"partner"}  title="partner"/>
+                    {partnerData?<PartnerData partner={partnerData} task={taskData}/>:
+                    <Register access={"partner"}  title="partner"/>}
                 </div>
             </div>
         </div>

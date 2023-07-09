@@ -22,7 +22,7 @@ function ClientDetail(props){
             headers: { 'Content-Type': 'application/json' ,
             "x-access-token": token&&token.token,
             "userId":token&&token.userId},
-            body:JSON.stringify({state:"informations", oldState:"lead",
+            body:JSON.stringify({state:"fiin", oldState:"informations",step:2,
                 userId:document.location.pathname.split('/')[3]})
           }
         fetch(env.siteApi + "/form/confirm-user-data",postOptions)
@@ -58,11 +58,11 @@ function ClientDetail(props){
                         {index===0?<ClientMoreData />:<></>}
                         {index===1?<ClientMontage />:<></>}
                     </div>
-                    <div className="footer-form-fiin reyhamBtn">
+                    {index===1?<div className="footer-form-fiin reyhamBtn">
                         <WaitingBtn class="btn-fiin acceptBtn" title="Confirm" 
                             waiting={'Confirming.'}
                             function={ConfirmData} name="submit" /> 
-                    </div>
+                    </div>:<></>}
                 </div>
             </div>
         </div>
