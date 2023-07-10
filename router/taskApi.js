@@ -29,6 +29,11 @@ router.get('/currentState',auth,jsonParser, async (req,res)=>{
         if(userOwner.access === "agent"){
             limitState = {agentId:req.headers['userid']}
         }
+        //var agencyLimit = {}
+        if(userOwner.access === "agency"){
+            limitState= {agentId:{$in:await findMyAgent(req.headers['userid'])}}
+        }
+        //console.log(limitState)
         const allTasks= await task.aggregate([
             { $match:limitState},
             { $addFields: { "userId": { "$toObjectId": "$userId" }}},
@@ -58,6 +63,13 @@ router.get('/currentState',auth,jsonParser, async (req,res)=>{
         res.status(500).json({message: error.message})
     }
 })
+const findMyAgent=async(agencyId)=>{
+    const myAgent = await users.find({agent:agencyId})
+    var myAgentIds = []
+    for(var i=0;i<myAgent.length;i++)
+        myAgentIds.push(myAgent[i]._id.toString())
+    return(myAgentIds)
+}
 const findStep=(state)=>{
     switch(state){
         case 'lead':return(0);
@@ -145,7 +157,8 @@ router.post('/confirm-proposal',auth,jsonParser, async (req,res)=>{
         `task no ${req.body.id}'s state change to ${data.state} and tag to ${data.tag}`)
         const leadTask= await task.updateOne({userId:req.headers['userid']},
             {$set:data})
-            //await sendMailAlert(userDetail.email,"Your Proposal Sets by administrator please visit Fiin profile")
+        await sendMailAlert("milad.cia@gmail.com","User Selected Proposal"+
+        userData.cName)
         await plans.updateOne({_id:req.body.taskId},
         {$set:{selectedPlan:"true"}})
 

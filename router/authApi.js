@@ -139,7 +139,7 @@ router.post('/register',auth,jsonParser, async (req,res)=>{
       if(!user){
         data.password = data.password&&await bcrypt.hash(data.password, 10);
         const bitrixData = {}//await sendBitrix(data,"crm.contact.add.json")
-        //console.log(bitrixData)
+        //console.log(data.agent)
         if(bitrixData.error){
           res.status(400).json({error:bitrixData.error_description})
           return
@@ -238,6 +238,15 @@ router.get('/partner',auth,jsonParser, async (req,res)=>{
       res.status(500).json({message: error.message})
   }
 })
+
+const findMyAgent=async(agencyId)=>{
+  const myAgent = await User.find({agent:agencyId})
+  var myAgentIds = []
+  for(var i=0;i<myAgent.length;i++)
+      myAgentIds.push(myAgent[i]._id.toString())
+  return(myAgentIds)
+}
+
 router.post('/list-search',auth,jsonParser, async (req,res)=>{
   try {
     var pageSize = req.body.pageSize?req.body.pageSize:"10";
@@ -263,9 +272,10 @@ router.post('/list-search',auth,jsonParser, async (req,res)=>{
             {email:{$regex: data.search}},
             {phone:{$regex: data.search}}
           ]}:{}},
-        
+          { $match : (userOwner&&userOwner.access==="agency"&&data.access==="customer")?
+            {agent: {$in:await findMyAgent(userOwner._id)}}:{}},
           { $match : (userOwner&&(userOwner.access==="agent"||userOwner.access==="agency"))?
-          {agent: {$regex:userOwner._id.toString()}}:{}},
+            {agent: {$regex:userOwner._id.toString()}}:{}},
         
         { $addFields: { "agent": { "$toObjectId": "$agent" }}},
         {$lookup:{
@@ -452,6 +462,17 @@ router.post('/change-user',auth,jsonParser, async (req,res)=>{
     var errorTemp=error.message.includes("duplicate")?
       "duplicate Value":error.message
       res.status(500).json({error: errorTemp})
+  }
+})
+router.get('/agency-agent',auth,jsonParser, async (req,res)=>{
+  try {
+      
+      // Validate if user exist in our database
+      const agentList = await User.find({agent:req.headers["userid"],access:"agent"})
+        res.status(200).json({agent:agentList,message:"Agent List"})
+      } 
+  catch(error){
+      res.status(500).json({error: error})
   }
 })
 
