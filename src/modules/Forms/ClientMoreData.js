@@ -61,7 +61,7 @@ function ClientMoreData(props){
                 console.log(error)
             })
     }
-    return(<>
+    return(<div className="form-fiin form-box-style">
         <div className="row">
             <div className="section-head">
                 <h1 className="section-title">Dados Pessoais
@@ -257,7 +257,7 @@ function ClientMoreData(props){
         </div>
         <small className="errorSmall" style={{color:error.color}}>
             {error.message}</small>
-        </>
+        </div>
     )
 }
 export default ClientMoreData

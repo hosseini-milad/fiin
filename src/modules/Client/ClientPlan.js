@@ -62,7 +62,9 @@ function ClientPlan(){
               console.log(error)
           })
     }
-    console.log(task)
+    if(!task)
+        return(<main>Please Wait</main>)
+    else
     return(
         <div className="container">
             <Breadcrumb title={"Lista de Créditos"}/>
@@ -77,7 +79,7 @@ function ClientPlan(){
                     <fieldset id="group1">
                         {plans&&plans.map((plan,i)=>(<div className="planOption" key={i}>
                             <input type="radio" value={plan._id} className="radioPlan" 
-                                checked={plan.selectedPlan?true:false}
+                                defaultChecked={plan.selectedPlan?true:false}
                                 name="group1" onChange={(e)=>setAcceptTask(e.target.value)}/>
                             <PlanView data={plan} /></div>
                     ))}</fieldset>

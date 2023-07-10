@@ -65,7 +65,7 @@ const Header = (props)=>{
                     <ul>
                         <li><a href="/profile">Dados do utilizador</a></li>
                         <li><a href="/password">Password</a></li>
-                        <li><a href="/configuration">Configuração</a></li>
+                        {token&&token.level>9?<li><a href="/configuration">Configuração</a></li>:<></>}
                         <li><a href="#" onClick={logOff}>Sair da Sessão</a></li>
                     </ul>
                 </div>

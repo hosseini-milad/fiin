@@ -54,7 +54,7 @@ function RegisterCompany(props){
                 <div className="col-md-6">
                     <div className="form-field-fiin">
                         <label htmlFor="Nome-Comercial">Nome<sup>*</sup></label>
-                        <input type="text" id="Nome-Comercial" placeholder="Nome Comercial" required
+                        <input type="text" id="Nome-Comercial" placeholder="Nome" required
                         onChange={(e)=>setRegElement(data => ({
                             ...data,
                             ...{nameCompany:e.target.value}
@@ -193,7 +193,7 @@ function RegisterCompany(props){
             </div>
             <div className="footer-form-fiin">
                 <WaitingBtn class="btn-fiin" title="Registar" 
-                    waiting={'registrando.'}
+                    waiting={'Registaring.'}
                     function={RegisterNow} name="submit" error={error}/> 
             </div>
             <small className="errorSmall" style={{color:error.color}}>

@@ -9,6 +9,8 @@ import ClientMoreData from "../Forms/ClientMoreData";
 import ClientMontage from "../Forms/ClientMontage";
 import SelectPlan from "../Forms/SelectPlan";
 import WaitingBtn from "../../components/Button/waitingBtn";
+import Register from "../Register";
+import PartnerTabData from "./PartnerTabData";
 const cookies = new Cookies();
 
 const Steps = (props)=>{
@@ -17,8 +19,9 @@ const Steps = (props)=>{
     //const [urlLocation,setUrlLocation] = useState()
     const [index,setIndex] = useState(0)
     const [task,setTask] = useState(0)
+    const [partner,setPartner] = useState(0)
     const [error,setError] = useState({message:'',color:"brown"})
-    
+    console.log(partner)
     useEffect(()=>{
         //setUrlLocation(urlTab.includes('#')?urlTab.split('#')[1]:'')
         urlLocation==="data"&&setIndex(0)
@@ -73,17 +76,16 @@ const Steps = (props)=>{
            <StepTab index={index} setIndex={setIndex}/>
         </div>
         <div className="step-placeHolder">
-            <div className="form-fiin form-box-style">
+            
                 {index===0?<ClientMoreData userId={token.userId} setTask={setTask}/>:<></>}
-                {index===1?<ClientMontage userId={token.userId}/>:<></>}
-                {index===2?<SelectPlan/>:<></>}
-            </div>
+                {index===1?<ClientMontage userId={token.userId} setPartner={setPartner}/>:<></>}
+                {index===2?<PartnerTabData/>:<></>}
             <div className="footer-form-fiin rev">
-                {index===1?<></>:<button type="input" className="btn-fiin"
+                {(index===0||partner==="2")&&index<2?<button type="input" className="btn-fiin"
                 onClick={()=>{setIndex(index+1);updateTab(index+1)}}>
-                    Next</button>}
+                    Next</button>:<></>}
                 
-                {index===1&&task&&task.step<2?
+                {index&&(partner==="1"||index===2)&&task&&task.step<2?
                     <WaitingBtn class="btn-fiin acceptBtn rev" title="Confirm" 
                         waiting={'Confirming.'}
                         function={ConfirmData} name="submit" error={error}/> 

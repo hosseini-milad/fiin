@@ -8,10 +8,16 @@ function Register(props){
     const access = props.access
     const [regElement,setRegElement] = useState('')
     const [error,setError] = useState({message:'',color:"brown"})
-    
+    const [option,setOption] = useState()
     const [showPass,setShowPass] = useState(0)
+    const token=cookies.get('fiin-login')
+    const agn = token.access==="agency"&&access==="customer"
     const RegisterNow=()=>{
-        const token=cookies.get('fiin-login')
+        if(agn&&(!option||option.value==="Select Agent")){
+            setError({message:'Please Select Agent',color:"brown"})
+            setTimeout(()=>setError({message:'',color:"brown"}),3000)
+            return;
+        }
         const postOptions={
             method:'post',
             headers: { 'Content-Type': 'application/json' ,
@@ -19,11 +25,11 @@ function Register(props){
             "userId":token&&token.userId,
             "userName":token&&token.username},
             body:JSON.stringify(
-                {access:access,...regElement,
-                username:regElement.email})
+                {access:access,...regElement, agentName:agn?option.value:'',
+                username:regElement.email,agent:agn?option.selectedOptions[0].id:''})
           }
-          //console.log(postOptions)
-        fetch(env.siteApi + "/auth/register",postOptions)
+        //console.log(postOptions)
+       fetch(env.siteApi + "/auth/register",postOptions)
       .then(res => res.json())
       .then(
         (result) => {
@@ -33,7 +39,7 @@ function Register(props){
             }
             else{
                 setError({message:result.message,color:"green"})
-                //setTimeout(()=>window.location.reload(),1000)
+                setTimeout(()=>window.location.reload(),1000)
             }
             
         },
@@ -41,6 +47,7 @@ function Register(props){
             console.log(error)
         })
     }
+    console.log(option)
     return(
         <div className="form-fiin form-box-style">
             <div className="section-head">
@@ -109,6 +116,19 @@ function Register(props){
                           }))}/>
                         <span className="icon-password icon-pass"
                         onClick={()=>showPass?setShowPass(0):setShowPass(1)}></span>
+                    </div>
+                </div>:<></>}
+                {agn?<div className="col-md-6">
+                    <div className="form-field-fiin">
+                        <label htmlFor="password">Agent<sup>*</sup></label>
+                        <select className="reyhamSelect registerSelect" 
+                            onChange={(e)=>setOption(e.target)}>
+                                <option>Select Agent</option>
+                            {props.agentList&&props.agentList.map((agent,i)=>(
+                                <option key={i} id={agent._id}>
+                                    {agent.cName +" "+ agent.sName}</option>
+                            ))}
+                        </select>
                     </div>
                 </div>:<></>}
             </div>

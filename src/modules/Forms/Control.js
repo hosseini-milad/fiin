@@ -32,7 +32,6 @@ function Control(){
             console.log(error)
         })
     },[])
-    console.log(config)
     useEffect(()=>{
         control&&
         setOption(control.controlName)

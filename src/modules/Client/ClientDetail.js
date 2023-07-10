@@ -7,11 +7,13 @@ import ClientMoreData from "../Forms/ClientMoreData";
 import StepTab from "../StepsFill/StepTab";
 import env from "../../env"
 import Cookies from 'universal-cookie';
+import Register from "../Register";
 const cookies = new Cookies();
 
 function ClientDetail(props){
     const [index,setIndex] = useState(0)
     const [error,setError] = useState({message:'',color:"brown"})
+    
     useEffect(()=>{
         window.scroll(0,150)
     },[index])
@@ -54,10 +56,11 @@ function ClientDetail(props){
              
             <div className="row justify-content-center">
                 <div className="col-lg-8">
-                    <div className="form-fiin form-box-style">
+                    
                         {index===0?<ClientMoreData />:<></>}
-                        {index===1?<ClientMontage />:<></>}
-                    </div>
+                        {index===1?<ClientMontage/>:<></>}
+                        {index===2?<Register access={"partner"}  title="partner"/>:<></>}
+                    
                     {index===1?<div className="footer-form-fiin reyhamBtn">
                         <WaitingBtn class="btn-fiin acceptBtn" title="Confirm" 
                             waiting={'Confirming.'}

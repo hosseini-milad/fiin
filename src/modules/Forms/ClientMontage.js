@@ -64,8 +64,8 @@ function ClientMontage(props){
                 console.log(error)
             })
     }
-
-    return(<>
+    console.log(regElement&&regElement.proposersCount)
+    return(<div className="form-fiin form-box-style">
         <div className="row">
             <div className="section-head">
                 <h1 className="section-title">Mortage Data
@@ -96,12 +96,17 @@ function ClientMontage(props){
             <div className="col-md-6">
                 <div className="form-field-fiin">
                     <label htmlFor="proposersCount">Número de Proponentes<sup>*</sup></label>
-                    <input type="text" name="proposersCount" id="proposersCount" placeholder="Número de Proponentes" required
-                    defaultValue={regElement&&regElement.proposersCount}
-                    onChange={(e)=>setRegElement(data => ({
-                        ...data,
-                        ...{proposersCount:e.target.value}
-                    }))}/>
+                    <select className="reyhamSelect registerSelect"
+                        onChange={(e)=>{setRegElement(data => ({
+                            ...data,
+                            ...{proposersCount:e.target.value}
+                        }));
+                        props.setPartner(e.target.value)
+                        }}>
+                        <option>Número de Proponentes</option>
+                        <option selected={regElement&&regElement.proposersCount==="1"?true:false}>1</option>
+                        <option selected={regElement&&regElement.proposersCount==="2"?true:false}>2</option>
+                    </select>
                 </div>
             </div>
             <div className="col-md-6">
@@ -119,10 +124,10 @@ function ClientMontage(props){
                 <div className="form-field-fiin">
                     <label htmlFor="bookAmount">Valor a Escriturar<sup>*</sup></label>
                     <input type="text" name="bookAmount" id="bookAmount" placeholder="Valor a Escriturar" required
-                    value={regElement&&StandardCurrency(regElement.bookAmount)}
+                    value={regElement&&regElement.bookAmount}
                     onChange={(e)=>setRegElement(data => ({
                         ...data,
-                        ...{bookAmount:e.target.value}
+                        ...{bookAmount:StandardCurrency(e.target.value)}
                     }))}/>
                 </div>
             </div>
@@ -130,10 +135,10 @@ function ClientMontage(props){
                 <div className="form-field-fiin">
                     <label htmlFor="intendedFinancing">Financiamento Pretendido<sup>*</sup></label>
                     <input type="text" name="intendedFinancing" id="intendedFinancing" placeholder="Financiamento Pretendido" required
-                    value={regElement&&StandardCurrency(regElement.intendedFinancing)}
+                    value={regElement&&regElement.intendedFinancing}
                     onChange={(e)=>setRegElement(data => ({
                         ...data,
-                        ...{intendedFinancing:e.target.value}
+                        ...{intendedFinancing:StandardCurrency(e.target.value)}
                     }))}/>
                 </div>
             </div>
@@ -141,10 +146,10 @@ function ClientMontage(props){
                 <div className="form-field-fiin">
                     <label htmlFor="entryAvailable">Valor Disponível para Entrada<sup>*</sup></label>
                     <input type="text" name="entryAvailable" id="entryAvailable" placeholder="Valor Disponível para Entrada" required
-                    value={regElement&&StandardCurrency(regElement.entryAvailable)}
+                    value={regElement&&regElement.entryAvailable}
                     onChange={(e)=>setRegElement(data => ({
                         ...data,
-                        ...{entryAvailable:e.target.value}
+                        ...{entryAvailable:StandardCurrency(e.target.value)}
                     }))}/>
                 </div>
             </div>
@@ -180,7 +185,7 @@ function ClientMontage(props){
         
         <small className="errorSmall" style={{color:error.color}}>
             {error.message}</small>
-        </>
+        </div>
     )
 }
 export default ClientMontage

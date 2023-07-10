@@ -5,7 +5,6 @@ const cookies = new Cookies();
 
 function Dashboard(){
     const token=cookies.get('fiin-login')
-    console.log(token.level)
     return(
         <main className="container-fluid">
             <div className="boards">

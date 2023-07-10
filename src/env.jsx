@@ -69,6 +69,7 @@ export const findSize = (size)=>{
   }
 }
 export const StandardCurrency=(number)=>{
+  if(!number)return number
   var pureNumber = parseInt(number.replace(/\D/g, ""))
   var decimal = pureNumber%100
   if(decimal<10)decimal="0"+decimal

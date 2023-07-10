@@ -16,11 +16,11 @@ function StepTab(props){
                 <i className="icon-user"></i>
                 <span>Fill Mortage</span>
             </div>
-            {/*<div className={classSet(2)}>
+            <div className={classSet(2)}>
                 <i className="icon-user"></i>
-                <span>Select Plan</span>
+                <span>Add Partner</span>
             </div>
-            <div className={classSet(3)}>
+            {/*<div className={classSet(3)}>
                 <i className="icon-user"></i>
                 <span>Accept Term</span>
     </div>*/}
