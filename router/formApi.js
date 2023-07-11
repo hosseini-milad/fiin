@@ -281,7 +281,6 @@ router.post('/user-plans',auth,jsonParser, async (req,res)=>{
   }
 })
 router.post('/update-user-plan',auth,jsonParser, async (req,res)=>{
-
   const data={
     userId:req.body.userId?req.body.userId:req.headers['userid'],
     
@@ -294,11 +293,27 @@ router.post('/update-user-plan',auth,jsonParser, async (req,res)=>{
   }
   
   try {
-        
-          await plans.create(data);
-          res.status(200).json({message:"User Plan Created"})
-        
-      } 
+    await plans.create(data);
+    res.status(200).json({message:"User Plan Created"})
+  } 
+  catch(error){
+      res.status(500).json({message: error.message})
+  }
+})
+router.post('/disable-user-plan',auth,jsonParser, async (req,res)=>{
+  const data={
+    userId:req.body.userId,
+    planId:req.body.planId,
+    cancelReason:req.body.cancelReason
+  }
+  
+  try {
+    await plans.updateOne({_id:data.planId},
+      {$set:{cancelReason:data.cancelReason,selectedPlan:""}});
+    await task.updateOne({userId:ObjectID(data.userId)},
+      {$set:{tag:"Proposal Refused",state:"fiin"}})
+    res.status(200).json({message:"User Plan Disabled"})
+  } 
   catch(error){
       res.status(500).json({message: error.message})
   }
@@ -311,7 +326,7 @@ router.post('/delete-user-plan',auth,jsonParser, async (req,res)=>{
         
       } 
   catch(error){
-      res.status(500).json({message: error.message})
+      res.status(500).json({error: error.message})
   }
 })
 router.post('/user-control',auth,jsonParser, async (req,res)=>{

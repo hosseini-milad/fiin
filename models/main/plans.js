@@ -7,6 +7,7 @@ const PlanSchema = new Schema({
     bankName:   String,
     planDescription:   String,
     fileUrl:String,
+    cancelReason:String,
     selectedPlan:String,
     date:    Date
 })
