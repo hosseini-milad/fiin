@@ -129,6 +129,7 @@ router.post('/changeTask',auth,jsonParser, async (req,res)=>{
         state:req.body.state,
         step:findStep(req.body.state),
         tag:req.body.tag,
+        
     }
     try{
         const userData = await users.findOne({_id:req.headers['userid']})
@@ -139,6 +140,10 @@ router.post('/changeTask',auth,jsonParser, async (req,res)=>{
         await sendMailAlert(userDetail.email,"Caro Cliente, tem uma nova proposta bancária na sua área de cliente FIIN.")
         const leadTask= await task.updateOne({userId:req.body.userId},
             {$set:data})
+        await plans.updateMany({_id:{$in:req.body.taskId}},
+            {$set:{selectedPlan:"true"}})
+        await plans.updateMany({_id:{$nin:req.body.taskId}},
+            {$set:{selectedPlan:""}})
         //if(leadTask)
         res.json({status:"report done",data:leadTask})
     }
@@ -161,7 +166,7 @@ router.post('/confirm-proposal',auth,jsonParser, async (req,res)=>{
             {$set:data})
         await sendMailAlert("milad.cia@gmail.com","User Selected Proposal"+
         userData.cName)
-        await plans.updateOne({_id:req.body.taskId},
+        await plans.updateMany({_id:{$in:req.body.taskId}},
         {$set:{selectedPlan:"true"}})
 
         //if(leadTask)
