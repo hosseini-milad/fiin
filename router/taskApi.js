@@ -47,7 +47,7 @@ router.get('/currentState',auth,jsonParser, async (req,res)=>{
         const informationTask= await task.find({state:'informations',...limitState}).sort({'prior':1})
         const fiinTask= await task.find({state:'fiin',...limitState}).sort({'prior':1})
         const propertyTask= await task.find({state:'property',...limitState}).sort({'prior':1})
-        const inprogressTask= await task.find({state:{$in:['informations','fiin','property']},
+        const inprogressTask= await task.find({state:{$in:['informations','fiin','property','seguros']},
             ...limitState}).sort({'prior':1})
         const segurosTask= await task.find({state:'seguros',...limitState}).sort({'prior':1})
         const escrituraTask= await task.find({state:'escritura',...limitState}).sort({'prior':1})
