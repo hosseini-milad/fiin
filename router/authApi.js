@@ -155,7 +155,7 @@ router.post('/register',auth,jsonParser, async (req,res)=>{
           otp:newOtp});
         if(data.access ==="partner")
             await User.updateOne({_id:req.headers["userid"]},{$set:{partner:user._id,
-            partnerName:data.username}})
+            partnerName:data.cName+" "+data.sName}})
         if(data.access ==="customer")
           await task.create({userId:user._id,agentId:user.agent,
             state:"lead",tag:"Not Active",step:0,date:Date.now()})
