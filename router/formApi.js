@@ -44,8 +44,11 @@ router.post('/user-detail',auth,jsonParser, async (req,res)=>{
             as : "userDetail"
         }}])
         if(userData){
-          const taskData = await task.findOne({userId:userId})
           const userDetail = await User.findOne({_id:req.body.userId})
+          var partnerAcc = ''
+          if(userDetail.access==="partner")
+            partnerAcc = (userDetail.agent)
+          const taskData = await task.findOne({userId:partnerAcc?partnerAcc:userId})
           res.status(200).json({user:userData,userDetail:userDetail,
             task:taskData,message:"User Exists"})
           }
@@ -113,8 +116,11 @@ router.post('/user-montage',auth,jsonParser, async (req,res)=>{
             as : "userDetail"
         }}])
         if(userMontage){
-          const taskData = await task.findOne({userId:userId})
           const userDetail = await User.findOne({_id:req.body.userId})
+          var partnerAcc = ''
+          if(userDetail.access==="partner")
+            partnerAcc = (userDetail.agent)
+          const taskData = await task.findOne({userId:partnerAcc?partnerAcc:userId})
           res.status(200).json({user:userMontage,task:taskData,
             userDetail:userDetail,message:"User Exists"})
           }
