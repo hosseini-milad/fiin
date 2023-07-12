@@ -245,7 +245,7 @@ router.post('/confirm-user-data',auth,jsonParser, async (req,res)=>{
     await task.updateOne({userId:ObjectID(data.userId),
       state:req.body.oldState},
       {$set:{state:req.body.state,step:req.body.step,
-        tag:data.tagId?tagId:""}})
+        tag:data.tagId?data.tagId:""}})
       const userOwner = await User.findOne({_id:req.body.userId});
       await LogCreator(userOwner,"Confirm Data",
         "user Data Confirmed by administrator")
