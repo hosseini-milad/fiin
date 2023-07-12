@@ -13,7 +13,8 @@ const sendMailRegBrevo=async(email,otp,access,userId)=>{
     sendSmtpEmail.htmlContent = `<html><body>
     <p>A FIIN recebeu uma solicitação para alteração da sua password.<br/>
     Para tal, nas próximas 24h deverá aceder ao seguinte link: </p><br/>
-    ${access==="customer"?`<a href="https://portal.fiinservice.com/forget-pass/${otp}">
+    ${access==="customer"||access==="partner"?
+        `<a href="https://portal.fiinservice.com/forget-pass/${otp}">
         Set Password Link</a>`:
     `Your password is: <h2>${otp}</h2><br/>
     Active account using below link:<br/>

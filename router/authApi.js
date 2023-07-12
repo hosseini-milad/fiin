@@ -70,7 +70,7 @@ const createOTP=(cName)=>{
   cName.replace( / /g, '')
   return(cName+(Math.floor(Math.random() * 10000000)
    + 10000000))
-}
+} 
 router.post('/forget',jsonParser, async (req,res)=>{
   try {
       const { email } = req.body;
