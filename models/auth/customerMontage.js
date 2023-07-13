@@ -13,6 +13,7 @@ const customerMontageSchema = new mongoose.Schema({
   entryAvailable: { type: String },
   intendedTerm: { type: String },
   notes: { type: String },
+  adminNotes: { type: String },
 
   date:{type:Date}
 });

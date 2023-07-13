@@ -146,6 +146,7 @@ router.post('/update-user-montage',auth,jsonParser, async (req,res)=>{
     entryAvailable: req.body.entryAvailable,
     intendedTerm: req.body.intendedTerm,
     notes:req.body.notes,
+    adminNotes:req.body.adminNotes,
     date:new Date()
   }
   
