@@ -7,7 +7,7 @@ const env={
 
     columnOrder:['lead','informations','fiin','property','seguros',
         'escritura','commissions','suspended'],
-    columnAgentOrder:['lead','seguros','escritura']
+    columnAgentOrder:['lead','inprogress','escritura']
 }
 export default env
 var fulldays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];

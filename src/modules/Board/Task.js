@@ -31,7 +31,8 @@ function Task(props){
                     </ul>
                     {props.taskList.content.tag?
                     <span className={props.taskList.content.tag==="Active"?
-                        "task-status status-active":"task-status status-deactive"}>
+                        "task-status status-active":"task-status status-deactive"}
+                        title={props.taskList.content.tag}>
                             {props.taskList.content.tag}</span>:<></>}
                     <div className='task-handler'>
                         <small>{props.taskList.content.agent}</small>

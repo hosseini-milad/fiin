@@ -11,6 +11,7 @@ function ClientMontage(props){
     const [task,setTask] = useState()
     const [regElement,setRegElement] = useState()
     const [error,setError] = useState({message:'',color:"brown"})
+    const token=cookies.get('fiin-login')
     useEffect(()=>{
         const token=cookies.get('fiin-login')
         const postOptions={
@@ -34,7 +35,6 @@ function ClientMontage(props){
             })
         },[])
     const UpdateData=()=>{
-        const token=cookies.get('fiin-login')
         const postOptions={
             method:'post',
             headers: { 'Content-Type': 'application/json' ,
@@ -42,6 +42,7 @@ function ClientMontage(props){
             "userId":token&&token.userId},
             body:JSON.stringify(userId?{...regElement,...{userId:userId}}:{})
           }
+          console.log(postOptions)
         fetch(env.siteApi + "/form/update-user-montage",postOptions)
         .then(res => res.json())
         .then(
@@ -64,7 +65,6 @@ function ClientMontage(props){
                 console.log(error)
             })
     }
-    console.log(regElement&&regElement.proposersCount)
     return(<div className="form-fiin form-box-style">
         <div className="row">
             <div className="section-head">
@@ -97,6 +97,7 @@ function ClientMontage(props){
                 <div className="form-field-fiin">
                     <label htmlFor="proposersCount">Número de Proponentes<sup>*</sup></label>
                     <select className="reyhamSelect registerSelect"
+                        disabled={userData&&userData.access==="partner"?true:false}
                         onChange={(e)=>{setRegElement(data => ({
                             ...data,
                             ...{proposersCount:e.target.value}
@@ -176,9 +177,22 @@ function ClientMontage(props){
                     </textarea>
                 </div>
             </div>
+            {token.level===10?<div className="col-md-12">
+                <div className="form-field-fiin">
+                    <label htmlFor="notes">Admin Notas</label>
+                    <textarea name="notes" id="notes" placeholder="Notas"
+                    defaultValue={regElement&&regElement.adminNotes}
+                    onChange={(e)=>setRegElement(data => ({
+                        ...data,
+                        ...{adminNotes:e.target.value}
+                    }))}>
+                    </textarea>
+                </div>
+            </div>:<></>}
         </div>
         <div className="footer-form-fiin">
-        {task&&(task.step<2)?<WaitingBtn class="btn-fiin" title="Update" 
+        {task&&(task.step<2)||token.level===10?
+        <WaitingBtn class="btn-fiin" title="Update" 
                 waiting={'Updating.'}
                 function={UpdateData} name="submit" error={error}/> :<></>}
         </div>

@@ -4,10 +4,8 @@ import ListFilters from "../ListFilters"
 import env from "../../env"
 import Cookies from 'universal-cookie';
 import StepTab from "./StepTab";
-import ClientDetail from "../Client/ClientDetail";
 import ClientMoreData from "../Forms/ClientMoreData";
 import ClientMontage from "../Forms/ClientMontage";
-import SelectPlan from "../Forms/SelectPlan";
 import WaitingBtn from "../../components/Button/waitingBtn";
 import Register from "../Register";
 import PartnerTabData from "./PartnerTabData";
@@ -16,12 +14,13 @@ const cookies = new Cookies();
 const Steps = (props)=>{
     const urlTab = window.location.href;
     const urlLocation = urlTab.includes('#')?urlTab.split('#')[1]:''
-    //const [urlLocation,setUrlLocation] = useState()
+    
+    const token=cookies.get('fiin-login')
     const [index,setIndex] = useState(0)
     const [task,setTask] = useState(0)
     const [partner,setPartner] = useState(0)
     const [error,setError] = useState({message:'',color:"brown"})
-    console.log(partner)
+    //console.log(partner)
     useEffect(()=>{
         //setUrlLocation(urlTab.includes('#')?urlTab.split('#')[1]:'')
         urlLocation==="data"&&setIndex(0)
@@ -38,16 +37,17 @@ const Steps = (props)=>{
         window.scroll(0,150)
     },[index])
     const ConfirmData=()=>{
-        const token=cookies.get('fiin-login')
         const postOptions={
             method:'post',
             headers: { 'Content-Type': 'application/json' ,
             "x-access-token": token&&token.token,
             "userId":token&&token.userId},
-            body:JSON.stringify({state:"informations", oldState:"lead",step:1})
+            body:JSON.stringify(index===2?{tagId:"Partner Data"}:{
+                state:"informations", oldState:"lead",step:1,
+                tagId:"",userId:token.access==="partner"?task.userId:''})
           }
-          //console.log()
-        fetch(env.siteApi + "/form/confirm-user-data",postOptions)
+          console.log(postOptions)
+       fetch(env.siteApi + "/form/confirm-user-data",postOptions)
       .then(res => res.json())
       .then(
         (result) => {
@@ -66,14 +66,12 @@ const Steps = (props)=>{
         })
         
     }
-    const token=cookies.get('fiin-login')
-    
     return(
         <div className="container">
         <Breadcrumb title={"Lista de Clientes"}/>
 
         <div className="step-fiin">
-           <StepTab index={index} setIndex={setIndex}/>
+           <StepTab index={index} setIndex={setIndex} token={token}/>
         </div>
         <div className="step-placeHolder">
             
@@ -85,7 +83,8 @@ const Steps = (props)=>{
                 onClick={()=>{setIndex(index+1);updateTab(index+1)}}>
                     Next</button>:<></>}
                 
-                {index&&(partner==="1"||index===2)&&task&&task.step<2?
+                {index&&(partner==="1"||index===2||token.access==="partner")&&
+                   task&&task.step<2?
                     <WaitingBtn class="btn-fiin acceptBtn rev" title="Confirm" 
                         waiting={'Confirming.'}
                         function={ConfirmData} name="submit" error={error}/> 

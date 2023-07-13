@@ -13,7 +13,6 @@ const cookies = new Cookies();
 function ClientDetail(props){
     const [index,setIndex] = useState(0)
     const [error,setError] = useState({message:'',color:"brown"})
-    
     useEffect(()=>{
         window.scroll(0,150)
     },[index])

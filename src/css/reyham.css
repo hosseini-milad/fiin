@@ -241,6 +241,44 @@ html{
     padding: 14px 18px;
     width: 100%;
   }
+  .home-title{
+    width: 100%;
+  }
+  .home-title:before{
+    display: none;
+  }
+  .home-hero p{
+    padding-left: 15px;
+  }
+
+.reyhamUploadBtn{
+    position: absolute;
+    right: 20px;
+    top:20px;
+    font-size: 20px;
+    display: flex;
+    justify-content: space-around;
+    width: 120px;
+}
+.account-head ul{
+z-index: 20;
+}
+.reyhamUploadBtn .icon-upload{
+    font-size: 20px;
+}
+.upFile{
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+}
+.upFile i{
+    font-size: 11px;
+    margin-right: 5px;
+    overflow: hidden;
+    white-space: nowrap; /* Don't forget this one */
+    text-overflow: ellipsis;
+    width: 70px;
+}
 
 @media only screen and (max-width:1200px){
     .table-fiin table {
@@ -260,5 +298,18 @@ html{
 @media only screen and (max-width: 768px) {
     .account-head:hover ul {
         display: block;
+    }
+    .accordion-item .accordion-title{
+        padding: 20px 20px 50px 20px;
+    }
+    .show-more{
+        position: relative;
+        right: auto;
+    }
+    .show-more .btn-fiin{
+        width: 100%;
+    }
+    .step-placeHolder{
+        width: 100%;
     }
 }

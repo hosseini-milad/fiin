@@ -44,13 +44,12 @@ function Control(){
             headers: { 'Content-Type': 'application/json' ,
             "x-access-token": token&&token.token,
             "userId":token&&token.userId},
-            body:JSON.stringify({userId:userId,controlName:option})
+            body:JSON.stringify({userId:userId,controlName:option==="Select Tag"?"":option})
           }
         fetch(env.siteApi + "/form/update-user-control",postOptions)
       .then(res => res.json())
       .then(
         (result) => {
-            console.log(result)
             setTimeout(()=>document.location.href="/dashboard",1000)       
         },
         (error) => {
@@ -68,6 +67,7 @@ function Control(){
                     </div>  
                     <select className="reyhamSelect" onChange={(e)=>setOption(e.target.value)}
                         value={option}>
+                            <option>Select Tag</option>
                             {config&&config.map((opt,i)=>(
                                 <option key={i}>{opt.configTitle}</option>
                             ))}

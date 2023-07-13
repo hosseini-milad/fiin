@@ -8,6 +8,7 @@ function UpdateTaskStatus(propsElement){
     const fiinTask = props.fiinTask
     const propertyTask = props.propertyTask
     const segurosTask = props.segurosTask
+    const inprogressTask = props.inprogressTask
     const escrituraTask = props.escrituraTask
     const commissionsTask = props.commissionsTask
     const suspendedTask = props.suspendedTask
@@ -62,6 +63,10 @@ function UpdateTaskStatus(propsElement){
                 'property':{
                     id:"property", title:"Avaliação Imóvel",
                     taskIds:propertyTask.map(lead=>lead._id)
+                },
+                'inprogress':{
+                    id:"inprogress", title:"InProgress",
+                    taskIds:inprogressTask.map(lead=>lead._id)
                 },
                 'seguros':{
                     id:"seguros", title:"Seguros",

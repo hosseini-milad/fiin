@@ -12,8 +12,8 @@ function ClientMoreData(props){
     const [task,setTask] = useState()
     const [regElement,setRegElement] = useState()
     const [error,setError] = useState({message:'',color:"brown"})
+    const token=cookies.get('fiin-login')
     useEffect(()=>{
-        const token=cookies.get('fiin-login')
         const postOptions={
             method:'post',
             headers: { 'Content-Type': 'application/json' ,
@@ -61,6 +61,7 @@ function ClientMoreData(props){
                 console.log(error)
             })
     }
+    //console.log(userData)
     return(<div className="form-fiin form-box-style">
         <div className="row">
             <div className="section-head">
@@ -251,7 +252,8 @@ function ClientMoreData(props){
             </div>
         </div>
         <div className="footer-form-fiin">
-            {task&&(task.step<2)?<WaitingBtn class="btn-fiin" title="Update" 
+            {task&&(task.step<2)||token.level===10?
+                <WaitingBtn class="btn-fiin" title="Update" 
                 waiting={'Updating.'}
                 function={UpdateData} name="submit" error={error}/> :<></>}
         </div>

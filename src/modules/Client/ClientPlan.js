@@ -8,7 +8,7 @@ const cookies = new Cookies();
 
 function ClientPlan(){
     const [plans,setPlans] = useState([])
-    const [acceptTask,setAcceptTask] = useState()
+    const [acceptTask,setAcceptTask] = useState([])
     const [task,setTask] = useState()
     const [error,setError] = useState({message:'',color:"brown"})
 
@@ -43,7 +43,7 @@ function ClientPlan(){
             body:JSON.stringify({state:"property",tag:"",
         taskId:acceptTask})
           }
-        console.log(postOptions)
+        //console.log(postOptions)
         fetch(env.siteApi + "/task/confirm-proposal",postOptions)
         .then(res => res.json())
         .then(
@@ -62,6 +62,19 @@ function ClientPlan(){
               console.log(error)
           })
     }
+    const setCheckBox=(e)=>{
+        if( acceptTask.find(item=>item === e))
+            setAcceptTask((current) =>
+                current.filter((acceptTask) => acceptTask !== e)
+            )
+        else{
+            setAcceptTask([ 
+                  ...acceptTask,e 
+                ]);
+        }
+            //setAcceptTask(e)
+    }
+    //console.log(acceptTask)
     if(!task)
         return(<main>Please Wait</main>)
     else
@@ -75,15 +88,14 @@ function ClientPlan(){
                         <p className="hidden">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt .</p>
                     </div>   
                     <div className="accordions">
-                    <form>
-                    <fieldset id="group1">
-                        {plans&&plans.map((plan,i)=>(<div className="planOption" key={i}>
-                            <input type="radio" value={plan._id} className="radioPlan" 
-                                defaultChecked={plan.selectedPlan?true:false}
-                                name="group1" onChange={(e)=>setAcceptTask(e.target.value)}/>
+                    {plans&&plans.map((plan,i)=>(<div className="planOption" key={i}>
+                            <input type="checkbox" value={plan._id} className="radioPlan" 
+                                //defaultChecked={plan.selectedPlan?true:false}
+                                disabled={task.step>2?true:plan.cancelReason?true:false}
+                                onChange={(e)=>setCheckBox(e.target.value)}/>
                             <PlanView data={plan} /></div>
-                    ))}</fieldset>
-                    </form></div>
+                    ))}
+                    </div>
                 </div>
                 {plans.length&&task.step<3?
                     <WaitingBtn class="btn-fiin acceptBtn" title="Confirm Proposal" 

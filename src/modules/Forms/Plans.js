@@ -10,6 +10,7 @@ const cookies = new Cookies();
 function Plans(){
     const userId = document.location.pathname.split('/')[3]
     const [plans,setPlans] = useState()
+    const [acceptTask,setAcceptTask] = useState([])
     useEffect(()=>{
         const token=cookies.get('fiin-login')
         const postOptions={
@@ -25,8 +26,7 @@ function Plans(){
       .then(res => res.json())
       .then(
         (result) => {
-            setPlans(result.plans)
-                        
+            setPlans(result.plans)        
         },
         (error) => {
             console.log(error)
@@ -41,19 +41,31 @@ function Plans(){
             "x-access-token": token&&token.token,
             "userId":token&&token.userId},
             body:JSON.stringify(
-                {userId:userId,tag:"proposal"})
+                {userId:userId,tag:"proposal",taskId:acceptTask})
           }
-          //console.log(postOptions)
+          console.log(postOptions)
         fetch(env.siteApi + "/task/changeTask",postOptions)
       .then(res => res.json())
       .then(
         (result) => {
-            console.log(result)
+            //console.log(result)
             setTimeout(()=>document.location.href="/dashboard",1000)       
         },
         (error) => {
             console.log(error)
         })
+    }
+    const setCheckBox=(e)=>{
+        if( acceptTask.find(item=>item === e))
+            setAcceptTask((current) =>
+                current.filter((acceptTask) => acceptTask !== e)
+            )
+        else{
+            setAcceptTask([ 
+                  ...acceptTask,e 
+                ]);
+        }
+            //setAcceptTask(e)
     }
     return(
         <div className="container">
@@ -66,8 +78,12 @@ function Plans(){
                     </div>   
                     <PlanItem userId={userId}/>
                     <div className="accordions">
-                        {plans&&plans.map((plan,i)=>(
-                            <PlanView data={plan} key={i} />
+                        {plans&&plans.map((plan,i)=>(<div className="planOption" key={i}>
+                            <input type="checkbox" value={plan._id} className="radioPlan" 
+                            //defaultChecked={plan.selectedPlan?true:false}
+                            disabled={plan.cancelReason?true:false}
+                            onChange={(e)=>setCheckBox(e.target.value)}/>
+                            <PlanView data={plan} userId={userId}/></div>
                     ))}</div>
                 </div>
                 {plans?<WaitingBtn class="btn-fiin acceptBtn" title="Confirm Proposal" 

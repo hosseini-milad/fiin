@@ -7,6 +7,7 @@ function InlineUpload(props){
     const [uploadFile,setUploadFile] = useState()
     const [isFilePicked, setIsFilePicked] = useState(false);
     const [uploaded,setUploaded] = useState(false)
+    
     const resizeFile = (file) =>
     new Promise((resolve,reject) => {
         const reader = new FileReader();
@@ -23,7 +24,7 @@ function InlineUpload(props){
             headers: { 'Content-Type': 'application/json'},
             body:JSON.stringify({data:tempfile,imgName:uploadFile.name.split('.')[0]})
           }
-          console.log(postOptions)
+          //console.log(postOptions)
         fetch(env.siteApi + "/upload",postOptions)
         .then(res => res.json())
         .then(
@@ -43,6 +44,7 @@ function InlineUpload(props){
     return(
         <div className="show-more list-item reyhamUpload">
              {props.upFile?<a href={env.siteApiUrl+props.upFile} className="">
+             <i style={{marginRight:"6px"}}>{props.upFile.split('-')[2]}</i>
                 <span className="icon-upload"></span></a>:<>
             <label htmlFor="files" className="btn-cancel">
                 <span className="icon-upload"></span> Upload PDF</label>
