@@ -312,4 +312,10 @@ z-index: 20;
     .step-placeHolder{
         width: 100%;
     }
+    .footer-form-fiin {
+    display: grid;
+    row-gap: 10px;
+    margin-top: 46px;
+    }
+    .reyhamUpload {width: fit-content;}
 }
