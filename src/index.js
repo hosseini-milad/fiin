@@ -50,7 +50,7 @@ root.render(
     <Router>
     {cookies.get('fiin-login')?
       <Routes>
-        <Route path="/" element={<Layout></Layout>}/>
+        <Route path="/" element={<Layout><Dashboard/></Layout>}/>
         <Route path="/dashboard" element={<Layout><Dashboard/></Layout>}/>
         <Route path="/password" element={<Layout><Password/></Layout>}/>
         <Route path="/upload" element={<Layout><UpLoad/></Layout>}/>

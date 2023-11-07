@@ -1,9 +1,11 @@
 const env={
-    siteApi:'http://localhost:4090/api',
+    //siteApi:'http://localhost:4090/api',
     //siteApi:'https://fiinadmin.deleves.com/api',
+    siteApi:'https://bpmadmin.dkmehr.com/api',
     
-    siteApiUrl:'http://localhost:4090',
+    //siteApiUrl:'http://localhost:4090',
     //siteApiUrl:'https://fiinadmin.deleves.com',
+    siteApiUrl:'https://bpmadmin.dkmehr.com',
 
     columnOrder:['lead','informations','fiin','property','seguros',
         'escritura','commissions','suspended']
