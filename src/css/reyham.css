@@ -120,8 +120,65 @@ html{
 .acceptBtn:hover{
     color: green;
 }
-
-
+.reyhamBtn{
+    flex-direction: row-reverse;
+}
+.reyhamUpload{
+    border:none;
+    padding: 0;
+}
+.reyhamUpload .btn-cancel:hover{
+    color:#fff;
+}
+.reverseHover:hover{
+    background-color: transparent !important;
+}
+.removeItem{
+    color: red;
+    position: absolute;
+    right:30px;
+    top:18px;
+    width:30px;
+    font-size: 20px;
+}
+.planOption{
+    display: flex;
+}
+.radioPlan {
+    margin-right: 15px;
+}
+.planOption .accordion-item{
+    width: 100%;
+}
+.disable-fiin{
+    background-color: silver;
+    border-color: gray;
+}
+.disable-fiin:hover{
+    color: gray;
+}
+.reyhamSelect{
+    border: 1px solid #E7E7E8;
+    border-radius: 4px;
+    background-color: #fff;
+    font-size: 14px;
+    padding: 14px 18px;
+    width: 50%;
+    margin: 20px auto
+}
+.registerSelect{
+    width: 100%;
+    margin:0;
+    min-height: 50px;
+}
+.miniFont{
+    font-size: 10px;
+    position: absolute;
+    margin:5px;
+}
+.titles{
+    display: grid;
+}
 /*Steps Client*/
 .tabStepHolder{
     display: flex;
@@ -184,6 +241,44 @@ html{
     padding: 14px 18px;
     width: 100%;
   }
+  .home-title{
+    width: 100%;
+  }
+  .home-title:before{
+    display: none;
+  }
+  .home-hero p{
+    padding-left: 15px;
+  }
+
+.reyhamUploadBtn{
+    position: absolute;
+    right: 20px;
+    top:20px;
+    font-size: 20px;
+    display: flex;
+    justify-content: space-around;
+    width: 120px;
+}
+.account-head ul{
+z-index: 20;
+}
+.reyhamUploadBtn .icon-upload{
+    font-size: 20px;
+}
+.upFile{
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+}
+.upFile i{
+    font-size: 11px;
+    margin-right: 5px;
+    overflow: hidden;
+    white-space: nowrap; /* Don't forget this one */
+    text-overflow: ellipsis;
+    width: 70px;
+}
 
 @media only screen and (max-width:1200px){
     .table-fiin table {
@@ -204,4 +299,23 @@ html{
     .account-head:hover ul {
         display: block;
     }
+    .accordion-item .accordion-title{
+        padding: 20px 20px 50px 20px;
+    }
+    .show-more{
+        position: relative;
+        right: auto;
+    }
+    .show-more .btn-fiin{
+        width: 100%;
+    }
+    .step-placeHolder{
+        width: 100%;
+    }
+    .footer-form-fiin {
+    display: grid;
+    row-gap: 10px;
+    margin-top: 46px;
+    }
+    .reyhamUpload {width: fit-content;}
 }

@@ -36,6 +36,11 @@ import ProfileView from './pages/ProfileView';
 import ActiveUser from './pages/ActiveUser';
 import ClientDetail from './modules/Client/ClientDetail';
 import Steps from './modules/StepsFill/Steps';
+import Plans from './modules/Forms/Plans';
+import ClientPlan from './modules/Client/ClientPlan';
+import Control from './modules/Forms/Control';
+import RegisterPartner from './modules/Client/RegisterPartner';
+import Configuration from './pages/Configuration';
 const cookies = new Cookies();
 var lang = JSON.parse(localStorage.getItem('fiin-lang'));
 
@@ -53,7 +58,8 @@ root.render(
         <Route path="/" element={<Layout><Dashboard/></Layout>}/>
         <Route path="/dashboard" element={<Layout><Dashboard/></Layout>}/>
         <Route path="/password" element={<Layout><Password/></Layout>}/>
-        <Route path="/upload" element={<Layout><UpLoad/></Layout>}/>
+        <Route path="/configuration" element={<Layout><Configuration/></Layout>}/>
+        <Route path="/upload/:userId" element={<Layout><UpLoad/></Layout>}/>
         <Route path="/profile" element={<Layout><ProfileView/></Layout>}/>
         <Route path="/profile/:profileId" element={<Layout><Profile/></Layout>}/>
         
@@ -74,16 +80,21 @@ root.render(
         {/* Client Pages */}
         <Route path="/client/list" element={<Layout><ClientList/></Layout>}/>
         <Route path="/client/register" element={<Layout><RegClient/></Layout>}/>
+        <Route path="/partner/register" element={<Layout><RegisterPartner/></Layout>}/>
         
         {/* Form Pages */}
         <Route path="/client/steps" element={<Layout><Steps/></Layout>}/>
+        <Route path="/client/plans" element={<Layout><ClientPlan/></Layout>}/>
         <Route path="/form/client/:data" element={<Layout><ClientDetail/></Layout>}/>
+        <Route path="/form/set-plan/:data" element={<Layout><Plans/></Layout>}/>
+        <Route path="/form/set-control/:data" element={<Layout><Control/></Layout>}/>
 
       </Routes>:
       <Routes>
         <Route path="/" element={<Login lang={lang}/>}/>
         <Route path="/:login" element={<Login lang={lang}/>}/>
         <Route path="/:login/:page" element={<Login lang={lang}/>}/>
+        <Route path="/:login/:page/:id" element={<Login lang={lang}/>}/>
         <Route path="/forget-pass/:otp" element={<ForgetPass/>}/>
         <Route path="/active-user/:otp" element={<ActiveUser/>}/>
       </Routes>}

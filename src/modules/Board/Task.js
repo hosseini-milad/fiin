@@ -6,12 +6,21 @@ function Task(props){
             {(provided,snapshot)=>(
                 <li className={snapshot.isDragging?"board-task dragTask":"board-task"}
                     {...provided.draggableProps}
+                    {...provided.dragHandleProps}
                     ref={provided.innerRef} 
                     data-dragging={snapshot.isDragging}>
                         
-                    <a href={`/profile/${props.taskList.content.id}`}>
-                        <h3 className="task-title">{props.taskList.content.user}</h3></a>
-                    <span className="task-date">{dayFromNow(props.taskList.content.date)}</span>
+                    <div className='titles'>
+                        <a href={`/profile/${props.taskList.content.id}`}>
+                            <h3 className="task-title">{props.taskList.content.user}</h3></a>
+                        {props.taskList.content.partner?
+                        <a href={`/profile/${props.taskList.content.partner}`}>
+                            <h3 className="task-title">{props.taskList.content.partnerName}</h3></a>
+                            :<></>}
+                    </div>
+                    <span className="task-date">
+                        <span className="icon-calendar"></span>
+                        {dayFromNow(props.taskList.content.date)}</span>
                     <ul className="task-meta">
                         <li><a href={`mailto:${props.taskList.content.email}`}>
                             <span className="icon-envelope"></span> 
@@ -20,11 +29,15 @@ function Task(props){
                             <span className="icon-phone"></span>
                             {props.taskList.content.phone}</a></li>
                     </ul>
-                    <span className={props.taskList.content.status==="active"?
-                        "task-status status-active":"task-status status-deactive"}>
-                            {props.taskList.content.status}</span>
-                    <div className='task-handler' 
-                            {...provided.dragHandleProps}  ></div>
+                    {props.taskList.content.tag?
+                    <span className={props.taskList.content.tag==="Active"?
+                        "task-status status-active":"task-status status-deactive"}
+                        title={props.taskList.content.tag}>
+                            {props.taskList.content.tag}</span>:<></>}
+                    <div className='task-handler'>
+                        <small>{props.taskList.content.agent}</small>
+                        <small>{props.taskList.content.agency}</small>
+                    </div>
                     
                 </li>
             )}

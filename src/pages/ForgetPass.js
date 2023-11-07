@@ -7,32 +7,7 @@ function ForgetPass(){
     const [pass,setPass] = useState()
     const [showPass,setShowPass] = useState()
     const [error,setError] = useState({message:'',color:"brown"})
-    useEffect(()=>{
-        const postOptions={
-            method:'post',
-            headers: { 'Content-Type': 'application/json' ,
-            },
-            body:JSON.stringify({otp:otp})
-          }
-          //console.log(postOptions)
-        0&&fetch(env.siteApi + "/auth/active-user",postOptions)
-      .then(res => res.json())
-      .then(
-        (result) => {
-            if(result.error){
-                setError({message:result.error,color:"brown"})
-                setTimeout(()=>setError({message:'',color:"brown"}),3000)
-            }
-            else{
-                setError({message:result.message,color:"green"})
-                setTimeout(()=>setError({message:'',color:"brown"}),1000)
-            }
-            
-        },
-        (error) => {
-            console.log(error)
-        })
-    },[])
+    
     const changePass=()=>{
         const postOptions={
             method:'post',
@@ -40,7 +15,6 @@ function ForgetPass(){
             },
             body:JSON.stringify({otp:otp,...pass})
           }
-          console.log(postOptions)
         fetch(env.siteApi + "/auth/forget-password-set",postOptions)
       .then(res => res.json())
       .then(

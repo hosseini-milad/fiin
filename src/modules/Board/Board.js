@@ -32,7 +32,7 @@ const initalDataStatic = {
         columnOrder:env.columnOrder
     }
 
-function Board(){
+function Board(props){
     const [taskState,setTaskState] = useState()
     //const initalData = 
     const [boardArray,setBoardArray] = useState()
@@ -50,7 +50,7 @@ function Board(){
         .then(
             (result) => {
                 setTaskState(result);
-                setBoardArray(()=>UpdateTaskStatus(result))
+                setBoardArray(()=>UpdateTaskStatus({result:result,token:token}))
             },
             (error) => {
                 //cookies.remove('fiin-login',{ path: '/' });

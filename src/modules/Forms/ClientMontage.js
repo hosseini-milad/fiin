@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import env from "../../env"
+import env, { StandardCurrency } from "../../env"
 import Cookies from 'universal-cookie';
 import WaitingBtn from "../../components/Button/waitingBtn";
 const cookies = new Cookies();
@@ -8,9 +8,10 @@ const cookies = new Cookies();
 function ClientMontage(props){
     const userId = props.userId?props.userId:document.location.pathname.split('/')[3]
     const [userData,setUserData] = useState()
-    const [fromDate,setFromDate] = useState()
+    const [task,setTask] = useState()
     const [regElement,setRegElement] = useState()
     const [error,setError] = useState({message:'',color:"brown"})
+    const token=cookies.get('fiin-login')
     useEffect(()=>{
         const token=cookies.get('fiin-login')
         const postOptions={
@@ -24,8 +25,9 @@ function ClientMontage(props){
         .then(res => res.json())
         .then(
             (result) => {
-                setUserData(result.user[0]&&result.user[0].userDetail[0])
+                setUserData(result.userDetail&&result.userDetail)
                 setRegElement(result.user[0])
+                setTask(result.task)
             },
             (error) => {
                 cookies.remove('fiin-login',{ path: '/' });
@@ -33,7 +35,6 @@ function ClientMontage(props){
             })
         },[])
     const UpdateData=()=>{
-        const token=cookies.get('fiin-login')
         const postOptions={
             method:'post',
             headers: { 'Content-Type': 'application/json' ,
@@ -41,6 +42,7 @@ function ClientMontage(props){
             "userId":token&&token.userId},
             body:JSON.stringify(userId?{...regElement,...{userId:userId}}:{})
           }
+          console.log(postOptions)
         fetch(env.siteApi + "/form/update-user-montage",postOptions)
         .then(res => res.json())
         .then(
@@ -63,14 +65,11 @@ function ClientMontage(props){
                 console.log(error)
             })
     }
-
-    const ConfirmData=()=>{
-
-    }
-    return(<>
+    return(<div className="form-fiin form-box-style">
         <div className="row">
             <div className="section-head">
-                <h1 className="section-title">Mortage Data</h1>
+                <h1 className="section-title">Mortage Data
+                <span>{(userData&&userData.cName)+ ' '+(userData&&userData.sName)}</span></h1>
             </div>
             <div className="col-md-6">
                 <div className="form-field-fiin">
@@ -97,12 +96,18 @@ function ClientMontage(props){
             <div className="col-md-6">
                 <div className="form-field-fiin">
                     <label htmlFor="proposersCount">Número de Proponentes<sup>*</sup></label>
-                    <input type="text" name="proposersCount" id="proposersCount" placeholder="Número de Proponentes" required
-                    defaultValue={regElement&&regElement.proposersCount}
-                    onChange={(e)=>setRegElement(data => ({
-                        ...data,
-                        ...{proposersCount:e.target.value}
-                    }))}/>
+                    <select className="reyhamSelect registerSelect"
+                        disabled={userData&&userData.access==="partner"?true:false}
+                        onChange={(e)=>{setRegElement(data => ({
+                            ...data,
+                            ...{proposersCount:e.target.value}
+                        }));
+                        props.setPartner(e.target.value)
+                        }}>
+                        <option>Número de Proponentes</option>
+                        <option selected={regElement&&regElement.proposersCount==="1"?true:false}>1</option>
+                        <option selected={regElement&&regElement.proposersCount==="2"?true:false}>2</option>
+                    </select>
                 </div>
             </div>
             <div className="col-md-6">
@@ -120,10 +125,10 @@ function ClientMontage(props){
                 <div className="form-field-fiin">
                     <label htmlFor="bookAmount">Valor a Escriturar<sup>*</sup></label>
                     <input type="text" name="bookAmount" id="bookAmount" placeholder="Valor a Escriturar" required
-                    defaultValue={regElement&&regElement.bookAmount}
+                    value={regElement&&regElement.bookAmount}
                     onChange={(e)=>setRegElement(data => ({
                         ...data,
-                        ...{bookAmount:e.target.value}
+                        ...{bookAmount:StandardCurrency(e.target.value)}
                     }))}/>
                 </div>
             </div>
@@ -131,10 +136,10 @@ function ClientMontage(props){
                 <div className="form-field-fiin">
                     <label htmlFor="intendedFinancing">Financiamento Pretendido<sup>*</sup></label>
                     <input type="text" name="intendedFinancing" id="intendedFinancing" placeholder="Financiamento Pretendido" required
-                    defaultValue={regElement&&regElement.intendedFinancing}
+                    value={regElement&&regElement.intendedFinancing}
                     onChange={(e)=>setRegElement(data => ({
                         ...data,
-                        ...{intendedFinancing:e.target.value}
+                        ...{intendedFinancing:StandardCurrency(e.target.value)}
                     }))}/>
                 </div>
             </div>
@@ -142,10 +147,10 @@ function ClientMontage(props){
                 <div className="form-field-fiin">
                     <label htmlFor="entryAvailable">Valor Disponível para Entrada<sup>*</sup></label>
                     <input type="text" name="entryAvailable" id="entryAvailable" placeholder="Valor Disponível para Entrada" required
-                    defaultValue={regElement&&regElement.entryAvailable}
+                    value={regElement&&regElement.entryAvailable}
                     onChange={(e)=>setRegElement(data => ({
                         ...data,
-                        ...{entryAvailable:e.target.value}
+                        ...{entryAvailable:StandardCurrency(e.target.value)}
                     }))}/>
                 </div>
             </div>
@@ -172,21 +177,29 @@ function ClientMontage(props){
                     </textarea>
                 </div>
             </div>
+            {token.level===10?<div className="col-md-12">
+                <div className="form-field-fiin">
+                    <label htmlFor="notes">Admin Notas</label>
+                    <textarea name="notes" id="notes" placeholder="Notas"
+                    defaultValue={regElement&&regElement.adminNotes}
+                    onChange={(e)=>setRegElement(data => ({
+                        ...data,
+                        ...{adminNotes:e.target.value}
+                    }))}>
+                    </textarea>
+                </div>
+            </div>:<></>}
         </div>
         <div className="footer-form-fiin">
-            <WaitingBtn class="btn-fiin" title="Update" 
+        {task&&(task.step<2)||token.level===10?
+        <WaitingBtn class="btn-fiin" title="Update" 
                 waiting={'Updating.'}
-                function={UpdateData} name="submit" error={error}/> 
+                function={UpdateData} name="submit" error={error}/> :<></>}
         </div>
         
-        {props.userId?<div className="footer-form-fiin">
-            <WaitingBtn class="btn-fiin acceptBtn" title="Confirm" 
-                waiting={'Confirming.'}
-                function={ConfirmData} name="submit" error={error}/> 
-        </div>:<></>}
         <small className="errorSmall" style={{color:error.color}}>
             {error.message}</small>
-        </>
+        </div>
     )
 }
 export default ClientMontage

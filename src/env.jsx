@@ -8,7 +8,8 @@ const env={
     siteApiUrl:'https://bpmadmin.dkmehr.com',
 
     columnOrder:['lead','informations','fiin','property','seguros',
-        'escritura','commissions','suspended']
+        'escritura','commissions','suspended'],
+    columnAgentOrder:['lead','inprogress','escritura']
 }
 export default env
 var fulldays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
@@ -60,4 +61,20 @@ export const splitDate=(dateRaw)=>{
     day:parseInt(dateArray[2])})
   }
   catch{return}
+}
+export const findSize = (size)=>{
+  try{
+    return(parseFloat(size)/1024).toFixed(2)
+  }
+  catch{
+    return(0)
+  }
+}
+export const StandardCurrency=(number)=>{
+  if(!number)return number
+  var pureNumber = parseInt(number.replace(/\D/g, ""))
+  var decimal = pureNumber%100
+  if(decimal<10)decimal="0"+decimal
+  var seprateComma = (pureNumber/100).toString().split('.')[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+  return seprateComma+"."+decimal+"€"
 }

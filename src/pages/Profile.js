@@ -9,10 +9,10 @@ function Profile(){
     const userId = document.location.pathname.split('/')[2]
 
     const [users,setUsers] = useState()
+    const [tasks,setTasks] = useState()
     const [changeEmail,setChangeEmail] = useState()
     const [email,setEmail] = useState()
     const [error,setError] = useState({message:'',color:"brown"})
-    
     const token=cookies.get('fiin-login')
     useEffect(()=>{
         const postOptions={
@@ -28,11 +28,13 @@ function Profile(){
       .then(
         (result) => {
             setUsers(result.user)
+            setTasks(result.task)
         },
         (error) => {
             console.log(error)
         })
     },[])
+    
     const saveData=()=>{
         const token=cookies.get('fiin-login')
         const postOptions={
@@ -90,9 +92,10 @@ function Profile(){
             setTimeout(()=>setError({message:'',color:"brown"}),3000)
         })
     }
+    console.log(tasks&&tasks.step)
     return(
         <div className="container">
-        <Breadcrumb title={"Dados do utilizador"}/>
+        <Breadcrumb title={"Dados do Profile"}/>
         
         <div className="section-fiin dados-do-consultor">
             <div className="row justify-content-center">
@@ -264,9 +267,20 @@ function Profile(){
                         <div className="footer-form-fiin">
                             <button type="submit" className="btn-fiin" name="submit"
                             onClick={saveData}>Save</button>
-                             <button className="btn-fiin" name="submit"
+                            {users&&(users.access==="customer"||
+                            users.access==="partner")&&token.level===10?
+                            <button className="btn-fiin" name="submit"
                             onClick={()=>window.location.href="/form/client/"+userId}>
-                                Add Data</button>
+                                More Data</button>:<></>}
+                            {users&&users.access==="customer"&&token.level===10?<>
+                            <button className={tasks.step>1?"btn-fiin":"btn-fiin disable-fiin"} name="submit"
+                            onClick={()=>window.location.href="/form/set-plan/"+userId}>
+                                Set Plans</button>
+                            <button className={tasks.step>2?"btn-fiin":"btn-fiin disable-fiin"} name="submit"
+                            onClick={()=>window.location.href="/form/set-control/"+userId}>
+                                Control</button>
+                            </>:<></>}
+                            
                         </div>
                         <small className="errorSmall" style={{color:error.color}}>
                             {error.message}</small>

@@ -37,7 +37,8 @@ function Login(props){
                     name:result.cName+" "+result.sName,
                     date:result.date,
                     token:result.token,
-                    username:result.username
+                    username:accessLevel==="agent"?(result.cName+" "+result.sName):
+                    accessLevel==="agency"?result.nameCompany:result.email
                 }, { path: '/' });
                 window.location.reload()
             }
@@ -97,6 +98,7 @@ function Login(props){
                                 <label htmlFor="first-name">{errortrans.password[lang]}</label>
                                 <input type={showPass?"input":"password"} name="firstname" 
                                     id="password" placeholder={errortrans.password[lang]}
+                                    value={loginInfo.password}
                                     onChange={(e)=>setLoginInfo(data => ({
                                         ...data,
                                         ...{password:e.target.value}
